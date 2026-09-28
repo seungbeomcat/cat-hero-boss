@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
-<title>도살장 보스 팝업 현황 V2.2.1</title>
+<title>도살장 보스 팝업 현황 V2.2.2</title>
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -205,12 +205,17 @@ button:disabled{cursor:default;opacity:.45}
 /* Accumulated defeat history */
 .log{
   display:grid!important;grid-template-columns:42px minmax(0,1fr);
-  gap:9px;align-items:center;padding:10px 2px!important;
+  gap:9px;align-items:center;padding:8px 2px!important;
 }
-.history-boss-icon{
-  width:42px;height:42px;object-fit:cover;display:block;border-radius:10px;
+.history-boss-icon-wrap{
+  width:42px;height:42px;display:block;overflow:hidden;border-radius:10px;
   border:3px solid #6c3bd2;background:#ffd46b;
   box-shadow:0 0 0 1px rgba(255,255,255,.9),0 2px 6px rgba(73,33,132,.12);
+  flex:0 0 42px;
+}
+.history-boss-icon{
+  width:100%;height:100%;display:block;object-fit:cover;object-position:center;
+  border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;
 }
 .history-copy{min-width:0}
 .history-top{
@@ -219,10 +224,22 @@ button:disabled{cursor:default;opacity:.45}
 .history-boss-name{color:#351570;font-size:13px;font-weight:950;white-space:nowrap}
 .history-time{color:#5e536f;font-size:12px;font-weight:750;font-variant-numeric:tabular-nums}
 .history-members{
-  display:block;margin-top:3px;color:#413450;font-size:12.5px;font-weight:900;
-  line-height:1.4;word-break:keep-all;
+  display:block;margin-top:2px;color:#413450;font-size:12.5px;font-weight:900;
+  line-height:1.35;word-break:keep-all;
 }
-.log .edit-hint{display:block;margin-top:3px!important;font-size:10px!important;font-weight:750!important}
+
+
+.history-list-scroll{
+  max-height:470px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+}
+@media(max-width:390px){
+  .history-list-scroll{max-height:450px}
+}
 
 </style>
 </head>
@@ -232,7 +249,7 @@ button:disabled{cursor:default;opacity:.45}
 
   <header class="header">
     <h1 class="title">도살장 보스 팝업 현황</h1>
-    <div class="version">V2.2.1 · 길드 공유</div>
+    <div class="version">V2.2.2 · 길드 공유</div>
     <div id="now" class="now">현재시간 --:--:--</div>
   </header>
 
@@ -248,7 +265,9 @@ button:disabled{cursor:default;opacity:.45}
       <div class="history-title">처치 기록</div>
       <button id="historyAddBtn" class="history-add" type="button" aria-label="처치 기록 소급 추가">+</button>
     </div>
-    <div id="historyList" class="history-empty">기록을 불러오는 중입니다.</div>
+    <div class="history-list-scroll">
+      <div id="historyList" class="history-empty">기록을 불러오는 중입니다.</div>
+    </div>
   </section>
 </main>
 
@@ -762,15 +781,14 @@ onSnapshot(collection(db,"bossHistory"),snap=>{
     const bossImg=boss?.img||"";
     const members=Array.isArray(x.participants)&&x.participants.length?x.participants.join(", "):"-";
     return `
-      <button type="button" class="log" data-history-id="${id}">
-        ${bossImg?`<img class="history-boss-icon" src="${bossImg}" alt="">`:`<span></span>`}
+      <button type="button" class="log" data-history-id="${id}" aria-label="${bossName} 처치 기록 수정">
+        ${bossImg?`<span class="history-boss-icon-wrap"><img class="history-boss-icon" src="${bossImg}" alt=""></span>`:`<span class="history-boss-icon-wrap"></span>`}
         <span class="history-copy">
           <span class="history-top">
             <span class="history-boss-name">${bossName}</span>
             <span class="history-time">${defeatedMs?`처치시간 : ${dateTimeText(defeatedMs)}`:"처치시간 : -"}</span>
           </span>
           <span class="history-members">${members}</span>
-          <span class="edit-hint">눌러서 기록 수정</span>
         </span>
       </button>`;
   });
