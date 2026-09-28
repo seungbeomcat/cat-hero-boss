@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.1.1">
-<!-- internal version: V3.1.1 -->
+<meta name="app-version" content="V3.1.2">
+<!-- internal version: V3.1.2 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -95,26 +95,26 @@ button:disabled{cursor:default;opacity:.45}
 .history{
   margin-top:10px;border:2px solid var(--line);border-radius:16px;background:#fff;padding:10px;
 }
-.history-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:-10px -10px 6px;padding:8px 10px;background:#f2ecff;border-radius:14px 14px 9px 9px}
+.history-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:-10px -10px 4px;padding:6px 10px;background:#f2ecff;border-radius:14px 14px 9px 9px;min-height:54px}
 .history-title{font-size:16px;font-weight:950;color:#351570}
 .history-add{
-  width:34px;height:34px;flex:0 0 34px;border-radius:50%;
+  width:32px;height:32px;flex:0 0 32px;border-radius:50%;
   border:1.5px solid #c9b1ef;background:#f7f3ff;color:#54259c;
   font-size:23px;line-height:1;font-weight:750;padding:0;
 }
 .history-list-scroll{
-  height:320px;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
+  height:324px;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
   overscroll-behavior:contain;
 }
 .history-empty{font-size:12px;color:#8b8097;padding:8px 2px}
 .log{
-  width:100%;display:grid;grid-template-columns:40px minmax(0,1fr);
-  gap:8px;align-items:center;text-align:left;border:0;border-top:1px solid #eee8f7;
-  background:#fff;padding:8px 1px;min-height:64px;color:#554a68;
+  width:100%;display:grid;grid-template-columns:36px minmax(0,1fr);
+  gap:7px;align-items:center;text-align:left;border:0;border-top:1px solid #eee8f7;
+  background:#fff;padding:5px 1px;min-height:54px;color:#554a68;
 }
 .log:first-child{border-top:0}
 .history-boss-icon-wrap{
-  width:40px;height:40px;display:block;overflow:hidden;border-radius:9px;
+  width:36px;height:36px;display:block;overflow:hidden;border-radius:9px;
   border:3px solid #6c3bd2;background:#ffd46b;box-shadow:0 2px 6px rgba(73,33,132,.12);
 }
 .history-boss-icon{
@@ -122,11 +122,11 @@ button:disabled{cursor:default;opacity:.45}
   border:0!important;border-radius:0!important;
 }
 .history-copy{min-width:0}
-.history-top{display:flex;align-items:baseline;gap:6px;min-width:0;flex-wrap:wrap;line-height:1.3}
+.history-top{display:flex;align-items:baseline;gap:5px;min-width:0;flex-wrap:wrap;line-height:1.2}
 .history-boss-name{color:#351570;font-size:12px;font-weight:950;white-space:nowrap}
 .history-time{color:#5e536f;font-size:11px;font-weight:800;font-variant-numeric:tabular-nums}
 .history-members{
-  display:block;margin-top:2px;color:#413450;font-size:11.5px;font-weight:900;line-height:1.35;
+  display:block;margin-top:1px;color:#413450;font-size:11.5px;font-weight:900;line-height:1.2;
   word-break:keep-all;
 }
 
@@ -218,7 +218,7 @@ button:disabled{cursor:default;opacity:.45}
   .rank-grid{gap:4px}
   .rank-count{font-size:10.5px}
   .rank-name{font-size:11.5px}
-  .history-list-scroll{height:320px}
+  .history-list-scroll{height:324px}
 }
 </style>
 </head>
