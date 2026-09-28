@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.1.2">
-<!-- internal version: V3.1.2 -->
+<meta name="app-version" content="V3.1.3">
+<!-- internal version: V3.1.3 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -396,7 +396,15 @@ const firebaseConfig = {
 const app=initializeApp(firebaseConfig);
 const auth=getAuth(app);
 const db=getFirestore(app);
-await signInAnonymously(auth);
+const authReady=(async()=>{
+  try{
+    if(!auth.currentUser) await signInAnonymously(auth);
+    return auth.currentUser;
+  }catch(e){
+    console.error("[auth] anonymous sign-in failed",e);
+    throw e;
+  }
+})();
 
 const WRITE_PIN="154100";
 function requireWritePin(){
@@ -435,6 +443,95 @@ const historyList=document.getElementById("historyList");
 const completeModal=document.getElementById("completeModal");
 const recordModal=document.getElementById("recordModal");
 const popupModal=document.getElementById("popupModal");
+
+const BOSS_TIMERS_CACHE_KEY="catHeroBossTimersCacheV1";
+const BOSS_HISTORY_CACHE_KEY="catHeroBossHistoryCacheV1";
+function cacheTs(ms){
+  return Number.isFinite(ms)?{toMillis:()=>ms}:null;
+}
+function loadTimersCache(){
+  try{
+    const raw=localStorage.getItem(BOSS_TIMERS_CACHE_KEY);
+    if(!raw)return null;
+    const parsed=JSON.parse(raw);
+    if(!parsed||typeof parsed!=="object"||!parsed.state)return null;
+    const state={};
+    Object.entries(parsed.state).forEach(([id,x])=>{
+      state[id]={
+        bossId:id,
+        spawnAt:cacheTs(Number(x?.spawnAtMs)),
+        updatedAt:cacheTs(Number(x?.updatedAtMs))
+      };
+    });
+    return state;
+  }catch(e){console.warn("[cache] timers read failed",e);return null}
+}
+function saveTimersCache(state){
+  try{
+    const plain={};
+    Object.entries(state).forEach(([id,x])=>{
+      const spawnAtMs=x?.spawnAt?.toMillis?.();
+      const updatedAtMs=x?.updatedAt?.toMillis?.();
+      plain[id]={
+        spawnAtMs:Number.isFinite(spawnAtMs)?spawnAtMs:null,
+        updatedAtMs:Number.isFinite(updatedAtMs)?updatedAtMs:null
+      };
+    });
+    localStorage.setItem(BOSS_TIMERS_CACHE_KEY,JSON.stringify({savedAt:Date.now(),state:plain}));
+  }catch(e){console.warn("[cache] timers save failed",e)}
+}
+function loadHistoryCache(){
+  try{
+    const raw=localStorage.getItem(BOSS_HISTORY_CACHE_KEY);
+    if(!raw)return null;
+    const parsed=JSON.parse(raw);
+    if(!parsed||!Array.isArray(parsed.items))return null;
+    return parsed.items.map(item=>{
+      const defeatedMs=Number(item.defeatedMs)||0;
+      const x={
+        bossId:item.bossId||"",
+        bossName:item.bossName||"",
+        type:"defeated",
+        participants:Array.isArray(item.participants)?item.participants:[],
+        defeatedAt:cacheTs(defeatedMs),
+        createdAt:cacheTs(Number(item.createdAtMs)),
+        updatedAt:cacheTs(Number(item.updatedAtMs))
+      };
+      return {id:String(item.id||""),x,defeatedMs};
+    }).filter(item=>item.id&&item.defeatedMs>0);
+  }catch(e){console.warn("[cache] history read failed",e);return null}
+}
+function saveHistoryCache(items){
+  try{
+    const plain=items.map(({id,x,defeatedMs})=>({
+      id,
+      bossId:x?.bossId||"",
+      bossName:x?.bossName||"",
+      participants:Array.isArray(x?.participants)?x.participants:[],
+      defeatedMs:Number(defeatedMs)||0,
+      createdAtMs:x?.createdAt?.toMillis?.()??null,
+      updatedAtMs:x?.updatedAt?.toMillis?.()??null
+    }));
+    localStorage.setItem(BOSS_HISTORY_CACHE_KEY,JSON.stringify({savedAt:Date.now(),items:plain}));
+  }catch(e){console.warn("[cache] history save failed",e)}
+}
+function applyCachedStateImmediately(){
+  const cachedTimers=loadTimersCache();
+  if(cachedTimers){
+    bossState=cachedTimers;
+  }
+  const cachedHistory=loadHistoryCache();
+  if(cachedHistory?.length){
+    historyItems=cachedHistory.sort((a,b)=>b.defeatedMs-a.defeatedMs);
+    historyState=new Map(historyItems.map(item=>[item.id,item.x]));
+  }
+  renderBosses();
+  renderWeeklyRanking();
+  renderHistory();
+}
+function updateCurrentClock(){
+  document.getElementById("now").textContent="현재시간 "+new Date().toLocaleTimeString("ko-KR",{hour12:false});
+}
 
 function pad(v){return String(v).padStart(2,"0")}
 function timeText(ms){const d=new Date(ms);return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`}
@@ -715,6 +812,7 @@ document.getElementById("saveComplete").addEventListener("click",async()=>{
   }
   const btn=document.getElementById("saveComplete");btn.disabled=true;
   try{
+    await authReady;
     const calcBaseMs=Date.now(),spawnMs=calcBaseMs+remain;
     const historyRef=doc(collection(db,"bossHistory")),timerRef=doc(db,"bossTimers",completeBoss),batch=writeBatch(db);
     batch.set(historyRef,{
@@ -745,6 +843,7 @@ document.getElementById("saveRecord").addEventListener("click",async()=>{
   }
   const btn=document.getElementById("saveRecord");btn.disabled=true;
   try{
+    await authReady;
     const ref=editingHistoryId?doc(db,"bossHistory",editingHistoryId):doc(collection(db,"bossHistory"));
     const payload={bossId:recordBoss,bossName:BOSSES[recordBoss].name,type:"defeated",
       defeatedAt:Timestamp.fromMillis(defeatedMs),participants:[...recordParticipants],
@@ -758,7 +857,7 @@ document.getElementById("saveRecord").addEventListener("click",async()=>{
 document.getElementById("deleteRecord").addEventListener("click",async()=>{
   if(!editingHistoryId)return;if(!confirm("이 처치 기록을 삭제할까요?"))return;
   const err=document.getElementById("recordError");
-  try{await deleteDoc(doc(db,"bossHistory",editingHistoryId));editingHistoryId=null;closeModal(recordModal)}
+  try{await authReady;await deleteDoc(doc(db,"bossHistory",editingHistoryId));editingHistoryId=null;closeModal(recordModal)}
   catch(e){err.textContent="삭제 실패: "+(e?.message||e)}
 });
 
@@ -774,6 +873,7 @@ document.getElementById("savePopup").addEventListener("click",async()=>{
   }
   const btn=document.getElementById("savePopup");btn.disabled=true;
   try{
+    await authReady;
     const batch=writeBatch(db),timerRef=doc(db,"bossTimers",popupBoss);
     batch.set(timerRef,{
       bossId:popupBoss,bossName:BOSSES[popupBoss].name,spawnAt:Timestamp.fromMillis(spawnMs),
@@ -785,30 +885,51 @@ document.getElementById("savePopup").addEventListener("click",async()=>{
   finally{syncPopupSave()}
 });
 
-onSnapshot(collection(db,"bossTimers"),snap=>{
-  bossState={};snap.forEach(d=>bossState[d.id]=d.data());renderBosses();
-},console.error);
+async function connectLiveData(){
+  try{
+    await authReady;
+    onSnapshot(collection(db,"bossTimers"),snap=>{
+      bossState={};
+      snap.forEach(d=>bossState[d.id]=d.data());
+      renderBosses();
+      saveTimersCache(bossState);
+    },e=>console.error("[bossTimers] snapshot error",e));
 
-onSnapshot(collection(db,"bossHistory"),snap=>{
-  historyState=new Map();historyItems=[];
-  snap.forEach(d=>{
-    const x=d.data();if(x.type!=="defeated")return;
-    historyState.set(d.id,x);
-    const defeatedMs=x.defeatedAt?.toMillis?.()??x.clientRecordedAt?.toMillis?.()??x.createdAt?.toMillis?.();
-    historyItems.push({id:d.id,x,defeatedMs:Number.isFinite(defeatedMs)?defeatedMs:0});
-  });
-  historyItems.sort((a,b)=>b.defeatedMs-a.defeatedMs);
-  renderBosses();renderWeeklyRanking();renderHistory();
-},e=>{historyList.className="history-empty";historyList.textContent="처치 기록을 불러오지 못했습니다."});
+    onSnapshot(collection(db,"bossHistory"),snap=>{
+      historyState=new Map();historyItems=[];
+      snap.forEach(d=>{
+        const x=d.data();if(x.type!=="defeated")return;
+        historyState.set(d.id,x);
+        const defeatedMs=x.defeatedAt?.toMillis?.()??x.clientRecordedAt?.toMillis?.()??x.createdAt?.toMillis?.();
+        historyItems.push({id:d.id,x,defeatedMs:Number.isFinite(defeatedMs)?defeatedMs:0});
+      });
+      historyItems.sort((a,b)=>b.defeatedMs-a.defeatedMs);
+      renderBosses();renderWeeklyRanking();renderHistory();
+      saveHistoryCache(historyItems);
+    },e=>{
+      console.error("[bossHistory] snapshot error",e);
+      if(!historyItems.length){
+        historyList.className="history-empty";
+        historyList.textContent="처치 기록을 불러오지 못했습니다.";
+      }
+    });
+  }catch(e){
+    console.error("[live data] connection failed",e);
+  }
+}
 
+updateCurrentClock();
+applyCachedStateImmediately();
+renderCompleteParticipants();
+renderRecordBossChoices();
+renderRecordParticipants();
 setInterval(()=>{
-  document.getElementById("now").textContent="현재시간 "+new Date().toLocaleTimeString("ko-KR",{hour12:false});
+  updateCurrentClock();
   if(completeModal.classList.contains("show"))refreshCompletePreview();
   if(popupModal.classList.contains("show")&&popupMode==="remaining")refreshPopupPreview();
   renderWeeklyRanking();
 },1000);
-
-renderBosses();renderWeeklyRanking();renderCompleteParticipants();renderRecordBossChoices();renderRecordParticipants();
+connectLiveData();
 </script>
 </body>
 </html>
