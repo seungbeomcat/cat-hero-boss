@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
-<title>도살장 보스 팝업 현황 V2.2.2</title>
+<title>도살장 보스 팝업 현황 V3.0.0</title>
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
-  --violet2:#5c2bc0; --soft:#f5f0ff; --text:#24183a; --muted:#786d89; --blue:#2f65b8;
-  --danger:#b72d2d; --ok:#2d7d52;
+  --violet2:#5c2bc0; --soft:#f5f0ff; --text:#24183a; --muted:#786d89;
+  --blue:#2f65b8; --danger:#b72d2d;
 }
 *{box-sizing:border-box}
 html,body{margin:0;max-width:100%;overflow-x:hidden}
@@ -22,225 +22,202 @@ button,input{font:inherit}
 button{cursor:pointer}
 button:disabled{cursor:default;opacity:.45}
 .app{
-  width:min(100%,560px);
-  min-height:100vh;
-  margin:0 auto;
+  width:min(100%,560px); min-height:100vh; margin:0 auto;
   background:linear-gradient(180deg,#fff 0%,#faf8ff 100%);
-  padding:14px 12px 28px;
+  padding:11px 9px 24px;
 }
 .top-back{
-  display:block;text-align:center;margin:0 0 8px;padding:8px 12px;border-radius:12px;
+  display:block;text-align:center;margin:0 0 8px;padding:8px 10px;border-radius:12px;
   background:#f3edff;border:1px solid #d7c6f2;color:#4b2295;text-decoration:none;
-  font-size:13px;font-weight:900;
+  font-size:12.5px;font-weight:900;
 }
-.header{text-align:center;padding:0 0 7px}
-.title{margin:0;color:#3d197e;font-size:26px;line-height:1.15;font-weight:950;letter-spacing:-.8px}
-.version{margin-top:5px;color:#7c6c9a;font-size:12px;font-weight:800}
-.now{margin-top:6px;color:#615775;font-size:13px;font-weight:850;font-variant-numeric:tabular-nums}
+.header{text-align:center;padding:0 0 8px}
+.title{margin:0;color:#3d197e;font-size:25px;line-height:1.12;font-weight:950;letter-spacing:-.7px}
+.version{margin-top:4px;color:#7c6c9a;font-size:11.5px;font-weight:800}
+.now{margin-top:5px;color:#615775;font-size:12.5px;font-weight:850;font-variant-numeric:tabular-nums}
 
-.quick-actions{
-  display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 8px;
+/* Four compact boss cards in one horizontal row */
+.boss-grid{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin-top:2px;
 }
-.quick-actions button{
-  min-height:38px;border-radius:12px;font-size:12.5px;font-weight:950;
+.boss-card{
+  min-width:0;overflow:hidden;background:#fff;border:2px solid var(--violet);
+  border-radius:15px;box-shadow:0 4px 10px rgba(66,32,125,.08);
 }
-.quick-record{
-  border:0;background:linear-gradient(180deg,#8156e9,#6133c7);color:#fff;
+.boss-art{
+  width:100%;aspect-ratio:1/1;display:block;object-fit:contain;object-position:center;
+  background:#ffd46b;border-bottom:1px solid #f1e7ff;
 }
-.quick-popup{
-  border:1px solid #cdb9ed;background:#f7f3ff;color:#4d258f;
-}
-
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.card{
-  background:#fff;border:2px solid var(--violet);border-radius:17px;overflow:hidden;
-  box-shadow:0 5px 13px rgba(66,32,125,.08);min-width:0;
-}
-.art{width:100%;height:106px;object-fit:contain;object-position:center;display:block;background:#ffd46b;}
-.card-body{text-align:center;padding:6px 7px 7px}
-.boss-name{font-size:17px;font-weight:950;color:#32156c;line-height:1.08}
-.popup-row{
-  display:flex;align-items:baseline;justify-content:center;gap:5px;margin-top:3px;min-width:0;
-}
-.popup-label{color:#847995;font-size:10px;font-weight:850;white-space:nowrap}
+.boss-body{text-align:center;padding:5px 4px 6px}
+.boss-name{color:#32156c;font-size:15px;line-height:1.05;font-weight:950;white-space:nowrap}
+.popup-label{margin-top:4px;color:#8a7c9b;font-size:8.5px;line-height:1;font-weight:850}
 .popup-time{
-  color:#4b2295;font-size:21px;line-height:1.05;font-weight:950;
-  letter-spacing:-.35px;font-variant-numeric:tabular-nums;white-space:nowrap;
+  margin-top:2px;color:#4b2295;font-size:clamp(15px,4.7vw,20px);line-height:1.02;
+  font-weight:950;letter-spacing:-.45px;font-variant-numeric:tabular-nums;white-space:nowrap;
 }
-.popup-meta{margin-top:2px;min-height:13px;color:#82768e;font-size:10px;font-weight:800}
-.card-actions{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:5px}
-.card-actions button{
-  min-height:31px;border-radius:9px;padding:5px 3px;font-size:10.5px;font-weight:900;
+.popup-meta{
+  margin-top:3px;color:#80738f;font-size:7.7px;line-height:1.25;font-weight:800;
+  min-height:20px;word-break:keep-all;
 }
-.record-btn{border:0;background:#6c3bd2;color:#fff}
-.popup-btn{border:1px solid #c9b2ed;background:#f7f3ff;color:#4e268f}
+.boss-actions{display:grid;grid-template-columns:1fr;gap:4px;margin-top:5px}
+.boss-actions button{
+  width:100%;min-height:29px;border-radius:9px;padding:4px 2px;font-size:9px;
+  line-height:1.1;font-weight:950;
+}
+.complete-btn{border:0;background:linear-gradient(180deg,#8156e9,#6133c7);color:#fff}
+.popup-edit-btn{border:1px solid #cbb7ed;background:#faf8ff;color:#512590}
 
+/* Weekly TOP 5 */
+.weekly-card{
+  margin-top:10px;border:2px solid var(--line);border-radius:16px;background:#fff;padding:10px 9px;
+}
+.weekly-head{text-align:center;margin-bottom:7px}
+.weekly-title{color:#351570;font-size:16px;font-weight:950;line-height:1.15}
+.weekly-period{
+  margin-top:3px;color:#766a88;font-size:10.5px;font-weight:800;
+  font-variant-numeric:tabular-nums;
+}
+.rank-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+.rank-cell{
+  min-width:0;border:1px solid #ded1f1;border-radius:10px;background:#faf8ff;
+  padding:7px 2px 6px;text-align:center;
+}
+.rank-count{color:#4b2295;font-size:18px;line-height:1;font-weight:950}
+.rank-name{
+  margin-top:4px;color:#43325b;font-size:10px;line-height:1.05;font-weight:900;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.rank-empty .rank-count,.rank-empty .rank-name{color:#aaa0b6}
+
+/* History is always the final page section */
 .history{
-  margin-top:12px;border:2px solid var(--line);border-radius:16px;background:#fff;padding:11px;
+  margin-top:10px;border:2px solid var(--line);border-radius:16px;background:#fff;padding:10px;
 }
-.history-title{font-size:16px;font-weight:950;color:#351570;margin-bottom:6px}
-
-.history-head{
-  display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;
-}
-.history-title{margin-bottom:0!important}
+.history-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:5px}
+.history-title{font-size:16px;font-weight:950;color:#351570}
 .history-add{
-  width:36px;height:36px;flex:0 0 36px;border-radius:50%;
+  width:34px;height:34px;flex:0 0 34px;border-radius:50%;
   border:1.5px solid #c9b1ef;background:#f7f3ff;color:#54259c;
-  font-size:24px;line-height:1;font-weight:700;padding:0;
+  font-size:23px;line-height:1;font-weight:750;padding:0;
 }
-
-.history-empty{font-size:12px;color:#8b8097;padding:6px 1px}
+.history-list-scroll{
+  height:330px;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+}
+.history-empty{font-size:12px;color:#8b8097;padding:8px 2px}
 .log{
-  width:100%;text-align:left;border:0;border-top:1px solid #eee8f7;background:#fff;
-  padding:9px 2px;font-size:12px;line-height:1.48;color:#554a68;
+  width:100%;display:grid;grid-template-columns:40px minmax(0,1fr);
+  gap:8px;align-items:center;text-align:left;border:0;border-top:1px solid #eee8f7;
+  background:#fff;padding:8px 1px;min-height:64px;color:#554a68;
 }
 .log:first-child{border-top:0}
-.log b{color:#351570}
-.log .edit-hint{display:block;margin-top:3px;color:#8b7ca3;font-size:10.5px;font-weight:800}
+.history-boss-icon-wrap{
+  width:40px;height:40px;display:block;overflow:hidden;border-radius:9px;
+  border:3px solid #6c3bd2;background:#ffd46b;box-shadow:0 2px 6px rgba(73,33,132,.12);
+}
+.history-boss-icon{
+  width:100%;height:100%;display:block;object-fit:cover;object-position:center;
+  border:0!important;border-radius:0!important;
+}
+.history-copy{min-width:0}
+.history-top{display:flex;align-items:baseline;gap:6px;min-width:0;flex-wrap:wrap;line-height:1.3}
+.history-boss-name{color:#351570;font-size:12px;font-weight:950;white-space:nowrap}
+.history-time{color:#5e536f;font-size:11px;font-weight:800;font-variant-numeric:tabular-nums}
+.history-members{
+  display:block;margin-top:2px;color:#413450;font-size:11.5px;font-weight:900;line-height:1.35;
+  word-break:keep-all;
+}
 
-/* modal */
+/* Modal */
 .modal{
   position:fixed;inset:0;z-index:1000;display:none;align-items:flex-end;justify-content:center;
-  background:rgba(25,12,48,.48);padding:12px;
+  background:rgba(25,12,48,.48);padding:10px;
 }
 .modal.show{display:flex}
 .sheet{
-  width:min(100%,560px);max-height:91vh;overflow:auto;background:#fff;border:2px solid #c9b1ef;
-  border-radius:22px 22px 15px 15px;padding:16px 14px 15px;box-shadow:0 20px 55px rgba(36,17,69,.28);
+  width:min(100%,560px);max-height:92vh;overflow:auto;background:#fff;border:2px solid #c9b1ef;
+  border-radius:21px 21px 14px 14px;padding:15px 13px 14px;box-shadow:0 20px 55px rgba(36,17,69,.28);
 }
-.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
 .sheet-title{font-size:19px;font-weight:950;color:#351570}
 .close{
   width:38px;height:38px;border:1px solid #dacdf0;border-radius:11px;background:#faf8ff;
   color:#4d238e;font-size:23px;line-height:1;padding:0;
 }
-.step-title{margin:12px 0 7px;font-size:13px;font-weight:950;color:#4b2a77}
-.boss-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.step-title{margin:11px 0 6px;font-size:13px;font-weight:950;color:#4b2a77}
+.boss-chip{
+  display:flex;align-items:center;gap:8px;border:1px solid #d8c8ee;border-radius:11px;
+  background:#faf8ff;padding:7px 9px;color:#452178;font-size:13px;font-weight:950;
+}
+.boss-chip img{width:36px;height:36px;object-fit:cover;border-radius:8px;border:2px solid #6c3bd2;background:#ffd46b}
+.boss-grid-modal{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
 .boss-choice{
-  min-height:40px;border:1.5px solid #d8c8ee;border-radius:10px;background:#fbfaff;
+  min-height:39px;border:1.5px solid #d8c8ee;border-radius:10px;background:#fbfaff;
   color:#4d2b70;font-size:12px;font-weight:900;padding:5px 3px;
 }
 .boss-choice.selected{background:#5d32bd;border-color:#5d32bd;color:#fff}
-.member-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.member-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .member-btn{
-  min-height:40px;border:1.5px solid #d8c8ee;border-radius:10px;background:#fbfaff;
-  color:#4d2b70;font-size:12.5px;font-weight:850;padding:5px 4px;
+  min-height:39px;border:1.5px solid #d8c8ee;border-radius:10px;background:#fbfaff;
+  color:#4d2b70;font-size:12px;font-weight:850;padding:5px 4px;
 }
-.member-btn.selected{
-  background:linear-gradient(180deg,#3a73ca,#2656a5);border-color:#28579f;color:#fff;
-}
+.member-btn.selected{background:linear-gradient(180deg,#3a73ca,#2656a5);border-color:#28579f;color:#fff}
 .selected-info{
   margin-top:7px;padding:8px 9px;border-radius:10px;background:#f7f3fc;color:#665876;
-  font-size:11.5px;line-height:1.45;font-weight:750;min-height:34px;
+  font-size:11px;line-height:1.4;font-weight:800;min-height:34px;
 }
-.field{
-  width:100%;height:46px;border:1.5px solid #ceb9ec;border-radius:11px;background:#fff;
-  color:#2d2150;font-size:16px;font-weight:850;padding:7px 10px;
+.exact-time-box{display:grid;grid-template-columns:1fr;gap:7px}
+.exact-date{
+  width:100%;height:43px;min-height:43px;border:1.5px solid #ceb9ec;border-radius:11px;
+  background:#fff;color:#2d2150;font-size:15px;font-weight:850;padding:0 10px;
+  -webkit-appearance:none;appearance:none;
 }
-.time-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.time-wrap{position:relative}
-.time-wrap input{
-  width:100%;height:46px;border:1.5px solid #ceb9ec;border-radius:11px;background:#fff;
-  color:#2d2150;font-size:18px;font-weight:900;text-align:center;padding:7px 22px 7px 7px;
+.hms-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.hms-wrap{position:relative}
+.hms-wrap input{
+  width:100%;height:43px;border:1.5px solid #ceb9ec;border-radius:11px;background:#fff;
+  color:#2d2150;font-size:17px;font-weight:900;text-align:center;padding:6px 22px 6px 6px;
 }
-.time-unit{position:absolute;right:7px;top:50%;transform:translateY(-50%);color:#887a9d;font-size:11px;font-weight:850}
+.hms-unit{
+  position:absolute;right:7px;top:50%;transform:translateY(-50%);color:#887a9d;
+  font-size:10.5px;font-weight:850;pointer-events:none;
+}
 .preview{
-  margin-top:10px;padding:10px;border:1px solid #c9b4ea;border-radius:12px;background:#f8f4ff;
-  text-align:center;
+  margin-top:8px;padding:9px;border:1px solid #c9b4ea;border-radius:12px;background:#f8f4ff;text-align:center;
 }
-.preview-label{font-size:11px;color:#7a6d8e;font-weight:850}
-.preview-time{margin-top:2px;font-size:24px;color:#4b2295;font-weight:950;font-variant-numeric:tabular-nums}
-.preview-date{margin-top:2px;font-size:11.5px;color:#786d88;font-weight:800}
-.mode-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:4px 0 9px}
+.preview-label{font-size:10.5px;color:#7a6d8e;font-weight:850}
+.preview-time{margin-top:2px;font-size:22px;color:#4b2295;font-weight:950;font-variant-numeric:tabular-nums}
+.preview-date{margin-top:2px;font-size:11px;color:#786d88;font-weight:800}
+.mode-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:4px 0 8px}
 .mode-tabs button{
-  min-height:38px;border-radius:10px;border:1px solid #d4c1ef;background:#faf8ff;
-  color:#5c3a89;font-size:12px;font-weight:900;
+  min-height:37px;border-radius:10px;border:1px solid #d4c1ef;background:#faf8ff;
+  color:#5c3a89;font-size:11.5px;font-weight:900;
 }
 .mode-tabs button.active{background:#6840c6;color:#fff;border-color:#6840c6}
-.popup-panel{display:none}
-.popup-panel.active{display:block}
-.sheet-actions{display:grid;grid-template-columns:1fr 1.6fr;gap:8px;margin-top:12px}
-.sheet-actions button{min-height:45px;border:0;border-radius:11px;font-size:14px;font-weight:950}
+.popup-panel{display:none}.popup-panel.active{display:block}
+.sheet-actions{display:grid;grid-template-columns:1fr 1.65fr;gap:8px;margin-top:11px}
+.sheet-actions button{min-height:44px;border:0;border-radius:11px;font-size:13px;font-weight:950}
 .cancel{background:#eeeaf3;color:#51465f}
 .save{background:linear-gradient(180deg,#8156e9,#6133c7);color:#fff}
 .danger{
-  width:100%;margin-top:8px;min-height:40px;border:1px solid #e4b1b1;border-radius:10px;
+  width:100%;margin-top:8px;min-height:39px;border:1px solid #e4b1b1;border-radius:10px;
   background:#fff7f7;color:#a73232;font-size:12px;font-weight:900;
 }
-.error{min-height:17px;margin-top:8px;color:#b22b2b;font-size:11.5px;font-weight:800;text-align:center}
-.helper{margin-top:6px;color:#847993;font-size:10.5px;line-height:1.45}
+.error{min-height:17px;margin-top:7px;color:#b22b2b;font-size:11.5px;font-weight:800;text-align:center}
 
 @media(max-width:390px){
-  .app{padding-left:9px;padding-right:9px}
-  .grid{gap:7px}
-  .art{height:98px}
-  .popup-time{font-size:19px}
-  .boss-name{font-size:17px}
-  .member-grid{gap:6px}
-  .member-btn{font-size:12px}
-  .quick-actions{gap:6px}
+  .app{padding-left:7px;padding-right:7px}
+  .boss-grid{gap:4px}
+  .boss-body{padding-left:3px;padding-right:3px}
+  .boss-name{font-size:14px}
+  .popup-time{font-size:15.5px}
+  .popup-meta{font-size:7.2px}
+  .boss-actions button{font-size:8.2px;min-height:27px}
+  .rank-grid{gap:4px}
+  .rank-count{font-size:17px}
+  .rank-name{font-size:9.5px}
+  .history-list-scroll{height:320px}
 }
-
-
-
-/* Exact defeated-time entry: date + hour/minute/second */
-.defeated-time-box{display:grid;grid-template-columns:1fr;gap:8px}
-.record-date{
-  width:100%;height:44px;min-height:44px;border:1.5px solid #ceb9ec;border-radius:11px;
-  background:#fff;color:#2d2150;font-size:16px;font-weight:850;padding:0 10px;
-  -webkit-appearance:none;appearance:none;
-}
-.record-time-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.record-time-wrap{position:relative}
-.record-time-wrap input{
-  width:100%;height:44px;border:1.5px solid #ceb9ec;border-radius:11px;background:#fff;
-  color:#2d2150;font-size:18px;font-weight:900;text-align:center;padding:7px 24px 7px 6px;
-}
-.record-time-unit{
-  position:absolute;right:7px;top:50%;transform:translateY(-50%);
-  color:#887a9d;font-size:11px;font-weight:850;pointer-events:none;
-}
-
-/* Accumulated defeat history */
-.log{
-  display:grid!important;grid-template-columns:42px minmax(0,1fr);
-  gap:9px;align-items:center;padding:8px 2px!important;
-}
-.history-boss-icon-wrap{
-  width:42px;height:42px;display:block;overflow:hidden;border-radius:10px;
-  border:3px solid #6c3bd2;background:#ffd46b;
-  box-shadow:0 0 0 1px rgba(255,255,255,.9),0 2px 6px rgba(73,33,132,.12);
-  flex:0 0 42px;
-}
-.history-boss-icon{
-  width:100%;height:100%;display:block;object-fit:cover;object-position:center;
-  border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;
-}
-.history-copy{min-width:0}
-.history-top{
-  display:flex;align-items:baseline;gap:7px;min-width:0;flex-wrap:wrap;line-height:1.35;
-}
-.history-boss-name{color:#351570;font-size:13px;font-weight:950;white-space:nowrap}
-.history-time{color:#5e536f;font-size:12px;font-weight:750;font-variant-numeric:tabular-nums}
-.history-members{
-  display:block;margin-top:2px;color:#413450;font-size:12.5px;font-weight:900;
-  line-height:1.35;word-break:keep-all;
-}
-
-
-.history-list-scroll{
-  max-height:470px;
-  overflow-y:auto;
-  overflow-x:hidden;
-  -webkit-overflow-scrolling:touch;
-  overscroll-behavior:contain;
-  scrollbar-gutter:stable;
-}
-@media(max-width:390px){
-  .history-list-scroll{max-height:450px}
-}
-
 </style>
 </head>
 <body>
@@ -249,27 +226,72 @@ button:disabled{cursor:default;opacity:.45}
 
   <header class="header">
     <h1 class="title">도살장 보스 팝업 현황</h1>
-    <div class="version">V2.2.2 · 길드 공유</div>
+    <div class="version">V3.0.0 · 길드 공유</div>
     <div id="now" class="now">현재시간 --:--:--</div>
   </header>
 
-  <div class="quick-actions">
-    <button id="globalRecordBtn" class="quick-record" type="button">처치 기록 추가</button>
-    <button id="globalPopupBtn" class="quick-popup" type="button">다음 팝업시간 관리</button>
-  </div>
+  <section id="bossGrid" class="boss-grid" aria-label="2구역 보스 현황"></section>
 
-  <section id="bossGrid" class="grid"></section>
+  <section class="weekly-card" aria-label="이번 주 2구역 참여 현황">
+    <div class="weekly-head">
+      <div class="weekly-title">이번 주 2구역 참여 현황 TOP 5</div>
+      <div id="weeklyPeriod" class="weekly-period">집계기간 계산 중</div>
+    </div>
+    <div id="rankGrid" class="rank-grid"></div>
+  </section>
 
-  <section class="history">
+  <section class="history" aria-label="처치 기록">
     <div class="history-head">
       <div class="history-title">처치 기록</div>
-      <button id="historyAddBtn" class="history-add" type="button" aria-label="처치 기록 소급 추가">+</button>
+      <button id="historyAddBtn" class="history-add" type="button" aria-label="과거 처치 기록 추가">+</button>
     </div>
     <div class="history-list-scroll">
       <div id="historyList" class="history-empty">기록을 불러오는 중입니다.</div>
     </div>
   </section>
 </main>
+
+<div id="completeModal" class="modal" aria-hidden="true">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="completeTitle">
+    <div class="sheet-head">
+      <div id="completeTitle" class="sheet-title">처치 완료</div>
+      <button id="closeCompleteModal" class="close" type="button" aria-label="닫기">×</button>
+    </div>
+    <div id="completeBossChip" class="boss-chip"></div>
+
+    <div class="step-title">1. 처치 완료시간</div>
+    <div class="exact-time-box">
+      <input id="completeDate" class="exact-date" type="date" aria-label="처치 완료 날짜">
+      <div class="hms-row">
+        <div class="hms-wrap"><input id="completeHour" type="number" inputmode="numeric" min="0" max="23"><span class="hms-unit">시</span></div>
+        <div class="hms-wrap"><input id="completeMinute" type="number" inputmode="numeric" min="0" max="59"><span class="hms-unit">분</span></div>
+        <div class="hms-wrap"><input id="completeSecond" type="number" inputmode="numeric" min="0" max="59"><span class="hms-unit">초</span></div>
+      </div>
+    </div>
+
+    <div class="step-title">2. 참여 길드원 선택</div>
+    <div id="completeParticipantGrid" class="member-grid"></div>
+    <div id="completeParticipantInfo" class="selected-info">참여 길드원을 선택해주세요.</div>
+
+    <div class="step-title">3. 다음 팝업까지 남은 시간</div>
+    <div class="hms-row">
+      <div class="hms-wrap"><input id="completeRemainHour" type="number" inputmode="numeric" min="0" max="23" placeholder="0"><span class="hms-unit">시간</span></div>
+      <div class="hms-wrap"><input id="completeRemainMinute" type="number" inputmode="numeric" min="0" max="59" placeholder="0"><span class="hms-unit">분</span></div>
+      <div class="hms-wrap"><input id="completeRemainSecond" type="number" inputmode="numeric" min="0" max="59" placeholder="0"><span class="hms-unit">초</span></div>
+    </div>
+    <div class="preview">
+      <div class="preview-label">저장 시점 기준 다음 팝업 예상시각</div>
+      <div id="completePreviewTime" class="preview-time">--:--:--</div>
+      <div id="completePreviewDate" class="preview-date"></div>
+    </div>
+
+    <div id="completeError" class="error"></div>
+    <div class="sheet-actions">
+      <button id="cancelComplete" class="cancel" type="button">취소</button>
+      <button id="saveComplete" class="save" type="button" disabled>처치 완료 + 다음 팝업 저장</button>
+    </div>
+  </div>
+</div>
 
 <div id="recordModal" class="modal" aria-hidden="true">
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="recordTitle">
@@ -279,27 +301,26 @@ button:disabled{cursor:default;opacity:.45}
     </div>
 
     <div class="step-title">1. 보스 선택</div>
-    <div id="recordBossGrid" class="boss-grid"></div>
+    <div id="recordBossGrid" class="boss-grid-modal"></div>
 
-    <div class="step-title">2. 처치 완료시간 입력</div>
-    <div class="defeated-time-box">
-      <input id="defeatedDate" class="record-date" type="date" aria-label="처치 완료 날짜">
-      <div class="record-time-row" aria-label="처치 완료 시각">
-        <div class="record-time-wrap"><input id="defeatedHour" type="number" inputmode="numeric" min="0" max="23" aria-label="처치 완료 시"><span class="record-time-unit">시</span></div>
-        <div class="record-time-wrap"><input id="defeatedMinute" type="number" inputmode="numeric" min="0" max="59" aria-label="처치 완료 분"><span class="record-time-unit">분</span></div>
-        <div class="record-time-wrap"><input id="defeatedSecond" type="number" inputmode="numeric" min="0" max="59" aria-label="처치 완료 초"><span class="record-time-unit">초</span></div>
+    <div class="step-title">2. 처치 완료시간</div>
+    <div class="exact-time-box">
+      <input id="recordDate" class="exact-date" type="date" aria-label="처치 완료 날짜">
+      <div class="hms-row">
+        <div class="hms-wrap"><input id="recordHour" type="number" inputmode="numeric" min="0" max="23"><span class="hms-unit">시</span></div>
+        <div class="hms-wrap"><input id="recordMinute" type="number" inputmode="numeric" min="0" max="59"><span class="hms-unit">분</span></div>
+        <div class="hms-wrap"><input id="recordSecond" type="number" inputmode="numeric" min="0" max="59"><span class="hms-unit">초</span></div>
       </div>
     </div>
-    <div class="helper">인게임에서 확인한 실제 처치 완료시간을 초 단위까지 입력해주세요.</div>
 
-    <div class="step-title">3. 처치 참여 길드원 선택</div>
-    <div id="participantGrid" class="member-grid"></div>
-    <div id="participantInfo" class="selected-info">참여 길드원을 선택해주세요.</div>
+    <div class="step-title">3. 참여 길드원 선택</div>
+    <div id="recordParticipantGrid" class="member-grid"></div>
+    <div id="recordParticipantInfo" class="selected-info">참여 길드원을 선택해주세요.</div>
 
     <div id="recordError" class="error"></div>
     <div class="sheet-actions">
       <button id="cancelRecord" class="cancel" type="button">취소</button>
-      <button id="saveRecord" class="save" type="button" disabled>처치 완료 기록</button>
+      <button id="saveRecord" class="save" type="button" disabled>처치 기록 저장</button>
     </div>
     <button id="deleteRecord" class="danger" type="button" hidden>이 처치 기록 삭제</button>
   </div>
@@ -308,43 +329,47 @@ button:disabled{cursor:default;opacity:.45}
 <div id="popupModal" class="modal" aria-hidden="true">
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
     <div class="sheet-head">
-      <div id="popupTitle" class="sheet-title">다음 팝업시간 관리</div>
+      <div id="popupTitle" class="sheet-title">팝업시간 수정</div>
       <button id="closePopupModal" class="close" type="button" aria-label="닫기">×</button>
     </div>
+    <div id="popupBossChip" class="boss-chip"></div>
 
-    <div class="step-title">1. 보스 선택</div>
-    <div id="popupBossGrid" class="boss-grid"></div>
-
-    <div class="step-title">2. 입력 방식 선택</div>
+    <div class="step-title">입력 방식</div>
     <div class="mode-tabs">
       <button id="remainModeBtn" class="active" type="button">남은 시간 입력</button>
-      <button id="manualModeBtn" type="button">팝업시각 직접 수정</button>
+      <button id="manualModeBtn" type="button">팝업시각 직접 입력</button>
     </div>
 
     <div id="remainPanel" class="popup-panel active">
       <div class="step-title">다음 팝업까지 남은 시간</div>
-      <div class="time-row">
-        <div class="time-wrap"><input id="hours" type="number" inputmode="numeric" min="0" max="23" value="10"><span class="time-unit">시간</span></div>
-        <div class="time-wrap"><input id="minutes" type="number" inputmode="numeric" min="0" max="59" value="0"><span class="time-unit">분</span></div>
-        <div class="time-wrap"><input id="seconds" type="number" inputmode="numeric" min="0" max="59" value="0"><span class="time-unit">초</span></div>
+      <div class="hms-row">
+        <div class="hms-wrap"><input id="popupRemainHour" type="number" inputmode="numeric" min="0" max="23" placeholder="0"><span class="hms-unit">시간</span></div>
+        <div class="hms-wrap"><input id="popupRemainMinute" type="number" inputmode="numeric" min="0" max="59" placeholder="0"><span class="hms-unit">분</span></div>
+        <div class="hms-wrap"><input id="popupRemainSecond" type="number" inputmode="numeric" min="0" max="59" placeholder="0"><span class="hms-unit">초</span></div>
       </div>
       <div class="preview">
-        <div class="preview-label">현재시간 + 남은 시간</div>
-        <div id="previewTime" class="preview-time">--:--:--</div>
-        <div id="previewDate" class="preview-date"></div>
+        <div class="preview-label">저장 시점 기준 다음 팝업 예상시각</div>
+        <div id="popupPreviewTime" class="preview-time">--:--:--</div>
+        <div id="popupPreviewDate" class="preview-date"></div>
       </div>
     </div>
 
     <div id="manualPanel" class="popup-panel">
       <div class="step-title">다음 팝업 예상시각 직접 입력</div>
-      <input id="manualSpawnAt" class="field" type="datetime-local" step="1">
-      <div class="helper">자동 계산값이 이상할 때 해당 보스의 다음 팝업시각을 직접 보정할 수 있습니다.</div>
+      <div class="exact-time-box">
+        <input id="popupDate" class="exact-date" type="date" aria-label="팝업 날짜">
+        <div class="hms-row">
+          <div class="hms-wrap"><input id="popupHour" type="number" inputmode="numeric" min="0" max="23"><span class="hms-unit">시</span></div>
+          <div class="hms-wrap"><input id="popupMinute" type="number" inputmode="numeric" min="0" max="59"><span class="hms-unit">분</span></div>
+          <div class="hms-wrap"><input id="popupSecond" type="number" inputmode="numeric" min="0" max="59"><span class="hms-unit">초</span></div>
+        </div>
+      </div>
     </div>
 
     <div id="popupError" class="error"></div>
     <div class="sheet-actions">
       <button id="cancelPopup" class="cancel" type="button">취소</button>
-      <button id="savePopup" class="save" type="button" disabled>다음 팝업시간 저장</button>
+      <button id="savePopup" class="save" type="button" disabled>팝업시간 저장</button>
     </div>
   </div>
 </div>
@@ -367,217 +392,224 @@ const firebaseConfig = {
   measurementId: "G-4QJSQ5DFDT"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
 await signInAnonymously(auth);
 
-const WRITE_PIN = "154100";
-
+const WRITE_PIN="154100";
 function requireWritePin(){
-  const value = window.prompt("인증번호를 입력하세요.");
-  if(value === null) return false;
-  if(String(value).trim() !== WRITE_PIN){
-    window.alert("인증번호가 올바르지 않습니다.");
-    return false;
-  }
+  const v=window.prompt("인증번호를 입력하세요.");
+  if(v===null)return false;
+  if(String(v).trim()!==WRITE_PIN){window.alert("인증번호가 올바르지 않습니다.");return false}
   return true;
 }
 
-const MEMBERS = {
+const MEMBERS={
   "돗돔":{base:191.6},"매콤갈비":{base:142.5},"사마엘":{base:122.5},"혀녕":{base:93.8},
   "데이다라":{base:93},"XIGN":{base:78},"뱅수띠":{base:64},"승부왕":{base:60.1},
   "진니":{base:57.5},"토시살":{base:57},"페르시안":{base:57},"벨제붑":{base:38},
-  "바포메트":{base:35.5},"옥돔":{base:34.5},"하니엘":{base:29}
+  "하니엘":{base:37},"바포메트":{base:35.5},"옥돔":{base:34.5}
 };
-const MEMBER_ORDER = Object.entries(MEMBERS)
-  .sort((a,b)=>b[1].base-a[1].base)
-  .map(([name])=>name);
+const MEMBER_ORDER=Object.entries(MEMBERS).sort((a,b)=>b[1].base-a[1].base).map(([n])=>n);
 
-const BOSSES = {
+const BOSSES={
   louis:{name:"루이",img:"assets/louis.png",order:0},
   looney:{name:"루니",img:"assets/looney.png",order:1},
   luna:{name:"루나",img:"assets/luna.png",order:2},
   bananyang:{name:"바나냥",img:"assets/bananyang.png",order:3}
 };
 
-let bossState = {};
-let historyState = new Map();
+let bossState={};
+let historyState=new Map();
+let historyItems=[];
+let completeBoss=null,completeParticipants=[];
+let recordBoss=null,recordParticipants=[],editingHistoryId=null;
+let popupBoss=null,popupMode="remaining";
 
-let recordBoss = null;
-let recordParticipants = [];
-let editingHistoryId = null;
-
-let popupBoss = null;
-let popupMode = "remaining";
-
-const bossGrid = document.getElementById("bossGrid");
-const recordModal = document.getElementById("recordModal");
-const popupModal = document.getElementById("popupModal");
-const recordBossGrid = document.getElementById("recordBossGrid");
-const popupBossGrid = document.getElementById("popupBossGrid");
-const participantGrid = document.getElementById("participantGrid");
+const bossGrid=document.getElementById("bossGrid");
+const rankGrid=document.getElementById("rankGrid");
+const weeklyPeriod=document.getElementById("weeklyPeriod");
+const historyList=document.getElementById("historyList");
+const completeModal=document.getElementById("completeModal");
+const recordModal=document.getElementById("recordModal");
+const popupModal=document.getElementById("popupModal");
 
 function pad(v){return String(v).padStart(2,"0")}
-function timeText(ms){
-  const d=new Date(ms);
-  return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-}
-function shortDate(ms){
-  const d=new Date(ms);
-  return `${d.getMonth()+1}/${d.getDate()}`;
-}
-function dateText(ms){
+function timeText(ms){const d=new Date(ms);return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`}
+function dateTimeText(ms){const d=new Date(ms);return `${d.getMonth()+1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`}
+function dateLabel(ms){
   const d=new Date(ms),t=new Date();
   const same=d.getFullYear()===t.getFullYear()&&d.getMonth()===t.getMonth()&&d.getDate()===t.getDate();
-  return same?"오늘":shortDate(ms);
+  return same?"오늘":`${d.getMonth()+1}/${d.getDate()}`;
 }
-function dateTimeText(ms){
+function recordDateValue(ms){const d=new Date(ms);return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
+function setExactInputs(prefix,ms){
   const d=new Date(ms);
-  return `${d.getMonth()+1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  document.getElementById(prefix+"Date").value=recordDateValue(ms);
+  document.getElementById(prefix+"Hour").value=String(d.getHours());
+  document.getElementById(prefix+"Minute").value=String(d.getMinutes());
+  document.getElementById(prefix+"Second").value=String(d.getSeconds());
 }
-function localInputValue(ms){
-  const d=new Date(ms);
-  const y=d.getFullYear(),m=pad(d.getMonth()+1),day=pad(d.getDate());
-  return `${y}-${m}-${day}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-}
-function parseLocalInput(value){
-  if(!value)return NaN;
-  const ms=new Date(value).getTime();
-  return Number.isFinite(ms)?ms:NaN;
-}
-
-function recordDateValue(ms){
-  const d=new Date(ms);
-  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-}
-function setRecordTimeInputs(ms){
-  const d=new Date(ms);
-  document.getElementById("defeatedDate").value=recordDateValue(ms);
-  document.getElementById("defeatedHour").value=String(d.getHours());
-  document.getElementById("defeatedMinute").value=String(d.getMinutes());
-  document.getElementById("defeatedSecond").value=String(d.getSeconds());
-}
-function defeatedMsFromInputs(){
-  const date=document.getElementById("defeatedDate").value;
-  if(!date)return NaN;
-  const h=Number(document.getElementById("defeatedHour").value);
-  const m=Number(document.getElementById("defeatedMinute").value);
-  const s=Number(document.getElementById("defeatedSecond").value);
+function exactMsFromInputs(prefix){
+  const date=document.getElementById(prefix+"Date").value;if(!date)return NaN;
+  const h=Number(document.getElementById(prefix+"Hour").value);
+  const m=Number(document.getElementById(prefix+"Minute").value);
+  const s=Number(document.getElementById(prefix+"Second").value);
   if(!Number.isInteger(h)||h<0||h>23)return NaN;
   if(!Number.isInteger(m)||m<0||m>59)return NaN;
   if(!Number.isInteger(s)||s<0||s>59)return NaN;
   const [y,mo,da]=date.split("-").map(Number);
   const d=new Date(y,mo-1,da,h,m,s,0);
   return d.getFullYear()===y&&d.getMonth()===mo-1&&d.getDate()===da&&
-    d.getHours()===h&&d.getMinutes()===m&&d.getSeconds()===s ? d.getTime() : NaN;
+    d.getHours()===h&&d.getMinutes()===m&&d.getSeconds()===s ? d.getTime():NaN;
 }
-
-function renderBossChoices(host,selected){
-  host.innerHTML=Object.entries(BOSSES).map(([id,b])=>
-    `<button type="button" class="boss-choice${selected===id?" selected":""}" data-boss-choice="${id}">${b.name}</button>`
-  ).join("");
+function remainingMs(prefix){
+  const h=Math.max(0,Number(document.getElementById(prefix+"Hour").value)||0);
+  const m=Math.min(59,Math.max(0,Number(document.getElementById(prefix+"Minute").value)||0));
+  const s=Math.min(59,Math.max(0,Number(document.getElementById(prefix+"Second").value)||0));
+  return (h*3600+m*60+s)*1000;
 }
+function openModal(el){el.classList.add("show");el.setAttribute("aria-hidden","false");document.body.style.overflow="hidden"}
+function closeModal(el){el.classList.remove("show");el.setAttribute("aria-hidden","true");document.body.style.overflow=""}
+function bossChipHtml(id){const b=BOSSES[id];return `<img src="${b.img}" alt=""><span>${b.name}</span>`}
 
 function renderBosses(){
   const cards=Object.entries(BOSSES).map(([id,b])=>{
-    const x=bossState[id]||{};
-    const ms=x.spawnAt?.toMillis?.();
-    const updatedMs=x.updatedAt?.toMillis?.();
-    return {id,...b,...x,ms:Number.isFinite(ms)?ms:null,updatedMs:Number.isFinite(updatedMs)?updatedMs:null};
+    const x=bossState[id]||{},ms=x.spawnAt?.toMillis?.(),updatedMs=x.updatedAt?.toMillis?.();
+    return {id,...b,ms:Number.isFinite(ms)?ms:null,updatedMs:Number.isFinite(updatedMs)?updatedMs:null};
   });
   cards.sort((a,b)=>(a.ms??Infinity)-(b.ms??Infinity)||a.order-b.order);
-
   bossGrid.innerHTML=cards.map(x=>`
-    <article class="card">
-      <img class="art" src="${x.img}" alt="${x.name}">
-      <div class="card-body">
+    <article class="boss-card">
+      <img class="boss-art" src="${x.img}" alt="${x.name}">
+      <div class="boss-body">
         <div class="boss-name">${x.name}</div>
-        <div class="popup-row">
-          <span class="popup-label">다음 팝업</span>
-          <span class="popup-time">${x.ms!==null?timeText(x.ms):"미등록"}</span>
-        </div>
-        <div class="popup-meta">${x.ms!==null?dateText(x.ms):""}${x.updatedMs?` · 갱신 ${dateTimeText(x.updatedMs)}`:""}</div>
-        <div class="card-actions">
-          <button class="record-btn" type="button" data-card-record="${x.id}">처치 기록</button>
-          <button class="popup-btn" type="button" data-card-popup="${x.id}">팝업시간 수정</button>
+        <div class="popup-label">다음 팝업</div>
+        <div class="popup-time">${x.ms!==null?timeText(x.ms):"미등록"}</div>
+        <div class="popup-meta">${x.ms!==null?dateLabel(x.ms):""}${x.updatedMs?` · 갱신 ${dateTimeText(x.updatedMs)}`:""}</div>
+        <div class="boss-actions">
+          <button class="complete-btn" type="button" data-complete="${x.id}">처치 완료</button>
+          <button class="popup-edit-btn" type="button" data-popup="${x.id}">팝업시간 수정</button>
         </div>
       </div>
     </article>
   `).join("");
 }
 
-function renderParticipantButtons(){
-  participantGrid.innerHTML=MEMBER_ORDER.map(name=>
-    `<button type="button" class="member-btn${recordParticipants.includes(name)?" selected":""}" data-participant="${name}">${name}</button>`
-  ).join("");
-  document.getElementById("participantInfo").textContent=
-    recordParticipants.length?`참여 ${recordParticipants.length}명 · ${recordParticipants.join(", ")}`:"참여 길드원을 선택해주세요.";
-  syncRecordSaveState();
+function currentWeekWindow(nowMs=Date.now()){
+  const now=new Date(nowMs);
+  const mondayOffset=(now.getDay()+6)%7;
+  let start=new Date(now.getFullYear(),now.getMonth(),now.getDate()-mondayOffset,9,0,0,0);
+  if(nowMs<start.getTime())start=new Date(start.getFullYear(),start.getMonth(),start.getDate()-7,9,0,0,0);
+  const end=new Date(start.getFullYear(),start.getMonth(),start.getDate()+7,9,0,0,0);
+  return {startMs:start.getTime(),endMs:end.getTime()};
+}
+function periodText(startMs,endMs){
+  const s=new Date(startMs),e=new Date(endMs-60000);
+  return `${s.getFullYear()}.${pad(s.getMonth()+1)}.${pad(s.getDate())} 09:00 ~ ${e.getFullYear()}.${pad(e.getMonth()+1)}.${pad(e.getDate())} 08:59`;
+}
+function renderWeeklyRanking(){
+  const {startMs,endMs}=currentWeekWindow();
+  weeklyPeriod.textContent=periodText(startMs,endMs);
+  const counts={};Object.keys(MEMBERS).forEach(n=>counts[n]=0);
+  historyItems.forEach(({x,defeatedMs})=>{
+    if(!(defeatedMs>=startMs&&defeatedMs<endMs))return;
+    const ps=Array.isArray(x.participants)?x.participants:[];
+    ps.forEach(n=>{if(Object.prototype.hasOwnProperty.call(counts,n))counts[n]+=1});
+  });
+  const top=Object.entries(counts).filter(([,c])=>c>0).map(([name,count])=>({name,count}))
+    .sort((a,b)=>b.count-a.count||a.name.localeCompare(b.name,"ko-KR")).slice(0,5);
+  while(top.length<5)top.push({name:"—",count:0,empty:true});
+  rankGrid.innerHTML=top.map(x=>`
+    <div class="rank-cell${x.empty?" rank-empty":""}">
+      <div class="rank-count">${x.count}회</div>
+      <div class="rank-name">${x.name}</div>
+    </div>`).join("");
+}
+function renderHistory(){
+  const rows=historyItems.map(({id,x,defeatedMs})=>{
+    const b=BOSSES[x.bossId]||null,bossName=x.bossName||b?.name||x.bossId||"-",img=b?.img||"";
+    const members=Array.isArray(x.participants)&&x.participants.length?x.participants.join(", "):"-";
+    return `<button type="button" class="log" data-history-id="${id}" aria-label="${bossName} 처치 기록 수정">
+      <span class="history-boss-icon-wrap">${img?`<img class="history-boss-icon" src="${img}" alt="">`:""}</span>
+      <span class="history-copy">
+        <span class="history-top"><span class="history-boss-name">${bossName}</span>
+        <span class="history-time">${defeatedMs?`처치시간 : ${dateTimeText(defeatedMs)}`:"처치시간 : -"}</span></span>
+        <span class="history-members">${members}</span>
+      </span></button>`;
+  });
+  historyList.className=rows.length?"":"history-empty";
+  historyList.innerHTML=rows.join("")||"아직 처치 기록이 없습니다.";
 }
 
-function syncRecordSaveState(){
-  const timeOk=Number.isFinite(defeatedMsFromInputs());
-  document.getElementById("saveRecord").disabled=!(recordBoss&&timeOk&&recordParticipants.length);
+function participantButtons(host,selected,attr){
+  host.innerHTML=MEMBER_ORDER.map(n=>`<button type="button" class="member-btn${selected.includes(n)?" selected":""}" ${attr}="${n}">${n}</button>`).join("");
 }
-function syncPopupSaveState(){
-  let ok=!!popupBoss;
-  if(popupMode==="remaining") ok=ok&&remainingMsFromInputs()>0;
-  else ok=ok&&Number.isFinite(parseLocalInput(document.getElementById("manualSpawnAt").value));
-  document.getElementById("savePopup").disabled=!ok;
+function renderCompleteParticipants(){
+  participantButtons(document.getElementById("completeParticipantGrid"),completeParticipants,"data-complete-member");
+  document.getElementById("completeParticipantInfo").textContent=completeParticipants.length?
+    `참여 ${completeParticipants.length}명 · ${completeParticipants.join(", ")}`:"참여 길드원을 선택해주세요.";
+  syncCompleteSave();
+}
+function renderRecordParticipants(){
+  participantButtons(document.getElementById("recordParticipantGrid"),recordParticipants,"data-record-member");
+  document.getElementById("recordParticipantInfo").textContent=recordParticipants.length?
+    `참여 ${recordParticipants.length}명 · ${recordParticipants.join(", ")}`:"참여 길드원을 선택해주세요.";
+  syncRecordSave();
+}
+function renderRecordBossChoices(){
+  document.getElementById("recordBossGrid").innerHTML=Object.entries(BOSSES).map(([id,b])=>
+    `<button type="button" class="boss-choice${recordBoss===id?" selected":""}" data-record-boss="${id}">${b.name}</button>`).join("");
 }
 
-function openRecordModal(bossId=null,historyId=null){
-  editingHistoryId=historyId;
-  recordParticipants=[];
-  recordBoss=bossId;
+function refreshCompletePreview(){
+  const ms=remainingMs("completeRemain"),timeEl=document.getElementById("completePreviewTime"),dateEl=document.getElementById("completePreviewDate");
+  if(ms<=0){timeEl.textContent="--:--:--";dateEl.textContent=""}
+  else{const at=Date.now()+ms;timeEl.textContent=timeText(at);dateEl.textContent=`${dateLabel(at)} · 현재시간 기준 계산`}
+  syncCompleteSave();
+}
+function syncCompleteSave(){
+  const ok=!!completeBoss&&Number.isFinite(exactMsFromInputs("complete"))&&completeParticipants.length>0&&remainingMs("completeRemain")>0;
+  document.getElementById("saveComplete").disabled=!ok;
+}
+function openCompleteModal(bossId){
+  completeBoss=bossId;completeParticipants=[];
+  document.getElementById("completeTitle").textContent=`${BOSSES[bossId].name} 처치 완료`;
+  document.getElementById("completeBossChip").innerHTML=bossChipHtml(bossId);
+  setExactInputs("complete",Date.now());
+  ["Hour","Minute","Second"].forEach(k=>document.getElementById("completeRemain"+k).value="");
+  document.getElementById("completeError").textContent="";
+  renderCompleteParticipants();refreshCompletePreview();openModal(completeModal);
+}
 
+function syncRecordSave(){
+  const ok=!!recordBoss&&Number.isFinite(exactMsFromInputs("record"))&&recordParticipants.length>0;
+  document.getElementById("saveRecord").disabled=!ok;
+}
+function openRecordModal(historyId=null){
+  editingHistoryId=historyId;recordParticipants=[];recordBoss=null;
   if(historyId){
-    const x=historyState.get(historyId);
-    if(!x)return;
-    recordBoss=x.bossId||bossId;
-    recordParticipants=Array.isArray(x.participants)?[...x.participants]:[];
-    const defeatedMs=x.defeatedAt?.toMillis?.() ?? x.clientRecordedAt?.toMillis?.() ?? x.createdAt?.toMillis?.();
-    setRecordTimeInputs(Number.isFinite(defeatedMs)?defeatedMs:Date.now());
+    const x=historyState.get(historyId);if(!x)return;
+    recordBoss=x.bossId||null;recordParticipants=Array.isArray(x.participants)?[...x.participants]:[];
+    const ms=x.defeatedAt?.toMillis?.()??x.clientRecordedAt?.toMillis?.()??x.createdAt?.toMillis?.();
+    setExactInputs("record",Number.isFinite(ms)?ms:Date.now());
     document.getElementById("recordTitle").textContent="처치 기록 수정";
     document.getElementById("deleteRecord").hidden=false;
   }else{
-    setRecordTimeInputs(Date.now());
-    document.getElementById("recordTitle").textContent=bossId?`${BOSSES[bossId].name} 처치 기록`:"처치 기록 추가";
+    setExactInputs("record",Date.now());
+    document.getElementById("recordTitle").textContent="과거 처치 기록 추가";
     document.getElementById("deleteRecord").hidden=true;
   }
-
-  renderBossChoices(recordBossGrid,recordBoss);
-  renderParticipantButtons();
   document.getElementById("recordError").textContent="";
-  recordModal.classList.add("show");
-  recordModal.setAttribute("aria-hidden","false");
-  document.body.style.overflow="hidden";
-}
-function closeRecordModal(){
-  recordModal.classList.remove("show");
-  recordModal.setAttribute("aria-hidden","true");
-  editingHistoryId=null;
-  document.body.style.overflow="";
+  renderRecordBossChoices();renderRecordParticipants();openModal(recordModal);
 }
 
-function remainingMsFromInputs(){
-  const h=Math.max(0,Number(document.getElementById("hours").value)||0);
-  const m=Math.min(59,Math.max(0,Number(document.getElementById("minutes").value)||0));
-  const s=Math.min(59,Math.max(0,Number(document.getElementById("seconds").value)||0));
-  return (h*3600+m*60+s)*1000;
-}
-function refreshPreview(){
-  const remain=remainingMsFromInputs();
-  if(remain<=0){
-    document.getElementById("previewTime").textContent="--:--:--";
-    document.getElementById("previewDate").textContent="";
-  }else{
-    const at=Date.now()+remain;
-    document.getElementById("previewTime").textContent=timeText(at);
-    document.getElementById("previewDate").textContent=`${dateText(at)} · 현재시간 기준 계산`;
-  }
-  syncPopupSaveState();
+function refreshPopupPreview(){
+  const ms=remainingMs("popupRemain");
+  if(ms<=0){document.getElementById("popupPreviewTime").textContent="--:--:--";document.getElementById("popupPreviewDate").textContent=""}
+  else{const at=Date.now()+ms;document.getElementById("popupPreviewTime").textContent=timeText(at);document.getElementById("popupPreviewDate").textContent=`${dateLabel(at)} · 현재시간 기준 계산`}
+  syncPopupSave();
 }
 function setPopupMode(mode){
   popupMode=mode;
@@ -585,232 +617,161 @@ function setPopupMode(mode){
   document.getElementById("manualModeBtn").classList.toggle("active",mode==="manual");
   document.getElementById("remainPanel").classList.toggle("active",mode==="remaining");
   document.getElementById("manualPanel").classList.toggle("active",mode==="manual");
-  syncPopupSaveState();
+  syncPopupSave();
 }
-function openPopupModal(bossId=null){
+function syncPopupSave(){
+  let ok=!!popupBoss;
+  if(popupMode==="remaining")ok=ok&&remainingMs("popupRemain")>0;
+  else ok=ok&&Number.isFinite(exactMsFromInputs("popup"));
+  document.getElementById("savePopup").disabled=!ok;
+}
+function openPopupModal(bossId){
   popupBoss=bossId;
-  renderBossChoices(popupBossGrid,popupBoss);
-  document.getElementById("popupTitle").textContent=bossId?`${BOSSES[bossId].name} 다음 팝업시간 관리`:"다음 팝업시간 관리";
-  document.getElementById("hours").value="10";
-  document.getElementById("minutes").value="0";
-  document.getElementById("seconds").value="0";
-
-  const currentMs=bossId?bossState[bossId]?.spawnAt?.toMillis?.():null;
-  document.getElementById("manualSpawnAt").value=Number.isFinite(currentMs)?localInputValue(currentMs):localInputValue(Date.now());
+  document.getElementById("popupTitle").textContent=`${BOSSES[bossId].name} 팝업시간 수정`;
+  document.getElementById("popupBossChip").innerHTML=bossChipHtml(bossId);
+  ["Hour","Minute","Second"].forEach(k=>document.getElementById("popupRemain"+k).value="");
+  const currentMs=bossState[bossId]?.spawnAt?.toMillis?.();
+  setExactInputs("popup",Number.isFinite(currentMs)?currentMs:Date.now());
   document.getElementById("popupError").textContent="";
-  setPopupMode("remaining");
-  refreshPreview();
-
-  popupModal.classList.add("show");
-  popupModal.setAttribute("aria-hidden","false");
-  document.body.style.overflow="hidden";
+  setPopupMode("remaining");refreshPopupPreview();openModal(popupModal);
 }
-function closePopupModal(){
-  popupModal.classList.remove("show");
-  popupModal.setAttribute("aria-hidden","true");
-  document.body.style.overflow="";
-}
-
-document.getElementById("globalRecordBtn").addEventListener("click",()=>{if(requireWritePin())openRecordModal();});
-document.getElementById("globalPopupBtn").addEventListener("click",()=>{if(requireWritePin())openPopupModal();});
-document.getElementById("historyAddBtn").addEventListener("click",()=>{if(requireWritePin())openRecordModal();});
 
 bossGrid.addEventListener("click",e=>{
-  const r=e.target.closest("[data-card-record]");
-  if(r){if(requireWritePin())openRecordModal(r.dataset.cardRecord);return}
-  const p=e.target.closest("[data-card-popup]");
-  if(p){if(requireWritePin())openPopupModal(p.dataset.cardPopup)}
+  const c=e.target.closest("[data-complete]");if(c){if(requireWritePin())openCompleteModal(c.dataset.complete);return}
+  const p=e.target.closest("[data-popup]");if(p){if(requireWritePin())openPopupModal(p.dataset.popup)}
+});
+document.getElementById("historyAddBtn").addEventListener("click",()=>{if(requireWritePin())openRecordModal()});
+historyList.addEventListener("click",e=>{const row=e.target.closest("[data-history-id]");if(row&&requireWritePin())openRecordModal(row.dataset.historyId)});
+
+document.getElementById("completeParticipantGrid").addEventListener("click",e=>{
+  const b=e.target.closest("[data-complete-member]");if(!b)return;const n=b.dataset.completeMember;
+  completeParticipants=completeParticipants.includes(n)?completeParticipants.filter(x=>x!==n):[...completeParticipants,n];renderCompleteParticipants();
+});
+document.getElementById("recordParticipantGrid").addEventListener("click",e=>{
+  const b=e.target.closest("[data-record-member]");if(!b)return;const n=b.dataset.recordMember;
+  recordParticipants=recordParticipants.includes(n)?recordParticipants.filter(x=>x!==n):[...recordParticipants,n];renderRecordParticipants();
+});
+document.getElementById("recordBossGrid").addEventListener("click",e=>{
+  const b=e.target.closest("[data-record-boss]");if(!b)return;recordBoss=b.dataset.recordBoss;renderRecordBossChoices();syncRecordSave();
 });
 
-recordBossGrid.addEventListener("click",e=>{
-  const btn=e.target.closest("[data-boss-choice]");
-  if(!btn)return;
-  recordBoss=btn.dataset.bossChoice;
-  renderBossChoices(recordBossGrid,recordBoss);
-  syncRecordSaveState();
-});
-popupBossGrid.addEventListener("click",e=>{
-  const btn=e.target.closest("[data-boss-choice]");
-  if(!btn)return;
-  popupBoss=btn.dataset.bossChoice;
-  renderBossChoices(popupBossGrid,popupBoss);
-  const currentMs=bossState[popupBoss]?.spawnAt?.toMillis?.();
-  if(Number.isFinite(currentMs))document.getElementById("manualSpawnAt").value=localInputValue(currentMs);
-  document.getElementById("popupTitle").textContent=`${BOSSES[popupBoss].name} 다음 팝업시간 관리`;
-  syncPopupSaveState();
-});
-participantGrid.addEventListener("click",e=>{
-  const btn=e.target.closest("[data-participant]");
-  if(!btn)return;
-  const n=btn.dataset.participant;
-  recordParticipants=recordParticipants.includes(n)?recordParticipants.filter(x=>x!==n):[...recordParticipants,n];
-  renderParticipantButtons();
-});
-
-["defeatedDate","defeatedHour","defeatedMinute","defeatedSecond"].forEach(id=>{
-  document.getElementById(id).addEventListener("input",syncRecordSaveState);
-});
-["hours","minutes","seconds"].forEach(id=>document.getElementById(id).addEventListener("input",refreshPreview));
-document.getElementById("manualSpawnAt").addEventListener("input",syncPopupSaveState);
+["completeDate","completeHour","completeMinute","completeSecond"].forEach(id=>document.getElementById(id).addEventListener("input",syncCompleteSave));
+["completeRemainHour","completeRemainMinute","completeRemainSecond"].forEach(id=>document.getElementById(id).addEventListener("input",refreshCompletePreview));
+["recordDate","recordHour","recordMinute","recordSecond"].forEach(id=>document.getElementById(id).addEventListener("input",syncRecordSave));
+["popupRemainHour","popupRemainMinute","popupRemainSecond"].forEach(id=>document.getElementById(id).addEventListener("input",refreshPopupPreview));
+["popupDate","popupHour","popupMinute","popupSecond"].forEach(id=>document.getElementById(id).addEventListener("input",syncPopupSave));
 document.getElementById("remainModeBtn").addEventListener("click",()=>setPopupMode("remaining"));
 document.getElementById("manualModeBtn").addEventListener("click",()=>setPopupMode("manual"));
 
-document.getElementById("closeRecordModal").addEventListener("click",closeRecordModal);
-document.getElementById("cancelRecord").addEventListener("click",closeRecordModal);
-recordModal.addEventListener("click",e=>{if(e.target===recordModal)closeRecordModal()});
-document.getElementById("closePopupModal").addEventListener("click",closePopupModal);
-document.getElementById("cancelPopup").addEventListener("click",closePopupModal);
-popupModal.addEventListener("click",e=>{if(e.target===popupModal)closePopupModal()});
+document.getElementById("closeCompleteModal").addEventListener("click",()=>closeModal(completeModal));
+document.getElementById("cancelComplete").addEventListener("click",()=>closeModal(completeModal));
+completeModal.addEventListener("click",e=>{if(e.target===completeModal)closeModal(completeModal)});
+document.getElementById("closeRecordModal").addEventListener("click",()=>closeModal(recordModal));
+document.getElementById("cancelRecord").addEventListener("click",()=>closeModal(recordModal));
+recordModal.addEventListener("click",e=>{if(e.target===recordModal)closeModal(recordModal)});
+document.getElementById("closePopupModal").addEventListener("click",()=>closeModal(popupModal));
+document.getElementById("cancelPopup").addEventListener("click",()=>closeModal(popupModal));
+popupModal.addEventListener("click",e=>{if(e.target===popupModal)closeModal(popupModal)});
 
-document.getElementById("saveRecord").addEventListener("click",async()=>{
-  const err=document.getElementById("recordError");
-  err.textContent="";
-  const defeatedMs=defeatedMsFromInputs();
-  if(!recordBoss){err.textContent="보스를 선택해주세요.";return}
-  if(!Number.isFinite(defeatedMs)){err.textContent="처치 완료시간을 입력해주세요.";return}
-  if(!recordParticipants.length){err.textContent="참여 길드원을 1명 이상 선택해주세요.";return}
-
-  const save=document.getElementById("saveRecord");
-  save.disabled=true;
-  try{
-    const ref=editingHistoryId?doc(db,"bossHistory",editingHistoryId):doc(collection(db,"bossHistory"));
-    const payload={
-      bossId:recordBoss,
-      bossName:BOSSES[recordBoss].name,
-      type:"defeated",
-      defeatedAt:Timestamp.fromMillis(defeatedMs),
-      participants:[...recordParticipants],
-      recordedByUid:auth.currentUser?.uid||"",
-      updatedAt:serverTimestamp()
-    };
-    if(editingHistoryId){
-      const batch=writeBatch(db);
-      batch.set(ref,payload,{merge:true});
-      await batch.commit();
-    }else{
-      const batch=writeBatch(db);
-      batch.set(ref,{...payload,createdAt:serverTimestamp()});
-      await batch.commit();
-    }
-    closeRecordModal();
-  }catch(e){
-    err.textContent="저장 실패: "+(e?.message||e);
-  }finally{
-    syncRecordSaveState();
+document.getElementById("saveComplete").addEventListener("click",async()=>{
+  const err=document.getElementById("completeError");err.textContent="";
+  const defeatedMs=exactMsFromInputs("complete"),remain=remainingMs("completeRemain");
+  if(!completeBoss||!Number.isFinite(defeatedMs)||!completeParticipants.length||remain<=0){
+    err.textContent="처치시간, 참여 길드원, 다음 팝업 남은 시간을 모두 입력해주세요.";return;
   }
+  const btn=document.getElementById("saveComplete");btn.disabled=true;
+  try{
+    const calcBaseMs=Date.now(),spawnMs=calcBaseMs+remain;
+    const historyRef=doc(collection(db,"bossHistory")),timerRef=doc(db,"bossTimers",completeBoss),batch=writeBatch(db);
+    batch.set(historyRef,{
+      bossId:completeBoss,bossName:BOSSES[completeBoss].name,type:"defeated",
+      defeatedAt:Timestamp.fromMillis(defeatedMs),participants:[...completeParticipants],
+      remainingMsAtRecord:remain,nextSpawnAtAtRecord:Timestamp.fromMillis(spawnMs),
+      calculatedAtClient:Timestamp.fromMillis(calcBaseMs),recordedByUid:auth.currentUser?.uid||"",
+      createdAt:serverTimestamp(),updatedAt:serverTimestamp()
+    });
+    batch.set(timerRef,{
+      bossId:completeBoss,bossName:BOSSES[completeBoss].name,
+      spawnAt:Timestamp.fromMillis(spawnMs),remainingMsAtRecord:remain,
+      updateSource:"completion",sourceHistoryId:historyRef.id,
+      calculatedAtClient:Timestamp.fromMillis(calcBaseMs),
+      updatedAt:serverTimestamp(),updatedByUid:auth.currentUser?.uid||""
+    },{merge:true});
+    await batch.commit();closeModal(completeModal);
+  }catch(e){err.textContent="저장 실패: "+(e?.message||e)}
+  finally{syncCompleteSave()}
 });
 
-document.getElementById("deleteRecord").addEventListener("click",async()=>{
-  if(!editingHistoryId)return;
-  if(!confirm("이 처치 기록을 삭제할까요?"))return;
-  const err=document.getElementById("recordError");
+document.getElementById("saveRecord").addEventListener("click",async()=>{
+  const err=document.getElementById("recordError");err.textContent="";
+  const defeatedMs=exactMsFromInputs("record");
+  if(!recordBoss||!Number.isFinite(defeatedMs)||!recordParticipants.length){err.textContent="보스, 처치시간, 참여 길드원을 모두 입력해주세요.";return}
+  const btn=document.getElementById("saveRecord");btn.disabled=true;
   try{
-    await deleteDoc(doc(db,"bossHistory",editingHistoryId));
-    closeRecordModal();
-  }catch(e){
-    err.textContent="삭제 실패: "+(e?.message||e);
-  }
+    const ref=editingHistoryId?doc(db,"bossHistory",editingHistoryId):doc(collection(db,"bossHistory"));
+    const payload={bossId:recordBoss,bossName:BOSSES[recordBoss].name,type:"defeated",
+      defeatedAt:Timestamp.fromMillis(defeatedMs),participants:[...recordParticipants],
+      recordedByUid:auth.currentUser?.uid||"",updatedAt:serverTimestamp()};
+    const batch=writeBatch(db);
+    if(editingHistoryId)batch.set(ref,payload,{merge:true});else batch.set(ref,{...payload,createdAt:serverTimestamp()});
+    await batch.commit();editingHistoryId=null;closeModal(recordModal);
+  }catch(e){err.textContent="저장 실패: "+(e?.message||e)}
+  finally{syncRecordSave()}
+});
+document.getElementById("deleteRecord").addEventListener("click",async()=>{
+  if(!editingHistoryId)return;if(!confirm("이 처치 기록을 삭제할까요?"))return;
+  const err=document.getElementById("recordError");
+  try{await deleteDoc(doc(db,"bossHistory",editingHistoryId));editingHistoryId=null;closeModal(recordModal)}
+  catch(e){err.textContent="삭제 실패: "+(e?.message||e)}
 });
 
 document.getElementById("savePopup").addEventListener("click",async()=>{
-  const err=document.getElementById("popupError");
-  err.textContent="";
-  if(!popupBoss){err.textContent="보스를 선택해주세요.";return}
-
-  let spawnMs,remainingMs=null,source;
+  const err=document.getElementById("popupError");err.textContent="";if(!popupBoss)return;
+  let spawnMs,remain=null,source;const calcBaseMs=Date.now();
   if(popupMode==="remaining"){
-    remainingMs=remainingMsFromInputs();
-    if(remainingMs<=0){err.textContent="다음 팝업까지 남은 시간을 입력해주세요.";return}
-    spawnMs=Date.now()+remainingMs;
-    source="remaining";
+    remain=remainingMs("popupRemain");if(remain<=0){err.textContent="남은 시간을 입력해주세요.";return}
+    spawnMs=calcBaseMs+remain;source="remaining";
   }else{
-    spawnMs=parseLocalInput(document.getElementById("manualSpawnAt").value);
-    if(!Number.isFinite(spawnMs)){err.textContent="다음 팝업 예상시각을 입력해주세요.";return}
+    spawnMs=exactMsFromInputs("popup");if(!Number.isFinite(spawnMs)){err.textContent="팝업시각을 입력해주세요.";return}
     source="manual";
   }
-
-  const save=document.getElementById("savePopup");
-  save.disabled=true;
+  const btn=document.getElementById("savePopup");btn.disabled=true;
   try{
-    const timerRef=doc(db,"bossTimers",popupBoss);
-    const batch=writeBatch(db);
+    const batch=writeBatch(db),timerRef=doc(db,"bossTimers",popupBoss);
     batch.set(timerRef,{
-      bossId:popupBoss,
-      bossName:BOSSES[popupBoss].name,
-      spawnAt:Timestamp.fromMillis(spawnMs),
-      remainingMsAtRecord:remainingMs,
-      updateSource:source,
-      updatedAt:serverTimestamp(),
-      updatedByUid:auth.currentUser?.uid||""
+      bossId:popupBoss,bossName:BOSSES[popupBoss].name,spawnAt:Timestamp.fromMillis(spawnMs),
+      remainingMsAtRecord:remain,updateSource:source,calculatedAtClient:Timestamp.fromMillis(calcBaseMs),
+      updatedAt:serverTimestamp(),updatedByUid:auth.currentUser?.uid||""
     },{merge:true});
-    await batch.commit();
-    closePopupModal();
-  }catch(e){
-    err.textContent="저장 실패: "+(e?.message||e);
-  }finally{
-    syncPopupSaveState();
-  }
-});
-
-document.getElementById("historyList").addEventListener("click",e=>{
-  const btn=e.target.closest("[data-history-id]");
-  if(!btn)return;
-  if(requireWritePin())openRecordModal(null,btn.dataset.historyId);
+    await batch.commit();closeModal(popupModal);
+  }catch(e){err.textContent="저장 실패: "+(e?.message||e)}
+  finally{syncPopupSave()}
 });
 
 onSnapshot(collection(db,"bossTimers"),snap=>{
-  bossState={};
-  snap.forEach(d=>bossState[d.id]=d.data());
-  renderBosses();
+  bossState={};snap.forEach(d=>bossState[d.id]=d.data());renderBosses();
 },console.error);
 
 onSnapshot(collection(db,"bossHistory"),snap=>{
-  historyState=new Map();
-  const items=[];
+  historyState=new Map();historyItems=[];
   snap.forEach(d=>{
-    const x=d.data();
-    if(x.type!=="defeated")return;
+    const x=d.data();if(x.type!=="defeated")return;
     historyState.set(d.id,x);
-    const defeatedMs=x.defeatedAt?.toMillis?.() ?? x.clientRecordedAt?.toMillis?.() ?? x.createdAt?.toMillis?.();
-    items.push({id:d.id,x,defeatedMs:Number.isFinite(defeatedMs)?defeatedMs:0});
+    const defeatedMs=x.defeatedAt?.toMillis?.()??x.clientRecordedAt?.toMillis?.()??x.createdAt?.toMillis?.();
+    historyItems.push({id:d.id,x,defeatedMs:Number.isFinite(defeatedMs)?defeatedMs:0});
   });
-  items.sort((a,b)=>b.defeatedMs-a.defeatedMs);
-  const rows=items.map(({id,x,defeatedMs})=>{
-    const boss=BOSSES[x.bossId]||null;
-    const bossName=x.bossName||boss?.name||x.bossId||"-";
-    const bossImg=boss?.img||"";
-    const members=Array.isArray(x.participants)&&x.participants.length?x.participants.join(", "):"-";
-    return `
-      <button type="button" class="log" data-history-id="${id}" aria-label="${bossName} 처치 기록 수정">
-        ${bossImg?`<span class="history-boss-icon-wrap"><img class="history-boss-icon" src="${bossImg}" alt=""></span>`:`<span class="history-boss-icon-wrap"></span>`}
-        <span class="history-copy">
-          <span class="history-top">
-            <span class="history-boss-name">${bossName}</span>
-            <span class="history-time">${defeatedMs?`처치시간 : ${dateTimeText(defeatedMs)}`:"처치시간 : -"}</span>
-          </span>
-          <span class="history-members">${members}</span>
-        </span>
-      </button>`;
-  });
-  const el=document.getElementById("historyList");
-  el.className=rows.length?"":"history-empty";
-  el.innerHTML=rows.join("")||"아직 처치 기록이 없습니다.";
-},e=>{
-  const el=document.getElementById("historyList");
-  el.className="history-empty";
-  el.textContent="처치 기록을 불러오지 못했습니다.";
-});
+  historyItems.sort((a,b)=>b.defeatedMs-a.defeatedMs);
+  renderWeeklyRanking();renderHistory();
+},e=>{historyList.className="history-empty";historyList.textContent="처치 기록을 불러오지 못했습니다."});
 
 setInterval(()=>{
   document.getElementById("now").textContent="현재시간 "+new Date().toLocaleTimeString("ko-KR",{hour12:false});
-  if(popupModal.classList.contains("show")&&popupMode==="remaining")refreshPreview();
+  if(completeModal.classList.contains("show"))refreshCompletePreview();
+  if(popupModal.classList.contains("show")&&popupMode==="remaining")refreshPopupPreview();
+  renderWeeklyRanking();
 },1000);
 
-renderBossChoices(recordBossGrid,null);
-renderBossChoices(popupBossGrid,null);
-renderParticipantButtons();
-renderBosses();
-refreshPreview();
+renderBosses();renderWeeklyRanking();renderCompleteParticipants();renderRecordBossChoices();renderRecordParticipants();
 </script>
 </body>
 </html>
