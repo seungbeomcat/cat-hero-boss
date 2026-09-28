@@ -4,11 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
-<title>도살장 보스 팝업 현황 V2.0.0</title>
+<title>도살장 보스 팝업 현황 V2.1.0</title>
 <style>
 :root{
-  --bg:#f7f3ff; --card:#fff; --line:#cdb8f4; --deep:#4b2295; --violet:#7445df;
-  --soft:#f3edff; --text:#23183a; --muted:#766b8a; --blue:#2668c9;
+  --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
+  --violet2:#5c2bc0; --soft:#f5f0ff; --text:#24183a; --muted:#786d89; --blue:#2f65b8;
+  --danger:#b72d2d; --ok:#2d7d52;
 }
 *{box-sizing:border-box}
 html,body{margin:0;max-width:100%;overflow-x:hidden}
@@ -17,74 +18,105 @@ body{
   font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Segoe UI",sans-serif;
   color:var(--text);
 }
+button,input{font:inherit}
+button{cursor:pointer}
+button:disabled{cursor:default;opacity:.45}
 .app{
   width:min(100%,560px);
   min-height:100vh;
   margin:0 auto;
   background:linear-gradient(180deg,#fff 0%,#faf8ff 100%);
-  padding:18px 14px 34px;
+  padding:14px 12px 28px;
 }
-.header{text-align:center;padding:3px 0 11px}
+.top-back{
+  display:block;text-align:center;margin:0 0 11px;padding:10px 12px;border-radius:12px;
+  background:#f3edff;border:1px solid #d7c6f2;color:#4b2295;text-decoration:none;
+  font-size:13px;font-weight:900;
+}
+.header{text-align:center;padding:2px 0 10px}
 .title{margin:0;color:#3d197e;font-size:26px;line-height:1.15;font-weight:950;letter-spacing:-.8px}
 .version{margin-top:5px;color:#7c6c9a;font-size:12px;font-weight:800}
 .now{margin-top:6px;color:#615775;font-size:13px;font-weight:850;font-variant-numeric:tabular-nums}
-.guide{
-  margin:3px 0 13px;padding:10px 11px;border:1px solid #d9caf4;border-radius:13px;
-  background:#f8f4ff;color:#5c4f73;font-size:12px;line-height:1.5;font-weight:700;
+
+.quick-actions{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 11px;
 }
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.quick-actions button{
+  min-height:42px;border-radius:12px;font-size:13px;font-weight:950;
+}
+.quick-record{
+  border:0;background:linear-gradient(180deg,#8156e9,#6133c7);color:#fff;
+}
+.quick-popup{
+  border:1px solid #cdb9ed;background:#f7f3ff;color:#4d258f;
+}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .card{
-  background:#fff;border:2px solid var(--violet);border-radius:18px;overflow:hidden;
-  box-shadow:0 5px 14px rgba(66,32,125,.08);min-width:0;
+  background:#fff;border:2px solid var(--violet);border-radius:17px;overflow:hidden;
+  box-shadow:0 5px 13px rgba(66,32,125,.08);min-width:0;
 }
-.art{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:#ffd46b}
-.card-body{text-align:center;padding:10px 9px 11px}
-.boss-name{font-size:19px;font-weight:950;color:#32156c}
-.popup-label{margin-top:6px;color:#847995;font-size:11px;font-weight:850}
+.art{
+  width:100%;height:118px;object-fit:cover;display:block;background:#ffd46b;
+}
+.card-body{text-align:center;padding:8px 8px 9px}
+.boss-name{font-size:18px;font-weight:950;color:#32156c;line-height:1.1}
+.popup-row{
+  display:flex;align-items:baseline;justify-content:center;gap:6px;margin-top:5px;min-width:0;
+}
+.popup-label{color:#847995;font-size:10px;font-weight:850;white-space:nowrap}
 .popup-time{
-  margin-top:1px;color:#4b2295;font-size:27px;line-height:1.08;font-weight:950;
-  letter-spacing:-.5px;font-variant-numeric:tabular-nums;white-space:nowrap;
+  color:#4b2295;font-size:21px;line-height:1.05;font-weight:950;
+  letter-spacing:-.35px;font-variant-numeric:tabular-nums;white-space:nowrap;
 }
-.popup-date{margin-top:3px;min-height:16px;color:#786d88;font-size:11.5px;font-weight:800}
-.updated{margin-top:6px;min-height:16px;color:#8c8299;font-size:10.5px;line-height:1.35}
-.main-btn{
-  width:100%;margin-top:9px;border:0;border-radius:11px;background:linear-gradient(180deg,#8156e9,#6133c7);
-  color:#fff;min-height:43px;padding:8px 6px;font-size:12.5px;font-weight:900;
+.popup-meta{margin-top:3px;min-height:15px;color:#82768e;font-size:10.5px;font-weight:800}
+.card-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:7px}
+.card-actions button{
+  min-height:34px;border-radius:9px;padding:6px 4px;font-size:11px;font-weight:900;
 }
+.record-btn{border:0;background:#6c3bd2;color:#fff}
+.popup-btn{border:1px solid #c9b2ed;background:#f7f3ff;color:#4e268f}
+
 .history{
-  margin-top:15px;border:2px solid var(--line);border-radius:16px;background:#fff;padding:12px;
+  margin-top:12px;border:2px solid var(--line);border-radius:16px;background:#fff;padding:11px;
 }
-.history-title{font-size:16px;font-weight:950;color:#351570;margin-bottom:7px}
+.history-title{font-size:16px;font-weight:950;color:#351570;margin-bottom:6px}
 .history-empty{font-size:12px;color:#8b8097;padding:6px 1px}
-.log{padding:9px 2px;border-top:1px solid #eee8f7;font-size:12px;line-height:1.5;color:#554a68}
+.log{
+  width:100%;text-align:left;border:0;border-top:1px solid #eee8f7;background:#fff;
+  padding:9px 2px;font-size:12px;line-height:1.48;color:#554a68;
+}
 .log:first-child{border-top:0}
 .log b{color:#351570}
-.back-link{
-  display:block;text-align:center;margin-top:13px;padding:11px;border-radius:12px;
-  background:#f3edff;border:1px solid #d7c6f2;color:#4b2295;text-decoration:none;font-size:13px;font-weight:900;
-}
+.log .edit-hint{display:block;margin-top:3px;color:#8b7ca3;font-size:10.5px;font-weight:800}
 
 /* modal */
 .modal{
   position:fixed;inset:0;z-index:1000;display:none;align-items:flex-end;justify-content:center;
-  background:rgba(25,12,48,.48);padding:14px;
+  background:rgba(25,12,48,.48);padding:12px;
 }
 .modal.show{display:flex}
 .sheet{
-  width:min(100%,560px);max-height:90vh;overflow:auto;background:#fff;border:2px solid #c9b1ef;
-  border-radius:22px 22px 15px 15px;padding:17px 15px 16px;box-shadow:0 20px 55px rgba(36,17,69,.28);
+  width:min(100%,560px);max-height:91vh;overflow:auto;background:#fff;border:2px solid #c9b1ef;
+  border-radius:22px 22px 15px 15px;padding:16px 14px 15px;box-shadow:0 20px 55px rgba(36,17,69,.28);
 }
-.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px}
-.sheet-title{font-size:20px;font-weight:950;color:#351570}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.sheet-title{font-size:19px;font-weight:950;color:#351570}
 .close{
   width:38px;height:38px;border:1px solid #dacdf0;border-radius:11px;background:#faf8ff;
   color:#4d238e;font-size:23px;line-height:1;padding:0;
 }
-.step-title{margin:13px 0 7px;font-size:13px;font-weight:950;color:#4b2a77}
-.member-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.step-title{margin:12px 0 7px;font-size:13px;font-weight:950;color:#4b2a77}
+.boss-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.boss-choice{
+  min-height:40px;border:1.5px solid #d8c8ee;border-radius:10px;background:#fbfaff;
+  color:#4d2b70;font-size:12px;font-weight:900;padding:5px 3px;
+}
+.boss-choice.selected{background:#5d32bd;border-color:#5d32bd;color:#fff}
+.member-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
 .member-btn{
-  min-height:42px;border:1.5px solid #d8c8ee;border-radius:11px;background:#fbfaff;
-  color:#4d2b70;font-size:13px;font-weight:850;padding:5px 4px;
+  min-height:40px;border:1.5px solid #d8c8ee;border-radius:10px;background:#fbfaff;
+  color:#4d2b70;font-size:12.5px;font-weight:850;padding:5px 4px;
 }
 .member-btn.selected{
   background:linear-gradient(180deg,#3a73ca,#2656a5);border-color:#28579f;color:#fff;
@@ -92,6 +124,10 @@ body{
 .selected-info{
   margin-top:7px;padding:8px 9px;border-radius:10px;background:#f7f3fc;color:#665876;
   font-size:11.5px;line-height:1.45;font-weight:750;min-height:34px;
+}
+.field{
+  width:100%;height:46px;border:1.5px solid #ceb9ec;border-radius:11px;background:#fff;
+  color:#2d2150;font-size:16px;font-weight:850;padding:7px 10px;
 }
 .time-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .time-wrap{position:relative}
@@ -101,39 +137,56 @@ body{
 }
 .time-unit{position:absolute;right:7px;top:50%;transform:translateY(-50%);color:#887a9d;font-size:11px;font-weight:850}
 .preview{
-  margin-top:10px;padding:11px;border:1px solid #c9b4ea;border-radius:12px;background:#f8f4ff;
+  margin-top:10px;padding:10px;border:1px solid #c9b4ea;border-radius:12px;background:#f8f4ff;
   text-align:center;
 }
 .preview-label{font-size:11px;color:#7a6d8e;font-weight:850}
-.preview-time{margin-top:2px;font-size:25px;color:#4b2295;font-weight:950;font-variant-numeric:tabular-nums}
+.preview-time{margin-top:2px;font-size:24px;color:#4b2295;font-weight:950;font-variant-numeric:tabular-nums}
 .preview-date{margin-top:2px;font-size:11.5px;color:#786d88;font-weight:800}
-.sheet-actions{display:grid;grid-template-columns:1fr 1.6fr;gap:8px;margin-top:13px}
+.mode-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:4px 0 9px}
+.mode-tabs button{
+  min-height:38px;border-radius:10px;border:1px solid #d4c1ef;background:#faf8ff;
+  color:#5c3a89;font-size:12px;font-weight:900;
+}
+.mode-tabs button.active{background:#6840c6;color:#fff;border-color:#6840c6}
+.popup-panel{display:none}
+.popup-panel.active{display:block}
+.sheet-actions{display:grid;grid-template-columns:1fr 1.6fr;gap:8px;margin-top:12px}
 .sheet-actions button{min-height:45px;border:0;border-radius:11px;font-size:14px;font-weight:950}
 .cancel{background:#eeeaf3;color:#51465f}
 .save{background:linear-gradient(180deg,#8156e9,#6133c7);color:#fff}
+.danger{
+  width:100%;margin-top:8px;min-height:40px;border:1px solid #e4b1b1;border-radius:10px;
+  background:#fff7f7;color:#a73232;font-size:12px;font-weight:900;
+}
 .error{min-height:17px;margin-top:8px;color:#b22b2b;font-size:11.5px;font-weight:800;text-align:center}
+.helper{margin-top:6px;color:#847993;font-size:10.5px;line-height:1.45}
 
 @media(max-width:390px){
-  .app{padding-left:10px;padding-right:10px}
-  .grid{gap:9px}
-  .popup-time{font-size:24px}
-  .boss-name{font-size:18px}
+  .app{padding-left:9px;padding-right:9px}
+  .grid{gap:7px}
+  .art{height:106px}
+  .popup-time{font-size:19px}
+  .boss-name{font-size:17px}
   .member-grid{gap:6px}
   .member-btn{font-size:12px}
+  .quick-actions{gap:6px}
 }
 </style>
 </head>
 <body>
 <main class="app">
+  <a class="top-back" href="https://seungbeomcat.github.io/dosalja/">도살장 계산기로 돌아가기</a>
+
   <header class="header">
     <h1 class="title">도살장 보스 팝업 현황</h1>
-    <div class="version">V2.0.0 · 길드 공유</div>
+    <div class="version">V2.1.0 · 길드 공유</div>
     <div id="now" class="now">현재시간 --:--:--</div>
   </header>
 
-  <div class="guide">
-    길드원에게 가장 중요한 값은 <b>다음 팝업 예상시각</b>입니다.
-    보스를 처치한 길드원이 참여자와 게임에 표시된 남은 시간을 함께 등록하면 다음 팝업 예상시각이 즉시 갱신됩니다.
+  <div class="quick-actions">
+    <button id="globalRecordBtn" class="quick-record" type="button">처치 기록 추가</button>
+    <button id="globalPopupBtn" class="quick-popup" type="button">다음 팝업시간 관리</button>
   </div>
 
   <section id="bossGrid" class="grid"></section>
@@ -142,42 +195,75 @@ body{
     <div class="history-title">최근 처치 기록</div>
     <div id="historyList" class="history-empty">기록을 불러오는 중입니다.</div>
   </section>
-
-  <a class="back-link" href="https://seungbeomcat.github.io/dosalja/">도살장 계산기로 돌아가기</a>
 </main>
 
 <div id="recordModal" class="modal" aria-hidden="true">
-  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="recordTitle">
     <div class="sheet-head">
-      <div id="modalTitle" class="sheet-title">처치 기록 · 다음 팝업 갱신</div>
-      <button id="closeModal" class="close" type="button" aria-label="닫기">×</button>
+      <div id="recordTitle" class="sheet-title">처치 기록 추가</div>
+      <button id="closeRecordModal" class="close" type="button" aria-label="닫기">×</button>
     </div>
 
-    <div class="step-title">1. 기록자 길드원 선택</div>
-    <div id="recorderGrid" class="member-grid"></div>
-    <div id="recorderInfo" class="selected-info">기록자를 선택해주세요.</div>
+    <div class="step-title">1. 보스 선택</div>
+    <div id="recordBossGrid" class="boss-grid"></div>
 
-    <div class="step-title">2. 처치 참여 길드원 선택</div>
+    <div class="step-title">2. 처치 완료시간 입력</div>
+    <input id="defeatedAt" class="field" type="datetime-local" step="1">
+    <div class="helper">인게임에서 확인한 실제 처치 완료시간을 입력해주세요.</div>
+
+    <div class="step-title">3. 처치 참여 길드원 선택</div>
     <div id="participantGrid" class="member-grid"></div>
     <div id="participantInfo" class="selected-info">참여 길드원을 선택해주세요.</div>
 
-    <div class="step-title">3. 게임에 표시된 다음 팝업까지 남은 시간</div>
-    <div class="time-row">
-      <div class="time-wrap"><input id="hours" type="number" inputmode="numeric" min="0" max="23" value="10"><span class="time-unit">시간</span></div>
-      <div class="time-wrap"><input id="minutes" type="number" inputmode="numeric" min="0" max="59" value="0"><span class="time-unit">분</span></div>
-      <div class="time-wrap"><input id="seconds" type="number" inputmode="numeric" min="0" max="59" value="0"><span class="time-unit">초</span></div>
-    </div>
-
-    <div class="preview">
-      <div class="preview-label">저장 시 다음 팝업 예상시간</div>
-      <div id="previewTime" class="preview-time">--:--:--</div>
-      <div id="previewDate" class="preview-date"></div>
-    </div>
-
-    <div id="error" class="error"></div>
+    <div id="recordError" class="error"></div>
     <div class="sheet-actions">
-      <button id="cancelModal" class="cancel" type="button">취소</button>
-      <button id="saveRecord" class="save" type="button">처치 기록 + 팝업 갱신</button>
+      <button id="cancelRecord" class="cancel" type="button">취소</button>
+      <button id="saveRecord" class="save" type="button" disabled>처치 완료 기록</button>
+    </div>
+    <button id="deleteRecord" class="danger" type="button" hidden>이 처치 기록 삭제</button>
+  </div>
+</div>
+
+<div id="popupModal" class="modal" aria-hidden="true">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
+    <div class="sheet-head">
+      <div id="popupTitle" class="sheet-title">다음 팝업시간 관리</div>
+      <button id="closePopupModal" class="close" type="button" aria-label="닫기">×</button>
+    </div>
+
+    <div class="step-title">1. 보스 선택</div>
+    <div id="popupBossGrid" class="boss-grid"></div>
+
+    <div class="step-title">2. 입력 방식 선택</div>
+    <div class="mode-tabs">
+      <button id="remainModeBtn" class="active" type="button">남은 시간 입력</button>
+      <button id="manualModeBtn" type="button">팝업시각 직접 수정</button>
+    </div>
+
+    <div id="remainPanel" class="popup-panel active">
+      <div class="step-title">다음 팝업까지 남은 시간</div>
+      <div class="time-row">
+        <div class="time-wrap"><input id="hours" type="number" inputmode="numeric" min="0" max="23" value="10"><span class="time-unit">시간</span></div>
+        <div class="time-wrap"><input id="minutes" type="number" inputmode="numeric" min="0" max="59" value="0"><span class="time-unit">분</span></div>
+        <div class="time-wrap"><input id="seconds" type="number" inputmode="numeric" min="0" max="59" value="0"><span class="time-unit">초</span></div>
+      </div>
+      <div class="preview">
+        <div class="preview-label">현재시간 + 남은 시간</div>
+        <div id="previewTime" class="preview-time">--:--:--</div>
+        <div id="previewDate" class="preview-date"></div>
+      </div>
+    </div>
+
+    <div id="manualPanel" class="popup-panel">
+      <div class="step-title">다음 팝업 예상시각 직접 입력</div>
+      <input id="manualSpawnAt" class="field" type="datetime-local" step="1">
+      <div class="helper">자동 계산값이 이상할 때 해당 보스의 다음 팝업시각을 직접 보정할 수 있습니다.</div>
+    </div>
+
+    <div id="popupError" class="error"></div>
+    <div class="sheet-actions">
+      <button id="cancelPopup" class="cancel" type="button">취소</button>
+      <button id="savePopup" class="save" type="button" disabled>다음 팝업시간 저장</button>
     </div>
   </div>
 </div>
@@ -187,7 +273,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebas
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 import {
   getFirestore, collection, doc, onSnapshot, serverTimestamp,
-  Timestamp, writeBatch, query, orderBy, limit
+  Timestamp, writeBatch, query, orderBy, limit, deleteDoc
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -205,13 +291,11 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 await signInAnonymously(auth);
 
-/* 2026-09-28 최신 dosalja 계산기 MEMBERS와 동일 기준.
-   통합 단계에서 이 명단을 공용 데이터 원본으로 분리할 예정. */
 const MEMBERS = {
   "돗돔":{base:191.6},"매콤갈비":{base:142.5},"사마엘":{base:122.5},"혀녕":{base:93.8},
-  "XIGN":{base:78},"뱅수띠":{base:64},"진니":{base:57.5},"토시살":{base:57},"페르시안":{base:57},
-  "승부왕":{base:60.1},"데이다라":{base:93},"바포메트":{base:35.5},"옥돔":{base:34.5},
-  "하니엘":{base:29},"벨제붑":{base:38}
+  "데이다라":{base:93},"XIGN":{base:78},"뱅수띠":{base:64},"승부왕":{base:60.1},
+  "진니":{base:57.5},"토시살":{base:57},"페르시안":{base:57},"벨제붑":{base:38},
+  "바포메트":{base:35.5},"옥돔":{base:34.5},"하니엘":{base:29}
 };
 const MEMBER_ORDER = Object.entries(MEMBERS)
   .sort((a,b)=>b[1].base-a[1].base)
@@ -225,180 +309,331 @@ const BOSSES = {
 };
 
 let bossState = {};
-let activeBoss = null;
-let recorder = "";
-let participants = [];
+let historyState = new Map();
+
+let recordBoss = null;
+let recordParticipants = [];
+let editingHistoryId = null;
+
+let popupBoss = null;
+let popupMode = "remaining";
 
 const bossGrid = document.getElementById("bossGrid");
-const modal = document.getElementById("recordModal");
-const recorderGrid = document.getElementById("recorderGrid");
+const recordModal = document.getElementById("recordModal");
+const popupModal = document.getElementById("popupModal");
+const recordBossGrid = document.getElementById("recordBossGrid");
+const popupBossGrid = document.getElementById("popupBossGrid");
 const participantGrid = document.getElementById("participantGrid");
 
-function pad(v){ return String(v).padStart(2,"0"); }
+function pad(v){return String(v).padStart(2,"0")}
 function timeText(ms){
-  const d = new Date(ms);
+  const d=new Date(ms);
   return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
-function dateText(ms){
-  const d = new Date(ms);
-  const today = new Date();
-  const same = d.getFullYear()===today.getFullYear() && d.getMonth()===today.getMonth() && d.getDate()===today.getDate();
-  if(same) return "오늘";
+function shortDate(ms){
+  const d=new Date(ms);
   return `${d.getMonth()+1}/${d.getDate()}`;
 }
-function formatCreated(ts){
-  if(!ts?.toDate) return "";
-  const d=ts.toDate();
-  return `${d.getMonth()+1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+function dateText(ms){
+  const d=new Date(ms),t=new Date();
+  const same=d.getFullYear()===t.getFullYear()&&d.getMonth()===t.getMonth()&&d.getDate()===t.getDate();
+  return same?"오늘":shortDate(ms);
+}
+function dateTimeText(ms){
+  const d=new Date(ms);
+  return `${d.getMonth()+1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+function localInputValue(ms){
+  const d=new Date(ms);
+  const y=d.getFullYear(),m=pad(d.getMonth()+1),day=pad(d.getDate());
+  return `${y}-${m}-${day}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+function parseLocalInput(value){
+  if(!value)return NaN;
+  const ms=new Date(value).getTime();
+  return Number.isFinite(ms)?ms:NaN;
+}
+
+function renderBossChoices(host,selected){
+  host.innerHTML=Object.entries(BOSSES).map(([id,b])=>
+    `<button type="button" class="boss-choice${selected===id?" selected":""}" data-boss-choice="${id}">${b.name}</button>`
+  ).join("");
 }
 
 function renderBosses(){
-  const cards = Object.entries(BOSSES).map(([id,b])=>{
-    const x = bossState[id] || {};
-    const ms = x.spawnAt?.toMillis?.();
-    return {id,...b,...x,ms};
+  const cards=Object.entries(BOSSES).map(([id,b])=>{
+    const x=bossState[id]||{};
+    const ms=x.spawnAt?.toMillis?.();
+    const updatedMs=x.updatedAt?.toMillis?.();
+    return {id,...b,...x,ms:Number.isFinite(ms)?ms:null,updatedMs:Number.isFinite(updatedMs)?updatedMs:null};
   });
   cards.sort((a,b)=>(a.ms??Infinity)-(b.ms??Infinity)||a.order-b.order);
 
-  bossGrid.innerHTML = cards.map(x=>{
-    const has = Number.isFinite(x.ms);
-    return `
-      <article class="card">
-        <img class="art" src="${x.img}" alt="${x.name}">
-        <div class="card-body">
-          <div class="boss-name">${x.name}</div>
-          <div class="popup-label">다음 팝업 예상시간</div>
-          <div class="popup-time">${has?timeText(x.ms):"미등록"}</div>
-          <div class="popup-date">${has?dateText(x.ms):""}</div>
-          <div class="updated">${x.updatedBy?`최근 기록자 ${x.updatedBy}`:""}</div>
-          <button class="main-btn" type="button" data-record="${x.id}">처치 기록 · 다음 팝업 갱신</button>
+  bossGrid.innerHTML=cards.map(x=>`
+    <article class="card">
+      <img class="art" src="${x.img}" alt="${x.name}">
+      <div class="card-body">
+        <div class="boss-name">${x.name}</div>
+        <div class="popup-row">
+          <span class="popup-label">다음 팝업</span>
+          <span class="popup-time">${x.ms!==null?timeText(x.ms):"미등록"}</span>
         </div>
-      </article>`;
-  }).join("");
+        <div class="popup-meta">${x.ms!==null?dateText(x.ms):""}${x.updatedMs?` · 갱신 ${dateTimeText(x.updatedMs)}`:""}</div>
+        <div class="card-actions">
+          <button class="record-btn" type="button" data-card-record="${x.id}">처치 기록</button>
+          <button class="popup-btn" type="button" data-card-popup="${x.id}">팝업시간 수정</button>
+        </div>
+      </div>
+    </article>
+  `).join("");
 }
 
-function renderMemberButtons(){
-  recorderGrid.innerHTML = MEMBER_ORDER.map(name=>
-    `<button type="button" class="member-btn${recorder===name?" selected":""}" data-recorder="${name}">${name}</button>`
+function renderParticipantButtons(){
+  participantGrid.innerHTML=MEMBER_ORDER.map(name=>
+    `<button type="button" class="member-btn${recordParticipants.includes(name)?" selected":""}" data-participant="${name}">${name}</button>`
   ).join("");
-  participantGrid.innerHTML = MEMBER_ORDER.map(name=>
-    `<button type="button" class="member-btn${participants.includes(name)?" selected":""}" data-participant="${name}">${name}</button>`
-  ).join("");
-
-  document.getElementById("recorderInfo").textContent =
-    recorder ? `기록자: ${recorder}` : "기록자를 선택해주세요.";
-  document.getElementById("participantInfo").textContent =
-    participants.length ? `참여 ${participants.length}명 · ${participants.join(", ")}` : "참여 길드원을 선택해주세요.";
+  document.getElementById("participantInfo").textContent=
+    recordParticipants.length?`참여 ${recordParticipants.length}명 · ${recordParticipants.join(", ")}`:"참여 길드원을 선택해주세요.";
+  syncRecordSaveState();
 }
 
-function remainingMsFromInputs(){
-  const h = Math.max(0, Number(document.getElementById("hours").value)||0);
-  const m = Math.min(59, Math.max(0, Number(document.getElementById("minutes").value)||0));
-  const s = Math.min(59, Math.max(0, Number(document.getElementById("seconds").value)||0));
-  return (h*3600+m*60+s)*1000;
+function syncRecordSaveState(){
+  const timeOk=Number.isFinite(parseLocalInput(document.getElementById("defeatedAt").value));
+  document.getElementById("saveRecord").disabled=!(recordBoss&&timeOk&&recordParticipants.length);
 }
-function refreshPreview(){
-  const ms = remainingMsFromInputs();
-  if(ms<=0){
-    document.getElementById("previewTime").textContent="--:--:--";
-    document.getElementById("previewDate").textContent="";
-    return;
+function syncPopupSaveState(){
+  let ok=!!popupBoss;
+  if(popupMode==="remaining") ok=ok&&remainingMsFromInputs()>0;
+  else ok=ok&&Number.isFinite(parseLocalInput(document.getElementById("manualSpawnAt").value));
+  document.getElementById("savePopup").disabled=!ok;
+}
+
+function openRecordModal(bossId=null,historyId=null){
+  editingHistoryId=historyId;
+  recordParticipants=[];
+  recordBoss=bossId;
+
+  if(historyId){
+    const x=historyState.get(historyId);
+    if(!x)return;
+    recordBoss=x.bossId||bossId;
+    recordParticipants=Array.isArray(x.participants)?[...x.participants]:[];
+    const defeatedMs=x.defeatedAt?.toMillis?.() ?? x.clientRecordedAt?.toMillis?.() ?? x.createdAt?.toMillis?.();
+    document.getElementById("defeatedAt").value=Number.isFinite(defeatedMs)?localInputValue(defeatedMs):localInputValue(Date.now());
+    document.getElementById("recordTitle").textContent="처치 기록 수정";
+    document.getElementById("deleteRecord").hidden=false;
+  }else{
+    document.getElementById("defeatedAt").value=localInputValue(Date.now());
+    document.getElementById("recordTitle").textContent=bossId?`${BOSSES[bossId].name} 처치 기록`:"처치 기록 추가";
+    document.getElementById("deleteRecord").hidden=true;
   }
-  const at = Date.now()+ms;
-  document.getElementById("previewTime").textContent=timeText(at);
-  document.getElementById("previewDate").textContent=`${dateText(at)} · 입력시각 기준 계산`;
-}
-function openModal(id){
-  activeBoss=id; recorder=""; participants=[];
-  document.getElementById("modalTitle").textContent=`${BOSSES[id].name} 처치 기록 · 다음 팝업 갱신`;
-  document.getElementById("hours").value="10";
-  document.getElementById("minutes").value="0";
-  document.getElementById("seconds").value="0";
-  document.getElementById("error").textContent="";
-  renderMemberButtons(); refreshPreview();
-  modal.classList.add("show"); modal.setAttribute("aria-hidden","false");
+
+  renderBossChoices(recordBossGrid,recordBoss);
+  renderParticipantButtons();
+  document.getElementById("recordError").textContent="";
+  recordModal.classList.add("show");
+  recordModal.setAttribute("aria-hidden","false");
   document.body.style.overflow="hidden";
 }
-function closeModal(){
-  modal.classList.remove("show"); modal.setAttribute("aria-hidden","true");
+function closeRecordModal(){
+  recordModal.classList.remove("show");
+  recordModal.setAttribute("aria-hidden","true");
+  editingHistoryId=null;
   document.body.style.overflow="";
 }
 
+function remainingMsFromInputs(){
+  const h=Math.max(0,Number(document.getElementById("hours").value)||0);
+  const m=Math.min(59,Math.max(0,Number(document.getElementById("minutes").value)||0));
+  const s=Math.min(59,Math.max(0,Number(document.getElementById("seconds").value)||0));
+  return (h*3600+m*60+s)*1000;
+}
+function refreshPreview(){
+  const remain=remainingMsFromInputs();
+  if(remain<=0){
+    document.getElementById("previewTime").textContent="--:--:--";
+    document.getElementById("previewDate").textContent="";
+  }else{
+    const at=Date.now()+remain;
+    document.getElementById("previewTime").textContent=timeText(at);
+    document.getElementById("previewDate").textContent=`${dateText(at)} · 현재시간 기준 계산`;
+  }
+  syncPopupSaveState();
+}
+function setPopupMode(mode){
+  popupMode=mode;
+  document.getElementById("remainModeBtn").classList.toggle("active",mode==="remaining");
+  document.getElementById("manualModeBtn").classList.toggle("active",mode==="manual");
+  document.getElementById("remainPanel").classList.toggle("active",mode==="remaining");
+  document.getElementById("manualPanel").classList.toggle("active",mode==="manual");
+  syncPopupSaveState();
+}
+function openPopupModal(bossId=null){
+  popupBoss=bossId;
+  renderBossChoices(popupBossGrid,popupBoss);
+  document.getElementById("popupTitle").textContent=bossId?`${BOSSES[bossId].name} 다음 팝업시간 관리`:"다음 팝업시간 관리";
+  document.getElementById("hours").value="10";
+  document.getElementById("minutes").value="0";
+  document.getElementById("seconds").value="0";
+
+  const currentMs=bossId?bossState[bossId]?.spawnAt?.toMillis?.():null;
+  document.getElementById("manualSpawnAt").value=Number.isFinite(currentMs)?localInputValue(currentMs):localInputValue(Date.now());
+  document.getElementById("popupError").textContent="";
+  setPopupMode("remaining");
+  refreshPreview();
+
+  popupModal.classList.add("show");
+  popupModal.setAttribute("aria-hidden","false");
+  document.body.style.overflow="hidden";
+}
+function closePopupModal(){
+  popupModal.classList.remove("show");
+  popupModal.setAttribute("aria-hidden","true");
+  document.body.style.overflow="";
+}
+
+document.getElementById("globalRecordBtn").addEventListener("click",()=>openRecordModal());
+document.getElementById("globalPopupBtn").addEventListener("click",()=>openPopupModal());
+
 bossGrid.addEventListener("click",e=>{
-  const id=e.target.dataset.record;
-  if(id) openModal(id);
+  const r=e.target.closest("[data-card-record]");
+  if(r){openRecordModal(r.dataset.cardRecord);return}
+  const p=e.target.closest("[data-card-popup]");
+  if(p){openPopupModal(p.dataset.cardPopup)}
 });
-recorderGrid.addEventListener("click",e=>{
-  const n=e.target.dataset.recorder;
-  if(!n)return;
-  recorder=n; renderMemberButtons();
+
+recordBossGrid.addEventListener("click",e=>{
+  const btn=e.target.closest("[data-boss-choice]");
+  if(!btn)return;
+  recordBoss=btn.dataset.bossChoice;
+  renderBossChoices(recordBossGrid,recordBoss);
+  syncRecordSaveState();
+});
+popupBossGrid.addEventListener("click",e=>{
+  const btn=e.target.closest("[data-boss-choice]");
+  if(!btn)return;
+  popupBoss=btn.dataset.bossChoice;
+  renderBossChoices(popupBossGrid,popupBoss);
+  const currentMs=bossState[popupBoss]?.spawnAt?.toMillis?.();
+  if(Number.isFinite(currentMs))document.getElementById("manualSpawnAt").value=localInputValue(currentMs);
+  document.getElementById("popupTitle").textContent=`${BOSSES[popupBoss].name} 다음 팝업시간 관리`;
+  syncPopupSaveState();
 });
 participantGrid.addEventListener("click",e=>{
-  const n=e.target.dataset.participant;
-  if(!n)return;
-  participants = participants.includes(n) ? participants.filter(x=>x!==n) : [...participants,n];
-  renderMemberButtons();
+  const btn=e.target.closest("[data-participant]");
+  if(!btn)return;
+  const n=btn.dataset.participant;
+  recordParticipants=recordParticipants.includes(n)?recordParticipants.filter(x=>x!==n):[...recordParticipants,n];
+  renderParticipantButtons();
 });
 
-["hours","minutes","seconds"].forEach(id=>
-  document.getElementById(id).addEventListener("input",refreshPreview)
-);
-document.getElementById("closeModal").addEventListener("click",closeModal);
-document.getElementById("cancelModal").addEventListener("click",closeModal);
-modal.addEventListener("click",e=>{ if(e.target===modal) closeModal(); });
+document.getElementById("defeatedAt").addEventListener("input",syncRecordSaveState);
+["hours","minutes","seconds"].forEach(id=>document.getElementById(id).addEventListener("input",refreshPreview));
+document.getElementById("manualSpawnAt").addEventListener("input",syncPopupSaveState);
+document.getElementById("remainModeBtn").addEventListener("click",()=>setPopupMode("remaining"));
+document.getElementById("manualModeBtn").addEventListener("click",()=>setPopupMode("manual"));
+
+document.getElementById("closeRecordModal").addEventListener("click",closeRecordModal);
+document.getElementById("cancelRecord").addEventListener("click",closeRecordModal);
+recordModal.addEventListener("click",e=>{if(e.target===recordModal)closeRecordModal()});
+document.getElementById("closePopupModal").addEventListener("click",closePopupModal);
+document.getElementById("cancelPopup").addEventListener("click",closePopupModal);
+popupModal.addEventListener("click",e=>{if(e.target===popupModal)closePopupModal()});
 
 document.getElementById("saveRecord").addEventListener("click",async()=>{
-  const err=document.getElementById("error");
+  const err=document.getElementById("recordError");
   err.textContent="";
-  if(!activeBoss){ err.textContent="보스를 다시 선택해주세요."; return; }
-  if(!recorder){ err.textContent="기록자를 선택해주세요."; return; }
-  if(!participants.length){ err.textContent="처치 참여 길드원을 1명 이상 선택해주세요."; return; }
+  const defeatedMs=parseLocalInput(document.getElementById("defeatedAt").value);
+  if(!recordBoss){err.textContent="보스를 선택해주세요.";return}
+  if(!Number.isFinite(defeatedMs)){err.textContent="처치 완료시간을 입력해주세요.";return}
+  if(!recordParticipants.length){err.textContent="참여 길드원을 1명 이상 선택해주세요.";return}
 
-  const remain = remainingMsFromInputs();
-  if(remain<=0){ err.textContent="다음 팝업까지 남은 시간을 입력해주세요."; return; }
-
-  const saveBtn=document.getElementById("saveRecord");
-  saveBtn.disabled=true;
+  const save=document.getElementById("saveRecord");
+  save.disabled=true;
   try{
-    const clientRecordedAt=Date.now();
-    const spawnAtMs=clientRecordedAt+remain;
-    const boss=BOSSES[activeBoss];
-    const batch=writeBatch(db);
-
-    const timerRef=doc(db,"bossTimers",activeBoss);
-    const historyRef=doc(collection(db,"bossHistory"));
-
-    batch.set(timerRef,{
-      bossId:activeBoss,
-      bossName:boss.name,
-      spawnAt:Timestamp.fromMillis(spawnAtMs),
-      remainingMsAtRecord:remain,
-      updatedAt:serverTimestamp(),
-      updatedBy:recorder,
-      updatedByUid:auth.currentUser?.uid||""
-    },{merge:true});
-
-    batch.set(historyRef,{
-      bossId:activeBoss,
-      bossName:boss.name,
+    const ref=editingHistoryId?doc(db,"bossHistory",editingHistoryId):doc(collection(db,"bossHistory"));
+    const payload={
+      bossId:recordBoss,
+      bossName:BOSSES[recordBoss].name,
       type:"defeated",
-      defeatedAt:serverTimestamp(),
-      participants:[...participants],
-      recordedBy:recorder,
+      defeatedAt:Timestamp.fromMillis(defeatedMs),
+      participants:[...recordParticipants],
       recordedByUid:auth.currentUser?.uid||"",
-      remainingMsAtRecord:remain,
-      spawnAt:Timestamp.fromMillis(spawnAtMs),
-      clientRecordedAt:Timestamp.fromMillis(clientRecordedAt),
-      createdAt:serverTimestamp()
-    });
-
-    await batch.commit();
-    closeModal();
+      updatedAt:serverTimestamp()
+    };
+    if(editingHistoryId){
+      const batch=writeBatch(db);
+      batch.set(ref,payload,{merge:true});
+      await batch.commit();
+    }else{
+      const batch=writeBatch(db);
+      batch.set(ref,{...payload,createdAt:serverTimestamp()});
+      await batch.commit();
+    }
+    closeRecordModal();
   }catch(e){
     err.textContent="저장 실패: "+(e?.message||e);
   }finally{
-    saveBtn.disabled=false;
+    syncRecordSaveState();
   }
+});
+
+document.getElementById("deleteRecord").addEventListener("click",async()=>{
+  if(!editingHistoryId)return;
+  if(!confirm("이 처치 기록을 삭제할까요?"))return;
+  const err=document.getElementById("recordError");
+  try{
+    await deleteDoc(doc(db,"bossHistory",editingHistoryId));
+    closeRecordModal();
+  }catch(e){
+    err.textContent="삭제 실패: "+(e?.message||e);
+  }
+});
+
+document.getElementById("savePopup").addEventListener("click",async()=>{
+  const err=document.getElementById("popupError");
+  err.textContent="";
+  if(!popupBoss){err.textContent="보스를 선택해주세요.";return}
+
+  let spawnMs,remainingMs=null,source;
+  if(popupMode==="remaining"){
+    remainingMs=remainingMsFromInputs();
+    if(remainingMs<=0){err.textContent="다음 팝업까지 남은 시간을 입력해주세요.";return}
+    spawnMs=Date.now()+remainingMs;
+    source="remaining";
+  }else{
+    spawnMs=parseLocalInput(document.getElementById("manualSpawnAt").value);
+    if(!Number.isFinite(spawnMs)){err.textContent="다음 팝업 예상시각을 입력해주세요.";return}
+    source="manual";
+  }
+
+  const save=document.getElementById("savePopup");
+  save.disabled=true;
+  try{
+    const timerRef=doc(db,"bossTimers",popupBoss);
+    const batch=writeBatch(db);
+    batch.set(timerRef,{
+      bossId:popupBoss,
+      bossName:BOSSES[popupBoss].name,
+      spawnAt:Timestamp.fromMillis(spawnMs),
+      remainingMsAtRecord:remainingMs,
+      updateSource:source,
+      updatedAt:serverTimestamp(),
+      updatedByUid:auth.currentUser?.uid||""
+    },{merge:true});
+    await batch.commit();
+    closePopupModal();
+  }catch(e){
+    err.textContent="저장 실패: "+(e?.message||e);
+  }finally{
+    syncPopupSaveState();
+  }
+});
+
+document.getElementById("historyList").addEventListener("click",e=>{
+  const btn=e.target.closest("[data-history-id]");
+  if(!btn)return;
+  openRecordModal(null,btn.dataset.historyId);
 });
 
 onSnapshot(collection(db,"bossTimers"),snap=>{
@@ -407,31 +642,41 @@ onSnapshot(collection(db,"bossTimers"),snap=>{
   renderBosses();
 },console.error);
 
-const historyQ=query(collection(db,"bossHistory"),orderBy("createdAt","desc"),limit(12));
+const historyQ=query(collection(db,"bossHistory"),orderBy("createdAt","desc"),limit(20));
 onSnapshot(historyQ,snap=>{
-  const list=[];
+  historyState=new Map();
+  const rows=[];
   snap.forEach(d=>{
     const x=d.data();
     if(x.type!=="defeated")return;
-    const spawnMs=x.spawnAt?.toMillis?.();
-    list.push(`<div class="log">
-      <b>${x.bossName||x.bossId}</b> · ${formatCreated(x.createdAt)} · 기록자 ${x.recordedBy||"-"}<br>
-      참여 ${x.participants?.length?x.participants.join(", "):"-"}
-      ${spawnMs?`<br>다음 팝업 ${dateText(spawnMs)} ${timeText(spawnMs)}`:""}
-    </div>`);
+    historyState.set(d.id,x);
+    const defeatedMs=x.defeatedAt?.toMillis?.() ?? x.clientRecordedAt?.toMillis?.() ?? x.createdAt?.toMillis?.();
+    rows.push(`
+      <button type="button" class="log" data-history-id="${d.id}">
+        <b>${x.bossName||BOSSES[x.bossId]?.name||x.bossId||"-"}</b>
+        ${Number.isFinite(defeatedMs)?` · 처치 ${dateTimeText(defeatedMs)}`:""}<br>
+        참여 ${Array.isArray(x.participants)&&x.participants.length?x.participants.join(", "):"-"}
+        <span class="edit-hint">눌러서 기록 수정</span>
+      </button>
+    `);
   });
-  document.getElementById("historyList").className=list.length?"":"history-empty";
-  document.getElementById("historyList").innerHTML=list.join("")||"아직 처치 기록이 없습니다.";
+  const el=document.getElementById("historyList");
+  el.className=rows.length?"":"history-empty";
+  el.innerHTML=rows.join("")||"아직 처치 기록이 없습니다.";
 },e=>{
-  document.getElementById("historyList").className="history-empty";
-  document.getElementById("historyList").textContent="최근 기록을 불러오지 못했습니다.";
+  const el=document.getElementById("historyList");
+  el.className="history-empty";
+  el.textContent="최근 기록을 불러오지 못했습니다.";
 });
 
 setInterval(()=>{
   document.getElementById("now").textContent="현재시간 "+new Date().toLocaleTimeString("ko-KR",{hour12:false});
-  if(modal.classList.contains("show")) refreshPreview();
+  if(popupModal.classList.contains("show")&&popupMode==="remaining")refreshPreview();
 },1000);
 
+renderBossChoices(recordBossGrid,null);
+renderBossChoices(popupBossGrid,null);
+renderParticipantButtons();
 renderBosses();
 refreshPreview();
 </script>
