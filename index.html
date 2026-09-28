@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
-<title>도살장 보스 팝업 현황 V2.1.0</title>
+<title>도살장 보스 팝업 현황 V2.2.0</title>
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -29,20 +29,20 @@ button:disabled{cursor:default;opacity:.45}
   padding:14px 12px 28px;
 }
 .top-back{
-  display:block;text-align:center;margin:0 0 11px;padding:10px 12px;border-radius:12px;
+  display:block;text-align:center;margin:0 0 8px;padding:8px 12px;border-radius:12px;
   background:#f3edff;border:1px solid #d7c6f2;color:#4b2295;text-decoration:none;
   font-size:13px;font-weight:900;
 }
-.header{text-align:center;padding:2px 0 10px}
+.header{text-align:center;padding:0 0 7px}
 .title{margin:0;color:#3d197e;font-size:26px;line-height:1.15;font-weight:950;letter-spacing:-.8px}
 .version{margin-top:5px;color:#7c6c9a;font-size:12px;font-weight:800}
 .now{margin-top:6px;color:#615775;font-size:13px;font-weight:850;font-variant-numeric:tabular-nums}
 
 .quick-actions{
-  display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 11px;
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 8px;
 }
 .quick-actions button{
-  min-height:42px;border-radius:12px;font-size:13px;font-weight:950;
+  min-height:38px;border-radius:12px;font-size:12.5px;font-weight:950;
 }
 .quick-record{
   border:0;background:linear-gradient(180deg,#8156e9,#6133c7);color:#fff;
@@ -56,23 +56,21 @@ button:disabled{cursor:default;opacity:.45}
   background:#fff;border:2px solid var(--violet);border-radius:17px;overflow:hidden;
   box-shadow:0 5px 13px rgba(66,32,125,.08);min-width:0;
 }
-.art{
-  width:100%;height:118px;object-fit:cover;display:block;background:#ffd46b;
-}
-.card-body{text-align:center;padding:8px 8px 9px}
-.boss-name{font-size:18px;font-weight:950;color:#32156c;line-height:1.1}
+.art{width:100%;height:106px;object-fit:contain;object-position:center;display:block;background:#ffd46b;}
+.card-body{text-align:center;padding:6px 7px 7px}
+.boss-name{font-size:17px;font-weight:950;color:#32156c;line-height:1.08}
 .popup-row{
-  display:flex;align-items:baseline;justify-content:center;gap:6px;margin-top:5px;min-width:0;
+  display:flex;align-items:baseline;justify-content:center;gap:5px;margin-top:3px;min-width:0;
 }
 .popup-label{color:#847995;font-size:10px;font-weight:850;white-space:nowrap}
 .popup-time{
   color:#4b2295;font-size:21px;line-height:1.05;font-weight:950;
   letter-spacing:-.35px;font-variant-numeric:tabular-nums;white-space:nowrap;
 }
-.popup-meta{margin-top:3px;min-height:15px;color:#82768e;font-size:10.5px;font-weight:800}
-.card-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:7px}
+.popup-meta{margin-top:2px;min-height:13px;color:#82768e;font-size:10px;font-weight:800}
+.card-actions{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:5px}
 .card-actions button{
-  min-height:34px;border-radius:9px;padding:6px 4px;font-size:11px;font-weight:900;
+  min-height:31px;border-radius:9px;padding:5px 3px;font-size:10.5px;font-weight:900;
 }
 .record-btn{border:0;background:#6c3bd2;color:#fff}
 .popup-btn{border:1px solid #c9b2ed;background:#f7f3ff;color:#4e268f}
@@ -81,6 +79,17 @@ button:disabled{cursor:default;opacity:.45}
   margin-top:12px;border:2px solid var(--line);border-radius:16px;background:#fff;padding:11px;
 }
 .history-title{font-size:16px;font-weight:950;color:#351570;margin-bottom:6px}
+
+.history-head{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;
+}
+.history-title{margin-bottom:0!important}
+.history-add{
+  width:36px;height:36px;flex:0 0 36px;border-radius:50%;
+  border:1.5px solid #c9b1ef;background:#f7f3ff;color:#54259c;
+  font-size:24px;line-height:1;font-weight:700;padding:0;
+}
+
 .history-empty{font-size:12px;color:#8b8097;padding:6px 1px}
 .log{
   width:100%;text-align:left;border:0;border-top:1px solid #eee8f7;background:#fff;
@@ -165,13 +174,28 @@ button:disabled{cursor:default;opacity:.45}
 @media(max-width:390px){
   .app{padding-left:9px;padding-right:9px}
   .grid{gap:7px}
-  .art{height:106px}
+  .art{height:98px}
   .popup-time{font-size:19px}
   .boss-name{font-size:17px}
   .member-grid{gap:6px}
   .member-btn{font-size:12px}
   .quick-actions{gap:6px}
 }
+
+/* iPhone/Safari datetime-local compaction */
+input[type="datetime-local"].field{
+  display:block;width:100%;height:48px!important;min-height:48px!important;max-height:48px!important;
+  padding:0 12px!important;border:1.5px solid #ceb9ec;border-radius:11px;background:#fff;
+  color:#2d2150;font-size:16px!important;font-weight:850;line-height:48px!important;
+  -webkit-appearance:none;appearance:none;
+}
+input[type="datetime-local"].field::-webkit-date-and-time-value{
+  text-align:left;margin:0;padding:0;line-height:46px;
+}
+input[type="datetime-local"].field::-webkit-datetime-edit{
+  padding:0;line-height:46px;
+}
+
 </style>
 </head>
 <body>
@@ -180,7 +204,7 @@ button:disabled{cursor:default;opacity:.45}
 
   <header class="header">
     <h1 class="title">도살장 보스 팝업 현황</h1>
-    <div class="version">V2.1.0 · 길드 공유</div>
+    <div class="version">V2.2.0 · 길드 공유</div>
     <div id="now" class="now">현재시간 --:--:--</div>
   </header>
 
@@ -192,7 +216,10 @@ button:disabled{cursor:default;opacity:.45}
   <section id="bossGrid" class="grid"></section>
 
   <section class="history">
-    <div class="history-title">최근 처치 기록</div>
+    <div class="history-head">
+      <div class="history-title">처치 기록</div>
+      <button id="historyAddBtn" class="history-add" type="button" aria-label="처치 기록 소급 추가">+</button>
+    </div>
     <div id="historyList" class="history-empty">기록을 불러오는 중입니다.</div>
   </section>
 </main>
@@ -273,7 +300,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebas
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 import {
   getFirestore, collection, doc, onSnapshot, serverTimestamp,
-  Timestamp, writeBatch, query, orderBy, limit, deleteDoc
+  Timestamp, writeBatch, deleteDoc
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -290,6 +317,18 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 await signInAnonymously(auth);
+
+const WRITE_PIN = "154100";
+
+function requireWritePin(){
+  const value = window.prompt("인증번호를 입력하세요.");
+  if(value === null) return false;
+  if(String(value).trim() !== WRITE_PIN){
+    window.alert("인증번호가 올바르지 않습니다.");
+    return false;
+  }
+  return true;
+}
 
 const MEMBERS = {
   "돗돔":{base:191.6},"매콤갈비":{base:142.5},"사마엘":{base:122.5},"혀녕":{base:93.8},
@@ -492,14 +531,15 @@ function closePopupModal(){
   document.body.style.overflow="";
 }
 
-document.getElementById("globalRecordBtn").addEventListener("click",()=>openRecordModal());
-document.getElementById("globalPopupBtn").addEventListener("click",()=>openPopupModal());
+document.getElementById("globalRecordBtn").addEventListener("click",()=>{if(requireWritePin())openRecordModal();});
+document.getElementById("globalPopupBtn").addEventListener("click",()=>{if(requireWritePin())openPopupModal();});
+document.getElementById("historyAddBtn").addEventListener("click",()=>{if(requireWritePin())openRecordModal();});
 
 bossGrid.addEventListener("click",e=>{
   const r=e.target.closest("[data-card-record]");
-  if(r){openRecordModal(r.dataset.cardRecord);return}
+  if(r){if(requireWritePin())openRecordModal(r.dataset.cardRecord);return}
   const p=e.target.closest("[data-card-popup]");
-  if(p){openPopupModal(p.dataset.cardPopup)}
+  if(p){if(requireWritePin())openPopupModal(p.dataset.cardPopup)}
 });
 
 recordBossGrid.addEventListener("click",e=>{
@@ -633,7 +673,7 @@ document.getElementById("savePopup").addEventListener("click",async()=>{
 document.getElementById("historyList").addEventListener("click",e=>{
   const btn=e.target.closest("[data-history-id]");
   if(!btn)return;
-  openRecordModal(null,btn.dataset.historyId);
+  if(requireWritePin())openRecordModal(null,btn.dataset.historyId);
 });
 
 onSnapshot(collection(db,"bossTimers"),snap=>{
@@ -642,31 +682,32 @@ onSnapshot(collection(db,"bossTimers"),snap=>{
   renderBosses();
 },console.error);
 
-const historyQ=query(collection(db,"bossHistory"),orderBy("createdAt","desc"),limit(20));
-onSnapshot(historyQ,snap=>{
+onSnapshot(collection(db,"bossHistory"),snap=>{
   historyState=new Map();
-  const rows=[];
+  const items=[];
   snap.forEach(d=>{
     const x=d.data();
     if(x.type!=="defeated")return;
     historyState.set(d.id,x);
     const defeatedMs=x.defeatedAt?.toMillis?.() ?? x.clientRecordedAt?.toMillis?.() ?? x.createdAt?.toMillis?.();
-    rows.push(`
-      <button type="button" class="log" data-history-id="${d.id}">
-        <b>${x.bossName||BOSSES[x.bossId]?.name||x.bossId||"-"}</b>
-        ${Number.isFinite(defeatedMs)?` · 처치 ${dateTimeText(defeatedMs)}`:""}<br>
-        참여 ${Array.isArray(x.participants)&&x.participants.length?x.participants.join(", "):"-"}
-        <span class="edit-hint">눌러서 기록 수정</span>
-      </button>
-    `);
+    items.push({id:d.id,x,defeatedMs:Number.isFinite(defeatedMs)?defeatedMs:0});
   });
+  items.sort((a,b)=>b.defeatedMs-a.defeatedMs);
+  const rows=items.map(({id,x,defeatedMs})=>`
+    <button type="button" class="log" data-history-id="${id}">
+      <b>${x.bossName||BOSSES[x.bossId]?.name||x.bossId||"-"}</b>
+      ${defeatedMs?` · 처치 ${dateTimeText(defeatedMs)}`:""}<br>
+      참여 ${Array.isArray(x.participants)&&x.participants.length?x.participants.join(", "):"-"}
+      <span class="edit-hint">눌러서 기록 수정</span>
+    </button>
+  `);
   const el=document.getElementById("historyList");
   el.className=rows.length?"":"history-empty";
   el.innerHTML=rows.join("")||"아직 처치 기록이 없습니다.";
 },e=>{
   const el=document.getElementById("historyList");
   el.className="history-empty";
-  el.textContent="최근 기록을 불러오지 못했습니다.";
+  el.textContent="처치 기록을 불러오지 못했습니다.";
 });
 
 setInterval(()=>{
