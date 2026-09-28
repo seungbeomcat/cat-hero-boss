@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
-<title>도살장 보스 팝업 현황 V2.2.0</title>
+<title>도살장 보스 팝업 현황 V2.2.1</title>
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -182,19 +182,47 @@ button:disabled{cursor:default;opacity:.45}
   .quick-actions{gap:6px}
 }
 
-/* iPhone/Safari datetime-local compaction */
-input[type="datetime-local"].field{
-  display:block;width:100%;height:48px!important;min-height:48px!important;max-height:48px!important;
-  padding:0 12px!important;border:1.5px solid #ceb9ec;border-radius:11px;background:#fff;
-  color:#2d2150;font-size:16px!important;font-weight:850;line-height:48px!important;
+
+
+/* Exact defeated-time entry: date + hour/minute/second */
+.defeated-time-box{display:grid;grid-template-columns:1fr;gap:8px}
+.record-date{
+  width:100%;height:44px;min-height:44px;border:1.5px solid #ceb9ec;border-radius:11px;
+  background:#fff;color:#2d2150;font-size:16px;font-weight:850;padding:0 10px;
   -webkit-appearance:none;appearance:none;
 }
-input[type="datetime-local"].field::-webkit-date-and-time-value{
-  text-align:left;margin:0;padding:0;line-height:46px;
+.record-time-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.record-time-wrap{position:relative}
+.record-time-wrap input{
+  width:100%;height:44px;border:1.5px solid #ceb9ec;border-radius:11px;background:#fff;
+  color:#2d2150;font-size:18px;font-weight:900;text-align:center;padding:7px 24px 7px 6px;
 }
-input[type="datetime-local"].field::-webkit-datetime-edit{
-  padding:0;line-height:46px;
+.record-time-unit{
+  position:absolute;right:7px;top:50%;transform:translateY(-50%);
+  color:#887a9d;font-size:11px;font-weight:850;pointer-events:none;
 }
+
+/* Accumulated defeat history */
+.log{
+  display:grid!important;grid-template-columns:42px minmax(0,1fr);
+  gap:9px;align-items:center;padding:10px 2px!important;
+}
+.history-boss-icon{
+  width:42px;height:42px;object-fit:cover;display:block;border-radius:10px;
+  border:3px solid #6c3bd2;background:#ffd46b;
+  box-shadow:0 0 0 1px rgba(255,255,255,.9),0 2px 6px rgba(73,33,132,.12);
+}
+.history-copy{min-width:0}
+.history-top{
+  display:flex;align-items:baseline;gap:7px;min-width:0;flex-wrap:wrap;line-height:1.35;
+}
+.history-boss-name{color:#351570;font-size:13px;font-weight:950;white-space:nowrap}
+.history-time{color:#5e536f;font-size:12px;font-weight:750;font-variant-numeric:tabular-nums}
+.history-members{
+  display:block;margin-top:3px;color:#413450;font-size:12.5px;font-weight:900;
+  line-height:1.4;word-break:keep-all;
+}
+.log .edit-hint{display:block;margin-top:3px!important;font-size:10px!important;font-weight:750!important}
 
 </style>
 </head>
@@ -204,7 +232,7 @@ input[type="datetime-local"].field::-webkit-datetime-edit{
 
   <header class="header">
     <h1 class="title">도살장 보스 팝업 현황</h1>
-    <div class="version">V2.2.0 · 길드 공유</div>
+    <div class="version">V2.2.1 · 길드 공유</div>
     <div id="now" class="now">현재시간 --:--:--</div>
   </header>
 
@@ -235,8 +263,15 @@ input[type="datetime-local"].field::-webkit-datetime-edit{
     <div id="recordBossGrid" class="boss-grid"></div>
 
     <div class="step-title">2. 처치 완료시간 입력</div>
-    <input id="defeatedAt" class="field" type="datetime-local" step="1">
-    <div class="helper">인게임에서 확인한 실제 처치 완료시간을 입력해주세요.</div>
+    <div class="defeated-time-box">
+      <input id="defeatedDate" class="record-date" type="date" aria-label="처치 완료 날짜">
+      <div class="record-time-row" aria-label="처치 완료 시각">
+        <div class="record-time-wrap"><input id="defeatedHour" type="number" inputmode="numeric" min="0" max="23" aria-label="처치 완료 시"><span class="record-time-unit">시</span></div>
+        <div class="record-time-wrap"><input id="defeatedMinute" type="number" inputmode="numeric" min="0" max="59" aria-label="처치 완료 분"><span class="record-time-unit">분</span></div>
+        <div class="record-time-wrap"><input id="defeatedSecond" type="number" inputmode="numeric" min="0" max="59" aria-label="처치 완료 초"><span class="record-time-unit">초</span></div>
+      </div>
+    </div>
+    <div class="helper">인게임에서 확인한 실제 처치 완료시간을 초 단위까지 입력해주세요.</div>
 
     <div class="step-title">3. 처치 참여 길드원 선택</div>
     <div id="participantGrid" class="member-grid"></div>
@@ -393,6 +428,32 @@ function parseLocalInput(value){
   return Number.isFinite(ms)?ms:NaN;
 }
 
+function recordDateValue(ms){
+  const d=new Date(ms);
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+}
+function setRecordTimeInputs(ms){
+  const d=new Date(ms);
+  document.getElementById("defeatedDate").value=recordDateValue(ms);
+  document.getElementById("defeatedHour").value=String(d.getHours());
+  document.getElementById("defeatedMinute").value=String(d.getMinutes());
+  document.getElementById("defeatedSecond").value=String(d.getSeconds());
+}
+function defeatedMsFromInputs(){
+  const date=document.getElementById("defeatedDate").value;
+  if(!date)return NaN;
+  const h=Number(document.getElementById("defeatedHour").value);
+  const m=Number(document.getElementById("defeatedMinute").value);
+  const s=Number(document.getElementById("defeatedSecond").value);
+  if(!Number.isInteger(h)||h<0||h>23)return NaN;
+  if(!Number.isInteger(m)||m<0||m>59)return NaN;
+  if(!Number.isInteger(s)||s<0||s>59)return NaN;
+  const [y,mo,da]=date.split("-").map(Number);
+  const d=new Date(y,mo-1,da,h,m,s,0);
+  return d.getFullYear()===y&&d.getMonth()===mo-1&&d.getDate()===da&&
+    d.getHours()===h&&d.getMinutes()===m&&d.getSeconds()===s ? d.getTime() : NaN;
+}
+
 function renderBossChoices(host,selected){
   host.innerHTML=Object.entries(BOSSES).map(([id,b])=>
     `<button type="button" class="boss-choice${selected===id?" selected":""}" data-boss-choice="${id}">${b.name}</button>`
@@ -437,7 +498,7 @@ function renderParticipantButtons(){
 }
 
 function syncRecordSaveState(){
-  const timeOk=Number.isFinite(parseLocalInput(document.getElementById("defeatedAt").value));
+  const timeOk=Number.isFinite(defeatedMsFromInputs());
   document.getElementById("saveRecord").disabled=!(recordBoss&&timeOk&&recordParticipants.length);
 }
 function syncPopupSaveState(){
@@ -458,11 +519,11 @@ function openRecordModal(bossId=null,historyId=null){
     recordBoss=x.bossId||bossId;
     recordParticipants=Array.isArray(x.participants)?[...x.participants]:[];
     const defeatedMs=x.defeatedAt?.toMillis?.() ?? x.clientRecordedAt?.toMillis?.() ?? x.createdAt?.toMillis?.();
-    document.getElementById("defeatedAt").value=Number.isFinite(defeatedMs)?localInputValue(defeatedMs):localInputValue(Date.now());
+    setRecordTimeInputs(Number.isFinite(defeatedMs)?defeatedMs:Date.now());
     document.getElementById("recordTitle").textContent="처치 기록 수정";
     document.getElementById("deleteRecord").hidden=false;
   }else{
-    document.getElementById("defeatedAt").value=localInputValue(Date.now());
+    setRecordTimeInputs(Date.now());
     document.getElementById("recordTitle").textContent=bossId?`${BOSSES[bossId].name} 처치 기록`:"처치 기록 추가";
     document.getElementById("deleteRecord").hidden=true;
   }
@@ -567,7 +628,9 @@ participantGrid.addEventListener("click",e=>{
   renderParticipantButtons();
 });
 
-document.getElementById("defeatedAt").addEventListener("input",syncRecordSaveState);
+["defeatedDate","defeatedHour","defeatedMinute","defeatedSecond"].forEach(id=>{
+  document.getElementById(id).addEventListener("input",syncRecordSaveState);
+});
 ["hours","minutes","seconds"].forEach(id=>document.getElementById(id).addEventListener("input",refreshPreview));
 document.getElementById("manualSpawnAt").addEventListener("input",syncPopupSaveState);
 document.getElementById("remainModeBtn").addEventListener("click",()=>setPopupMode("remaining"));
@@ -583,7 +646,7 @@ popupModal.addEventListener("click",e=>{if(e.target===popupModal)closePopupModal
 document.getElementById("saveRecord").addEventListener("click",async()=>{
   const err=document.getElementById("recordError");
   err.textContent="";
-  const defeatedMs=parseLocalInput(document.getElementById("defeatedAt").value);
+  const defeatedMs=defeatedMsFromInputs();
   if(!recordBoss){err.textContent="보스를 선택해주세요.";return}
   if(!Number.isFinite(defeatedMs)){err.textContent="처치 완료시간을 입력해주세요.";return}
   if(!recordParticipants.length){err.textContent="참여 길드원을 1명 이상 선택해주세요.";return}
@@ -693,14 +756,24 @@ onSnapshot(collection(db,"bossHistory"),snap=>{
     items.push({id:d.id,x,defeatedMs:Number.isFinite(defeatedMs)?defeatedMs:0});
   });
   items.sort((a,b)=>b.defeatedMs-a.defeatedMs);
-  const rows=items.map(({id,x,defeatedMs})=>`
-    <button type="button" class="log" data-history-id="${id}">
-      <b>${x.bossName||BOSSES[x.bossId]?.name||x.bossId||"-"}</b>
-      ${defeatedMs?` · 처치 ${dateTimeText(defeatedMs)}`:""}<br>
-      참여 ${Array.isArray(x.participants)&&x.participants.length?x.participants.join(", "):"-"}
-      <span class="edit-hint">눌러서 기록 수정</span>
-    </button>
-  `);
+  const rows=items.map(({id,x,defeatedMs})=>{
+    const boss=BOSSES[x.bossId]||null;
+    const bossName=x.bossName||boss?.name||x.bossId||"-";
+    const bossImg=boss?.img||"";
+    const members=Array.isArray(x.participants)&&x.participants.length?x.participants.join(", "):"-";
+    return `
+      <button type="button" class="log" data-history-id="${id}">
+        ${bossImg?`<img class="history-boss-icon" src="${bossImg}" alt="">`:`<span></span>`}
+        <span class="history-copy">
+          <span class="history-top">
+            <span class="history-boss-name">${bossName}</span>
+            <span class="history-time">${defeatedMs?`처치시간 : ${dateTimeText(defeatedMs)}`:"처치시간 : -"}</span>
+          </span>
+          <span class="history-members">${members}</span>
+          <span class="edit-hint">눌러서 기록 수정</span>
+        </span>
+      </button>`;
+  });
   const el=document.getElementById("historyList");
   el.className=rows.length?"":"history-empty";
   el.innerHTML=rows.join("")||"아직 처치 기록이 없습니다.";
