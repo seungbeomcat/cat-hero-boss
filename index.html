@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.2.1">
-<!-- internal version: V3.2.1 -->
+<meta name="app-version" content="V3.3.0">
+<!-- internal version: V3.3.0 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -272,6 +272,48 @@ button:disabled{cursor:default;opacity:.45}
   .rank-name{font-size:11.5px}
   .history-list-scroll{height:324px}
 }
+
+/* Outcome tracking: guild win vs stolen by another guild */
+.weekly-outcome-summary{
+  display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 0 7px;
+}
+.weekly-outcome-box{
+  min-height:34px;border-radius:10px;padding:5px 8px;display:flex;align-items:center;justify-content:center;gap:7px;
+  font-size:10px;line-height:1.05;font-weight:900;
+}
+.weekly-outcome-box strong{font-size:12px;font-weight:950;white-space:nowrap}
+.weekly-outcome-box.won{background:#f4efff;border:1.5px solid #cbb8ef;color:#4b2295}
+.weekly-outcome-box.stolen{background:#fff0f0;border:1.5px solid #e3a7a7;color:#a42a2a}
+.member-detail-stolen{
+  display:flex;align-items:center;justify-content:space-between;margin:0 2px 4px;padding:5px 3px;
+  border-top:1px solid #f0d8d8;color:#a63131;font-size:9.5px;font-weight:900;
+}
+.member-detail-stolen strong{font-size:10.5px;color:#b12626}
+.outcome-choice{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.outcome-btn{
+  min-height:39px;border-radius:10px;border:1.5px solid #d8c8ee;background:#fbfaff;
+  color:#4d2b70;font-size:12px;font-weight:900;padding:5px 4px;
+}
+.outcome-btn.won.selected{background:#5d32bd;border-color:#5d32bd;color:#fff}
+.outcome-btn.stolen{border-color:#e2bcbc;color:#a03a3a;background:#fffafa}
+.outcome-btn.stolen.selected{background:#c64747;border-color:#b73c3c;color:#fff;box-shadow:0 2px 7px rgba(183,60,60,.18)}
+.log.stolen{
+  background:#fff0f0;border-top-color:#efcaca;
+}
+.log.stolen:first-child{border-top:0}
+.log.stolen .history-boss-icon-wrap{border-color:#c94a4a}
+.history-result-badge{
+  display:inline-flex;align-items:center;justify-content:center;min-height:18px;padding:2px 6px;border-radius:999px;
+  background:#c93d3d;color:#fff;font-size:8.5px;line-height:1;font-weight:950;white-space:nowrap;
+}
+.log.stolen .history-boss-name{color:#922b2b}
+.log.stolen .history-time{color:#805454}
+.log.stolen .history-members{color:#5f3c3c}
+@media(max-width:390px){
+  .weekly-outcome-box{font-size:9.4px;gap:5px;padding-left:5px;padding-right:5px}
+  .weekly-outcome-box strong{font-size:11px}
+  .outcome-btn{font-size:11px}
+}
 </style>
 </head>
 <body>
@@ -290,6 +332,10 @@ button:disabled{cursor:default;opacity:.45}
       <div class="weekly-title">이번 주 2구역 참여 현황</div>
       <div id="weeklyPeriod" class="weekly-period">집계기간 계산 중</div>
       <div class="weekly-hint">닉네임 클릭 시 세부 현황 확인 가능</div>
+    </div>
+    <div id="weeklyOutcomeSummary" class="weekly-outcome-summary" aria-label="이번 주 보스 획득 결과">
+      <div class="weekly-outcome-box won"><span>우리 길드 획득</span><strong id="weeklyWonCount">0회</strong></div>
+      <div class="weekly-outcome-box stolen"><span>뺏김</span><strong id="weeklyStolenCount">0회</strong></div>
     </div>
     <div id="rankGrid" class="rank-grid"></div>
   </section>
@@ -325,11 +371,17 @@ button:disabled{cursor:default;opacity:.45}
       </div>
     </div>
 
-    <div class="step-title">2. 참여 길드원 선택</div>
+    <div class="step-title">2. 결과 선택</div>
+    <div id="completeOutcomeGrid" class="outcome-choice" role="group" aria-label="처치 결과 선택">
+      <button type="button" class="outcome-btn won selected" data-complete-outcome="won">우리 길드 획득</button>
+      <button type="button" class="outcome-btn stolen" data-complete-outcome="stolen">다른 길드에 뺏김</button>
+    </div>
+
+    <div class="step-title">3. 참여 길드원 선택</div>
     <div id="completeParticipantGrid" class="member-grid"></div>
     <div id="completeParticipantInfo" class="selected-info">참여 길드원을 선택해주세요.</div>
 
-    <div class="step-title">3. 다음 팝업까지 남은 시간</div>
+    <div class="step-title">4. 다음 팝업까지 남은 시간</div>
     <div class="hms-row">
       <div class="hms-wrap"><input id="completeRemainHour" type="number" inputmode="numeric" min="0" max="23" placeholder="0"><span class="hms-unit">시간</span></div>
       <div class="hms-wrap"><input id="completeRemainMinute" type="number" inputmode="numeric" min="0" max="59" placeholder="0"><span class="hms-unit">분</span></div>
@@ -369,7 +421,13 @@ button:disabled{cursor:default;opacity:.45}
       </div>
     </div>
 
-    <div class="step-title">3. 참여 길드원 선택</div>
+    <div class="step-title">3. 결과 선택</div>
+    <div id="recordOutcomeGrid" class="outcome-choice" role="group" aria-label="처치 기록 결과 선택">
+      <button type="button" class="outcome-btn won selected" data-record-outcome="won">우리 길드 획득</button>
+      <button type="button" class="outcome-btn stolen" data-record-outcome="stolen">다른 길드에 뺏김</button>
+    </div>
+
+    <div class="step-title">4. 참여 길드원 선택</div>
     <div id="recordParticipantGrid" class="member-grid"></div>
     <div id="recordParticipantInfo" class="selected-info">참여 길드원을 선택해주세요.</div>
 
@@ -487,14 +545,16 @@ const BOSSES={
 let bossState={};
 let historyState=new Map();
 let historyItems=[];
-let completeBoss=null,completeParticipants=[];
-let recordBoss=null,recordParticipants=[],editingHistoryId=null;
+let completeBoss=null,completeParticipants=[],completeOutcome="won";
+let recordBoss=null,recordParticipants=[],recordOutcome="won",editingHistoryId=null;
 let popupBoss=null,popupMode="remaining";
 let selectedWeeklyMember=null;
 
 const bossGrid=document.getElementById("bossGrid");
 const rankGrid=document.getElementById("rankGrid");
 const weeklyPeriod=document.getElementById("weeklyPeriod");
+const weeklyWonCount=document.getElementById("weeklyWonCount");
+const weeklyStolenCount=document.getElementById("weeklyStolenCount");
 const memberDetailPopover=document.getElementById("memberDetailPopover");
 const historyList=document.getElementById("historyList");
 const completeModal=document.getElementById("completeModal");
@@ -549,6 +609,7 @@ function loadHistoryCache(){
         bossId:item.bossId||"",
         bossName:item.bossName||"",
         type:"defeated",
+        outcome:item.outcome==="stolen"?"stolen":"won",
         participants:Array.isArray(item.participants)?item.participants:[],
         defeatedAt:cacheTs(defeatedMs),
         createdAt:cacheTs(Number(item.createdAtMs)),
@@ -564,6 +625,7 @@ function saveHistoryCache(items){
       id,
       bossId:x?.bossId||"",
       bossName:x?.bossName||"",
+      outcome:x?.outcome==="stolen"?"stolen":"won",
       participants:Array.isArray(x?.participants)?x.participants:[],
       defeatedMs:Number(defeatedMs)||0,
       createdAtMs:x?.createdAt?.toMillis?.()??null,
@@ -697,14 +759,16 @@ function periodText(startMs,endMs){
 function weeklyMemberStats(name){
   const {startMs,endMs}=currentWeekWindow();
   const byBoss={louis:0,looney:0,luna:0,bananyang:0};
+  let stolenParticipations=0;
   historyItems.forEach(({x,defeatedMs})=>{
     if(!(defeatedMs>=startMs&&defeatedMs<endMs))return;
     const ps=Array.isArray(x.participants)?x.participants:[];
     if(!ps.includes(name))return;
     if(Object.prototype.hasOwnProperty.call(byBoss,x.bossId))byBoss[x.bossId]+=1;
+    if(x?.outcome==="stolen")stolenParticipations+=1;
   });
   const total=Object.values(byBoss).reduce((a,b)=>a+b,0);
-  return {total,byBoss};
+  return {total,byBoss,stolenParticipations};
 }
 function memberDetailHtml(name){
   const stats=weeklyMemberStats(name);
@@ -715,6 +779,7 @@ function memberDetailHtml(name){
       <button class="member-detail-close" type="button" aria-label="세부 현황 닫기">×</button>
     </div>
     <div class="member-detail-total"><span>총 참여횟수</span><strong>${stats.total}회</strong></div>
+    <div class="member-detail-stolen"><span>뺏긴 전투 참여</span><strong>${stats.stolenParticipations}회</strong></div>
     ${order.map(id=>`
       <div class="member-detail-row">
         <span class="member-detail-boss-img-wrap"><img class="member-detail-boss-img" src="${BOSSES[id].img}" alt=""></span>
@@ -776,11 +841,15 @@ function renderWeeklyRanking(){
   const {startMs,endMs}=currentWeekWindow();
   weeklyPeriod.textContent=periodText(startMs,endMs);
   const counts={};Object.keys(MEMBERS).forEach(n=>counts[n]=0);
+  let wonCount=0,stolenCount=0;
   historyItems.forEach(({x,defeatedMs})=>{
     if(!(defeatedMs>=startMs&&defeatedMs<endMs))return;
+    if(x?.outcome==="stolen")stolenCount+=1;else wonCount+=1;
     const ps=Array.isArray(x.participants)?x.participants:[];
     ps.forEach(n=>{if(Object.prototype.hasOwnProperty.call(counts,n))counts[n]+=1});
   });
+  if(weeklyWonCount)weeklyWonCount.textContent=`${wonCount}회`;
+  if(weeklyStolenCount)weeklyStolenCount.textContent=`${stolenCount}회`;
   const ranked=Object.entries(counts).map(([name,count])=>({name,count,base:MEMBERS[name]?.base??Infinity}))
     .sort((a,b)=>b.count-a.count||a.base-b.base||a.name.localeCompare(b.name,"ko-KR"))
     .slice(0,15);
@@ -795,16 +864,24 @@ function renderHistory(){
   const rows=historyItems.map(({id,x,defeatedMs})=>{
     const b=BOSSES[x.bossId]||null,bossName=x.bossName||b?.name||x.bossId||"-",img=b?.img||"";
     const members=Array.isArray(x.participants)&&x.participants.length?x.participants.join(", "):"-";
-    return `<button type="button" class="log" data-history-id="${id}" aria-label="${bossName} 처치 기록 수정">
+    const stolen=x?.outcome==="stolen";
+    return `<button type="button" class="log${stolen?" stolen":""}" data-history-id="${id}" aria-label="${bossName} ${stolen?"뺏김":"처치"} 기록 수정">
       <span class="history-boss-icon-wrap">${img?`<img class="history-boss-icon" src="${img}" alt="">`:""}</span>
       <span class="history-copy">
-        <span class="history-top"><span class="history-boss-name">${bossName}</span>
+        <span class="history-top"><span class="history-boss-name">${bossName}</span>${stolen?`<span class="history-result-badge">뺏김</span>`:""}
         <span class="history-time">${defeatedMs?`처치시간 : ${dateTimeText(defeatedMs)}`:"처치시간 : -"}</span></span>
         <span class="history-members">${members}</span>
       </span></button>`;
   });
   historyList.className=rows.length?"":"history-empty";
   historyList.innerHTML=rows.join("")||"아직 처치 기록이 없습니다.";
+}
+
+function renderOutcomeChoices(prefix,outcome){
+  document.querySelectorAll(`[data-${prefix}-outcome]`).forEach(btn=>{
+    btn.classList.toggle("selected",btn.dataset[`${prefix}Outcome`]===outcome);
+    btn.setAttribute("aria-pressed",btn.dataset[`${prefix}Outcome`]===outcome?"true":"false");
+  });
 }
 
 function participantButtons(host,selected,attr){
@@ -835,15 +912,18 @@ function refreshCompletePreview(){
 }
 function syncCompleteSave(){
   const ok=!!completeBoss&&Number.isFinite(exactMsFromInputs("complete"))&&completeParticipants.length>0&&remainingMs("completeRemain")>0;
-  document.getElementById("saveComplete").disabled=!ok;
+  const btn=document.getElementById("saveComplete");
+  btn.disabled=!ok;
+  btn.textContent=completeOutcome==="stolen"?"뺏김 기록 + 다음 팝업 저장":"처치 등록 + 다음 팝업 저장";
 }
 function openCompleteModal(bossId){
-  completeBoss=bossId;completeParticipants=[];
+  completeBoss=bossId;completeParticipants=[];completeOutcome="won";
   document.getElementById("completeTitle").textContent=`${BOSSES[bossId].name} 처치 등록`;
   document.getElementById("completeBossChip").innerHTML=bossChipHtml(bossId);
   setExactInputs("complete",Date.now());
   ["Hour","Minute","Second"].forEach(k=>document.getElementById("completeRemain"+k).value="");
   document.getElementById("completeError").textContent="";
+  renderOutcomeChoices("complete",completeOutcome);
   renderCompleteParticipants();refreshCompletePreview();openModal(completeModal);
 }
 
@@ -852,10 +932,10 @@ function syncRecordSave(){
   document.getElementById("saveRecord").disabled=!ok;
 }
 function openRecordModal(historyId=null){
-  editingHistoryId=historyId;recordParticipants=[];recordBoss=null;
+  editingHistoryId=historyId;recordParticipants=[];recordBoss=null;recordOutcome="won";
   if(historyId){
     const x=historyState.get(historyId);if(!x)return;
-    recordBoss=x.bossId||null;recordParticipants=Array.isArray(x.participants)?[...x.participants]:[];
+    recordBoss=x.bossId||null;recordParticipants=Array.isArray(x.participants)?[...x.participants]:[];recordOutcome=x?.outcome==="stolen"?"stolen":"won";
     const ms=x.defeatedAt?.toMillis?.()??x.clientRecordedAt?.toMillis?.()??x.createdAt?.toMillis?.();
     setExactInputs("record",Number.isFinite(ms)?ms:Date.now());
     document.getElementById("recordTitle").textContent="처치 기록 수정";
@@ -866,6 +946,7 @@ function openRecordModal(historyId=null){
     document.getElementById("deleteRecord").hidden=true;
   }
   document.getElementById("recordError").textContent="";
+  renderOutcomeChoices("record",recordOutcome);
   renderRecordBossChoices();renderRecordParticipants();openModal(recordModal);
 }
 
@@ -952,6 +1033,14 @@ document.getElementById("recordParticipantGrid").addEventListener("click",e=>{
   const b=e.target.closest("[data-record-member]");if(!b)return;const n=b.dataset.recordMember;
   recordParticipants=recordParticipants.includes(n)?recordParticipants.filter(x=>x!==n):[...recordParticipants,n];renderRecordParticipants();
 });
+document.getElementById("completeOutcomeGrid").addEventListener("click",e=>{
+  const b=e.target.closest("[data-complete-outcome]");if(!b)return;completeOutcome=b.dataset.completeOutcome==="stolen"?"stolen":"won";
+  renderOutcomeChoices("complete",completeOutcome);syncCompleteSave();
+});
+document.getElementById("recordOutcomeGrid").addEventListener("click",e=>{
+  const b=e.target.closest("[data-record-outcome]");if(!b)return;recordOutcome=b.dataset.recordOutcome==="stolen"?"stolen":"won";
+  renderOutcomeChoices("record",recordOutcome);syncRecordSave();
+});
 document.getElementById("recordBossGrid").addEventListener("click",e=>{
   const b=e.target.closest("[data-record-boss]");if(!b)return;recordBoss=b.dataset.recordBoss;renderRecordBossChoices();syncRecordSave();
 });
@@ -989,7 +1078,7 @@ document.getElementById("saveComplete").addEventListener("click",async()=>{
     const calcBaseMs=Date.now(),spawnMs=calcBaseMs+remain;
     const historyRef=doc(collection(db,"bossHistory")),timerRef=doc(db,"bossTimers",completeBoss),batch=writeBatch(db);
     batch.set(historyRef,{
-      bossId:completeBoss,bossName:BOSSES[completeBoss].name,type:"defeated",
+      bossId:completeBoss,bossName:BOSSES[completeBoss].name,type:"defeated",outcome:completeOutcome,
       defeatedAt:Timestamp.fromMillis(defeatedMs),participants:[...completeParticipants],
       remainingMsAtRecord:remain,nextSpawnAtAtRecord:Timestamp.fromMillis(spawnMs),
       calculatedAtClient:Timestamp.fromMillis(calcBaseMs),recordedByUid:auth.currentUser?.uid||"",
@@ -1018,7 +1107,7 @@ document.getElementById("saveRecord").addEventListener("click",async()=>{
   try{
     await authReady;
     const ref=editingHistoryId?doc(db,"bossHistory",editingHistoryId):doc(collection(db,"bossHistory"));
-    const payload={bossId:recordBoss,bossName:BOSSES[recordBoss].name,type:"defeated",
+    const payload={bossId:recordBoss,bossName:BOSSES[recordBoss].name,type:"defeated",outcome:recordOutcome,
       defeatedAt:Timestamp.fromMillis(defeatedMs),participants:[...recordParticipants],
       recordedByUid:auth.currentUser?.uid||"",updatedAt:serverTimestamp()};
     const batch=writeBatch(db);
