@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.3.0">
-<!-- internal version: V3.3.0 -->
+<meta name="app-version" content="V3.3.2">
+<!-- internal version: V3.3.2 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -216,6 +216,14 @@ button:disabled{cursor:default;opacity:.45}
   color:#4d2b70;font-size:12px;font-weight:850;padding:5px 4px;
 }
 .member-btn.selected{background:linear-gradient(180deg,#3a73ca,#2656a5);border-color:#28579f;color:#fff}
+.no-participant-btn{
+  width:100%;min-height:36px;margin-top:7px;border:1.5px solid #d8c8ee;border-radius:10px;
+  background:#faf8ff;color:#68597a;font-size:11.5px;font-weight:900;padding:6px 8px;
+}
+.no-participant-btn[hidden]{display:none!important}
+.no-participant-btn.selected{
+  background:#fff0f0;border-color:#cf6a6a;color:#a42a2a;box-shadow:0 2px 7px rgba(183,60,60,.12);
+}
 .selected-info{
   margin-top:7px;padding:8px 9px;border-radius:10px;background:#f7f3fc;color:#665876;
   font-size:11px;line-height:1.4;font-weight:800;min-height:34px;
@@ -315,6 +323,35 @@ button:disabled{cursor:default;opacity:.45}
   .outcome-btn{font-size:11px}
 }
 </style>
+
+<style id="v332-stolen-killer-final">
+/* Other-guild killer nickname field — visible only for stolen records. */
+.stolen-killer-field{
+  margin-top:7px;padding:8px 9px;border:1.5px solid #e6b2b2;border-radius:11px;
+  background:#fff7f7;
+}
+.stolen-killer-field[hidden]{display:none!important;}
+.stolen-killer-label{
+  display:block;margin:0 0 5px;color:#a33636;font-size:10.5px;font-weight:950;line-height:1.15;
+}
+.stolen-killer-input{
+  width:100%;height:38px;box-sizing:border-box;border:1.5px solid #d98d8d;border-radius:9px;
+  background:#fff;color:#4b2e3a;font-size:16px;font-weight:800;padding:6px 9px;outline:none;
+}
+.stolen-killer-input::placeholder{color:#b39494;font-weight:700;}
+.stolen-killer-input:focus{border-color:#c64747;box-shadow:0 0 0 2px rgba(198,71,71,.10);}
+
+/* History boss icon borders: thinner; blue for our win, red for stolen. */
+.history-boss-icon-wrap{border:2px solid #2878d8!important;}
+.log.stolen .history-boss-icon-wrap{border-color:#c94a4a!important;}
+.history-members .stolen-killer-name{color:#a62f2f;font-weight:950;}
+.history-members .stolen-divider{color:#b78d8d;font-weight:800;padding:0 3px;}
+@media(max-width:390px){
+  .stolen-killer-field{padding:7px 8px;}
+  .stolen-killer-input{height:36px;font-size:16px;}
+}
+</style>
+
 </head>
 <body>
 <main class="app">
@@ -376,9 +413,14 @@ button:disabled{cursor:default;opacity:.45}
       <button type="button" class="outcome-btn won selected" data-complete-outcome="won">우리 길드 획득</button>
       <button type="button" class="outcome-btn stolen" data-complete-outcome="stolen">다른 길드에 뺏김</button>
     </div>
+    <div id="completeStolenKillerField" class="stolen-killer-field" hidden>
+      <label class="stolen-killer-label" for="completeStolenKiller">뺏은 닉네임</label>
+      <input id="completeStolenKiller" class="stolen-killer-input" type="text" maxlength="30" autocomplete="off" placeholder="다른 길드 처치 닉네임 입력">
+    </div>
 
     <div class="step-title">3. 참여 길드원 선택</div>
     <div id="completeParticipantGrid" class="member-grid"></div>
+    <button id="completeNoParticipants" class="no-participant-btn" type="button" aria-pressed="false" hidden>참여 길드원 없음</button>
     <div id="completeParticipantInfo" class="selected-info">참여 길드원을 선택해주세요.</div>
 
     <div class="step-title">4. 다음 팝업까지 남은 시간</div>
@@ -426,9 +468,14 @@ button:disabled{cursor:default;opacity:.45}
       <button type="button" class="outcome-btn won selected" data-record-outcome="won">우리 길드 획득</button>
       <button type="button" class="outcome-btn stolen" data-record-outcome="stolen">다른 길드에 뺏김</button>
     </div>
+    <div id="recordStolenKillerField" class="stolen-killer-field" hidden>
+      <label class="stolen-killer-label" for="recordStolenKiller">뺏은 닉네임</label>
+      <input id="recordStolenKiller" class="stolen-killer-input" type="text" maxlength="30" autocomplete="off" placeholder="다른 길드 처치 닉네임 입력">
+    </div>
 
     <div class="step-title">4. 참여 길드원 선택</div>
     <div id="recordParticipantGrid" class="member-grid"></div>
+    <button id="recordNoParticipants" class="no-participant-btn" type="button" aria-pressed="false" hidden>참여 길드원 없음</button>
     <div id="recordParticipantInfo" class="selected-info">참여 길드원을 선택해주세요.</div>
 
     <div id="recordError" class="error"></div>
@@ -545,8 +592,8 @@ const BOSSES={
 let bossState={};
 let historyState=new Map();
 let historyItems=[];
-let completeBoss=null,completeParticipants=[],completeOutcome="won";
-let recordBoss=null,recordParticipants=[],recordOutcome="won",editingHistoryId=null;
+let completeBoss=null,completeParticipants=[],completeOutcome="won",completeNoParticipants=false,completeStolenKiller="";
+let recordBoss=null,recordParticipants=[],recordOutcome="won",recordNoParticipants=false,recordStolenKiller="",editingHistoryId=null;
 let popupBoss=null,popupMode="remaining";
 let selectedWeeklyMember=null;
 
@@ -611,6 +658,8 @@ function loadHistoryCache(){
         type:"defeated",
         outcome:item.outcome==="stolen"?"stolen":"won",
         participants:Array.isArray(item.participants)?item.participants:[],
+        noGuildParticipants:item.noGuildParticipants===true,
+        stolenKillerNickname:typeof item.stolenKillerNickname==="string"?item.stolenKillerNickname:"",
         defeatedAt:cacheTs(defeatedMs),
         createdAt:cacheTs(Number(item.createdAtMs)),
         updatedAt:cacheTs(Number(item.updatedAtMs))
@@ -627,6 +676,8 @@ function saveHistoryCache(items){
       bossName:x?.bossName||"",
       outcome:x?.outcome==="stolen"?"stolen":"won",
       participants:Array.isArray(x?.participants)?x.participants:[],
+      noGuildParticipants:x?.noGuildParticipants===true,
+      stolenKillerNickname:typeof x?.stolenKillerNickname==="string"?x.stolenKillerNickname:"",
       defeatedMs:Number(defeatedMs)||0,
       createdAtMs:x?.createdAt?.toMillis?.()??null,
       updatedAtMs:x?.updatedAt?.toMillis?.()??null
@@ -692,6 +743,7 @@ function remainingMs(prefix){
 function openModal(el){el.classList.add("show");el.setAttribute("aria-hidden","false");document.body.style.overflow="hidden"}
 function closeModal(el){el.classList.remove("show");el.setAttribute("aria-hidden","true");document.body.style.overflow=""}
 function bossChipHtml(id){const b=BOSSES[id];return `<img src="${b.img}" alt=""><span>${b.name}</span>`}
+function escapeHtml(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","\'":"&#39;"}[c]||c))}
 
 const MIN_SAME_BOSS_INTERVAL_MS=10*60*60*1000;
 function latestDefeatMsForBoss(bossId){
@@ -863,14 +915,17 @@ function renderWeeklyRanking(){
 function renderHistory(){
   const rows=historyItems.map(({id,x,defeatedMs})=>{
     const b=BOSSES[x.bossId]||null,bossName=x.bossName||b?.name||x.bossId||"-",img=b?.img||"";
-    const members=Array.isArray(x.participants)&&x.participants.length?x.participants.join(", "):"-";
     const stolen=x?.outcome==="stolen";
+    const noGuildParticipants=x?.noGuildParticipants===true||(stolen&&Array.isArray(x.participants)&&x.participants.length===0);
+    const members=Array.isArray(x.participants)&&x.participants.length?x.participants.join(", "):(noGuildParticipants?"우리 길드 참여 없음":"-");
+    const killer=stolen&&typeof x?.stolenKillerNickname==="string"?x.stolenKillerNickname.trim():"";
+    const memberLine=stolen&&killer?`<span class="stolen-killer-name">뺏은 닉네임 ${escapeHtml(killer)}</span><span class="stolen-divider">·</span>${escapeHtml(members)}`:escapeHtml(members);
     return `<button type="button" class="log${stolen?" stolen":""}" data-history-id="${id}" aria-label="${bossName} ${stolen?"뺏김":"처치"} 기록 수정">
       <span class="history-boss-icon-wrap">${img?`<img class="history-boss-icon" src="${img}" alt="">`:""}</span>
       <span class="history-copy">
         <span class="history-top"><span class="history-boss-name">${bossName}</span>${stolen?`<span class="history-result-badge">뺏김</span>`:""}
         <span class="history-time">${defeatedMs?`처치시간 : ${dateTimeText(defeatedMs)}`:"처치시간 : -"}</span></span>
-        <span class="history-members">${members}</span>
+        <span class="history-members">${memberLine}</span>
       </span></button>`;
   });
   historyList.className=rows.length?"":"history-empty";
@@ -883,20 +938,39 @@ function renderOutcomeChoices(prefix,outcome){
     btn.setAttribute("aria-pressed",btn.dataset[`${prefix}Outcome`]===outcome?"true":"false");
   });
 }
+function syncStolenKillerField(prefix,outcome,value){
+  const field=document.getElementById(prefix+"StolenKillerField"),input=document.getElementById(prefix+"StolenKiller");
+  if(!field||!input)return;
+  const stolen=outcome==="stolen";
+  field.hidden=!stolen;
+  if(input.value!==value)input.value=value||"";
+}
 
 function participantButtons(host,selected,attr){
   host.innerHTML=MEMBER_ORDER.map(n=>`<button type="button" class="member-btn${selected.includes(n)?" selected":""}" ${attr}="${n}">${n}</button>`).join("");
 }
+function syncNoParticipantButton(prefix,outcome,noParticipants){
+  const btn=document.getElementById(prefix+"NoParticipants");
+  if(!btn)return;
+  const available=outcome==="stolen";
+  btn.hidden=!available;
+  btn.classList.toggle("selected",available&&noParticipants);
+  btn.setAttribute("aria-pressed",available&&noParticipants?"true":"false");
+}
 function renderCompleteParticipants(){
   participantButtons(document.getElementById("completeParticipantGrid"),completeParticipants,"data-complete-member");
-  document.getElementById("completeParticipantInfo").textContent=completeParticipants.length?
-    `참여 ${completeParticipants.length}명 · ${completeParticipants.join(", ")}`:"참여 길드원을 선택해주세요.";
+  syncNoParticipantButton("complete",completeOutcome,completeNoParticipants);
+  syncStolenKillerField("complete",completeOutcome,completeStolenKiller);
+  document.getElementById("completeParticipantInfo").textContent=completeNoParticipants?
+    "우리 길드 참여 없음":(completeParticipants.length?`참여 ${completeParticipants.length}명 · ${completeParticipants.join(", ")}`:"참여 길드원을 선택해주세요.");
   syncCompleteSave();
 }
 function renderRecordParticipants(){
   participantButtons(document.getElementById("recordParticipantGrid"),recordParticipants,"data-record-member");
-  document.getElementById("recordParticipantInfo").textContent=recordParticipants.length?
-    `참여 ${recordParticipants.length}명 · ${recordParticipants.join(", ")}`:"참여 길드원을 선택해주세요.";
+  syncNoParticipantButton("record",recordOutcome,recordNoParticipants);
+  syncStolenKillerField("record",recordOutcome,recordStolenKiller);
+  document.getElementById("recordParticipantInfo").textContent=recordNoParticipants?
+    "우리 길드 참여 없음":(recordParticipants.length?`참여 ${recordParticipants.length}명 · ${recordParticipants.join(", ")}`:"참여 길드원을 선택해주세요.");
   syncRecordSave();
 }
 function renderRecordBossChoices(){
@@ -911,13 +985,14 @@ function refreshCompletePreview(){
   syncCompleteSave();
 }
 function syncCompleteSave(){
-  const ok=!!completeBoss&&Number.isFinite(exactMsFromInputs("complete"))&&completeParticipants.length>0&&remainingMs("completeRemain")>0;
+  const participantOk=completeParticipants.length>0||(completeOutcome==="stolen"&&completeNoParticipants);
+  const ok=!!completeBoss&&Number.isFinite(exactMsFromInputs("complete"))&&participantOk&&remainingMs("completeRemain")>0;
   const btn=document.getElementById("saveComplete");
   btn.disabled=!ok;
   btn.textContent=completeOutcome==="stolen"?"뺏김 기록 + 다음 팝업 저장":"처치 등록 + 다음 팝업 저장";
 }
 function openCompleteModal(bossId){
-  completeBoss=bossId;completeParticipants=[];completeOutcome="won";
+  completeBoss=bossId;completeParticipants=[];completeOutcome="won";completeNoParticipants=false;completeStolenKiller="";
   document.getElementById("completeTitle").textContent=`${BOSSES[bossId].name} 처치 등록`;
   document.getElementById("completeBossChip").innerHTML=bossChipHtml(bossId);
   setExactInputs("complete",Date.now());
@@ -928,14 +1003,17 @@ function openCompleteModal(bossId){
 }
 
 function syncRecordSave(){
-  const ok=!!recordBoss&&Number.isFinite(exactMsFromInputs("record"))&&recordParticipants.length>0;
+  const participantOk=recordParticipants.length>0||(recordOutcome==="stolen"&&recordNoParticipants);
+  const ok=!!recordBoss&&Number.isFinite(exactMsFromInputs("record"))&&participantOk;
   document.getElementById("saveRecord").disabled=!ok;
 }
 function openRecordModal(historyId=null){
-  editingHistoryId=historyId;recordParticipants=[];recordBoss=null;recordOutcome="won";
+  editingHistoryId=historyId;recordParticipants=[];recordBoss=null;recordOutcome="won";recordNoParticipants=false;recordStolenKiller="";
   if(historyId){
     const x=historyState.get(historyId);if(!x)return;
     recordBoss=x.bossId||null;recordParticipants=Array.isArray(x.participants)?[...x.participants]:[];recordOutcome=x?.outcome==="stolen"?"stolen":"won";
+    recordNoParticipants=recordOutcome==="stolen"&&(x?.noGuildParticipants===true||recordParticipants.length===0);
+    recordStolenKiller=recordOutcome==="stolen"&&typeof x?.stolenKillerNickname==="string"?x.stolenKillerNickname:"";
     const ms=x.defeatedAt?.toMillis?.()??x.clientRecordedAt?.toMillis?.()??x.createdAt?.toMillis?.();
     setExactInputs("record",Number.isFinite(ms)?ms:Date.now());
     document.getElementById("recordTitle").textContent="처치 기록 수정";
@@ -1027,24 +1105,42 @@ historyList.addEventListener("click",e=>{const row=e.target.closest("[data-histo
 
 document.getElementById("completeParticipantGrid").addEventListener("click",e=>{
   const b=e.target.closest("[data-complete-member]");if(!b)return;const n=b.dataset.completeMember;
+  completeNoParticipants=false;
   completeParticipants=completeParticipants.includes(n)?completeParticipants.filter(x=>x!==n):[...completeParticipants,n];renderCompleteParticipants();
 });
 document.getElementById("recordParticipantGrid").addEventListener("click",e=>{
   const b=e.target.closest("[data-record-member]");if(!b)return;const n=b.dataset.recordMember;
+  recordNoParticipants=false;
   recordParticipants=recordParticipants.includes(n)?recordParticipants.filter(x=>x!==n):[...recordParticipants,n];renderRecordParticipants();
+});
+document.getElementById("completeNoParticipants").addEventListener("click",()=>{
+  if(completeOutcome!=="stolen")return;
+  completeNoParticipants=!completeNoParticipants;
+  if(completeNoParticipants)completeParticipants=[];
+  renderCompleteParticipants();
+});
+document.getElementById("recordNoParticipants").addEventListener("click",()=>{
+  if(recordOutcome!=="stolen")return;
+  recordNoParticipants=!recordNoParticipants;
+  if(recordNoParticipants)recordParticipants=[];
+  renderRecordParticipants();
 });
 document.getElementById("completeOutcomeGrid").addEventListener("click",e=>{
   const b=e.target.closest("[data-complete-outcome]");if(!b)return;completeOutcome=b.dataset.completeOutcome==="stolen"?"stolen":"won";
-  renderOutcomeChoices("complete",completeOutcome);syncCompleteSave();
+  if(completeOutcome!=="stolen"){completeNoParticipants=false;completeStolenKiller="";}
+  renderOutcomeChoices("complete",completeOutcome);renderCompleteParticipants();
 });
 document.getElementById("recordOutcomeGrid").addEventListener("click",e=>{
   const b=e.target.closest("[data-record-outcome]");if(!b)return;recordOutcome=b.dataset.recordOutcome==="stolen"?"stolen":"won";
-  renderOutcomeChoices("record",recordOutcome);syncRecordSave();
+  if(recordOutcome!=="stolen"){recordNoParticipants=false;recordStolenKiller="";}
+  renderOutcomeChoices("record",recordOutcome);renderRecordParticipants();
 });
 document.getElementById("recordBossGrid").addEventListener("click",e=>{
   const b=e.target.closest("[data-record-boss]");if(!b)return;recordBoss=b.dataset.recordBoss;renderRecordBossChoices();syncRecordSave();
 });
 
+document.getElementById("completeStolenKiller").addEventListener("input",e=>{completeStolenKiller=e.target.value;syncCompleteSave()});
+document.getElementById("recordStolenKiller").addEventListener("input",e=>{recordStolenKiller=e.target.value;syncRecordSave()});
 ["completeDate","completeHour","completeMinute","completeSecond"].forEach(id=>document.getElementById(id).addEventListener("input",syncCompleteSave));
 ["completeRemainHour","completeRemainMinute","completeRemainSecond"].forEach(id=>document.getElementById(id).addEventListener("input",refreshCompletePreview));
 ["recordDate","recordHour","recordMinute","recordSecond"].forEach(id=>document.getElementById(id).addEventListener("input",syncRecordSave));
@@ -1066,8 +1162,9 @@ popupModal.addEventListener("click",e=>{if(e.target===popupModal)closeModal(popu
 document.getElementById("saveComplete").addEventListener("click",async()=>{
   const err=document.getElementById("completeError");err.textContent="";
   const defeatedMs=exactMsFromInputs("complete"),remain=remainingMs("completeRemain");
-  if(!completeBoss||!Number.isFinite(defeatedMs)||!completeParticipants.length||remain<=0){
-    err.textContent="처치시간, 참여 길드원, 다음 팝업 남은 시간을 모두 입력해주세요.";return;
+  const participantOk=completeParticipants.length>0||(completeOutcome==="stolen"&&completeNoParticipants);
+  if(!completeBoss||!Number.isFinite(defeatedMs)||!participantOk||remain<=0){
+    err.textContent="처치시간, 참여 길드원(또는 참여 없음), 다음 팝업 남은 시간을 모두 입력해주세요.";return;
   }
   if(!confirmSameBossInterval(completeBoss,defeatedMs,null)){
     err.textContent="동일 보스의 10시간 이내 처치기록을 확인해주세요.";return;
@@ -1079,7 +1176,9 @@ document.getElementById("saveComplete").addEventListener("click",async()=>{
     const historyRef=doc(collection(db,"bossHistory")),timerRef=doc(db,"bossTimers",completeBoss),batch=writeBatch(db);
     batch.set(historyRef,{
       bossId:completeBoss,bossName:BOSSES[completeBoss].name,type:"defeated",outcome:completeOutcome,
-      defeatedAt:Timestamp.fromMillis(defeatedMs),participants:[...completeParticipants],
+      defeatedAt:Timestamp.fromMillis(defeatedMs),participants:completeNoParticipants?[]:[...completeParticipants],
+      noGuildParticipants:completeNoParticipants===true,
+      stolenKillerNickname:completeOutcome==="stolen"?completeStolenKiller.trim():"",
       remainingMsAtRecord:remain,nextSpawnAtAtRecord:Timestamp.fromMillis(spawnMs),
       calculatedAtClient:Timestamp.fromMillis(calcBaseMs),recordedByUid:auth.currentUser?.uid||"",
       createdAt:serverTimestamp(),updatedAt:serverTimestamp()
@@ -1099,7 +1198,8 @@ document.getElementById("saveComplete").addEventListener("click",async()=>{
 document.getElementById("saveRecord").addEventListener("click",async()=>{
   const err=document.getElementById("recordError");err.textContent="";
   const defeatedMs=exactMsFromInputs("record");
-  if(!recordBoss||!Number.isFinite(defeatedMs)||!recordParticipants.length){err.textContent="보스, 처치시간, 참여 길드원을 모두 입력해주세요.";return}
+  const participantOk=recordParticipants.length>0||(recordOutcome==="stolen"&&recordNoParticipants);
+  if(!recordBoss||!Number.isFinite(defeatedMs)||!participantOk){err.textContent="보스, 처치시간, 참여 길드원(또는 참여 없음)을 모두 입력해주세요.";return}
   if(!confirmSameBossInterval(recordBoss,defeatedMs,editingHistoryId)){
     err.textContent="동일 보스의 10시간 이내 처치기록을 확인해주세요.";return;
   }
@@ -1108,7 +1208,9 @@ document.getElementById("saveRecord").addEventListener("click",async()=>{
     await authReady;
     const ref=editingHistoryId?doc(db,"bossHistory",editingHistoryId):doc(collection(db,"bossHistory"));
     const payload={bossId:recordBoss,bossName:BOSSES[recordBoss].name,type:"defeated",outcome:recordOutcome,
-      defeatedAt:Timestamp.fromMillis(defeatedMs),participants:[...recordParticipants],
+      defeatedAt:Timestamp.fromMillis(defeatedMs),participants:recordNoParticipants?[]:[...recordParticipants],
+      noGuildParticipants:recordNoParticipants===true,
+      stolenKillerNickname:recordOutcome==="stolen"?recordStolenKiller.trim():"",
       recordedByUid:auth.currentUser?.uid||"",updatedAt:serverTimestamp()};
     const batch=writeBatch(db);
     if(editingHistoryId)batch.set(ref,payload,{merge:true});else batch.set(ref,{...payload,createdAt:serverTimestamp()});
