@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.3.3">
-<!-- internal version: V3.3.3 -->
+<meta name="app-version" content="V3.3.5">
+<!-- internal version: V3.3.5 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -91,7 +91,7 @@ button:disabled{cursor:default;opacity:.45}
 }
 .rank-empty .rank-count,.rank-empty .rank-name{color:#aaa0b6}
 .weekly-hint{
-  margin-top:5px;color:#d22f2f;font-size:9.5px;line-height:1.2;font-weight:900;text-align:center;
+  margin-top:5px;color:#176ee8;font-size:9.5px;line-height:1.2;font-weight:900;text-align:center;
 }
 .rank-cell{
   cursor:pointer;transition:border-color .12s ease,box-shadow .12s ease,background .12s ease;
@@ -403,6 +403,90 @@ button:disabled{cursor:default;opacity:.45}
 }
 </style>
 
+
+<style id="v335-history-layout-refined-final">
+/* Weekly outcome summary: compact, centered pair. */
+.weekly-outcome-summary{
+  width:58%!important;
+  max-width:330px!important;
+  margin:0 auto 7px!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:8px!important;
+}
+.weekly-outcome-box{
+  min-width:0!important;
+  min-height:34px!important;
+  padding:5px 8px!important;
+  gap:5px!important;
+  justify-content:center!important;
+}
+.weekly-outcome-box span,
+.weekly-outcome-box strong{
+  white-space:nowrap!important;
+}
+.weekly-outcome-box.won{
+  background:rgba(78,179,103,.14)!important;
+  border:1.5px solid rgba(91,174,112,.62)!important;
+  color:#176b3f!important;
+}
+.weekly-outcome-box.won strong{color:#176b3f!important;}
+.weekly-outcome-box.stolen{
+  background:#fff0f0!important;
+  border:1.5px solid #e3a7a7!important;
+  color:#a42a2a!important;
+}
+
+/* History top row: timestamp first, stolen badge immediately after with a small gap. */
+.history-top{
+  align-items:center!important;
+  column-gap:5px!important;
+  row-gap:3px!important;
+}
+.history-time{
+  white-space:nowrap!important;
+}
+.history-result-badge{
+  margin-left:4px!important;
+  align-self:center!important;
+  vertical-align:middle!important;
+  flex:0 0 auto!important;
+}
+
+/* Participant/status row breathing room. */
+.history-members{
+  margin-top:5px!important;
+}
+
+/* Stolen rows remain rounded red cards; acquired rows remain plain. */
+.log.stolen{
+  box-sizing:border-box!important;
+  background:#fff0f0!important;
+  border:2px solid #e3a0a0!important;
+  border-radius:12px!important;
+  margin:2px 0!important;
+  padding:4px 5px!important;
+}
+
+/* Slim icon borders: blue acquired, red stolen. */
+.history-boss-icon-wrap{
+  border:2px solid #2878d8!important;
+}
+.log.stolen .history-boss-icon-wrap{
+  border-color:#c94a4a!important;
+}
+
+@media(max-width:390px){
+  .weekly-outcome-summary{
+    width:60%!important;
+    gap:6px!important;
+  }
+  .weekly-outcome-box{
+    padding-left:6px!important;
+    padding-right:6px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <main class="app">
@@ -419,10 +503,10 @@ button:disabled{cursor:default;opacity:.45}
     <div class="weekly-head">
       <div class="weekly-title">이번 주 2구역 참여 현황</div>
       <div id="weeklyPeriod" class="weekly-period">집계기간 계산 중</div>
-      <div class="weekly-hint">닉네임 클릭 시 세부 현황 확인 가능</div>
+      <div class="weekly-hint">닉네임 클릭시 현황 확인</div>
     </div>
     <div id="weeklyOutcomeSummary" class="weekly-outcome-summary" aria-label="이번 주 보스 획득 결과">
-      <div class="weekly-outcome-box won"><span>우리 길드 획득</span><strong id="weeklyWonCount">0회</strong></div>
+      <div class="weekly-outcome-box won"><span>획득</span><strong id="weeklyWonCount">0회</strong></div>
       <div class="weekly-outcome-box stolen"><span>뺏김</span><strong id="weeklyStolenCount">0회</strong></div>
     </div>
     <div id="rankGrid" class="rank-grid"></div>
@@ -471,7 +555,7 @@ button:disabled{cursor:default;opacity:.45}
 
     <div class="step-title">3. 참여 길드원 선택</div>
     <div id="completeParticipantGrid" class="member-grid"></div>
-    <button id="completeNoParticipants" class="no-participant-btn" type="button" aria-pressed="false" hidden>참여 길드원 없음</button>
+    <button id="completeNoParticipants" class="no-participant-btn" type="button" aria-pressed="false" hidden>길드원 참여 없음</button>
     <div id="completeParticipantInfo" class="selected-info">참여 길드원을 선택해주세요.</div>
 
     <div class="step-title">4. 다음 팝업까지 남은 시간</div>
@@ -526,7 +610,7 @@ button:disabled{cursor:default;opacity:.45}
 
     <div class="step-title">4. 참여 길드원 선택</div>
     <div id="recordParticipantGrid" class="member-grid"></div>
-    <button id="recordNoParticipants" class="no-participant-btn" type="button" aria-pressed="false" hidden>참여 길드원 없음</button>
+    <button id="recordNoParticipants" class="no-participant-btn" type="button" aria-pressed="false" hidden>길드원 참여 없음</button>
     <div id="recordParticipantInfo" class="selected-info">참여 길드원을 선택해주세요.</div>
 
     <div id="recordError" class="error"></div>
@@ -837,7 +921,7 @@ function renderBosses(){
         <div class="boss-name">${x.name}</div>
         <div class="popup-label">다음 팝업</div>
         <div class="popup-time">${x.ms!==null?hmText(x.ms):"미등록"}</div>
-        <div class="popup-meta">이전 처치 : ${x.prevDefeatMs!==null?dateHmText(x.prevDefeatMs):"—"}</div>
+        <div class="popup-meta">처치 : ${x.prevDefeatMs!==null?dateHmText(x.prevDefeatMs):"—"}</div>
         <div class="boss-actions">
           <button class="complete-btn" type="button" data-complete="${x.id}">처치 등록</button>
           <button class="popup-edit-btn" type="button" data-popup="${x.id}">팝업시간 수정</button>
@@ -968,14 +1052,14 @@ function renderHistory(){
     const b=BOSSES[x.bossId]||null,bossName=x.bossName||b?.name||x.bossId||"-",img=b?.img||"";
     const stolen=x?.outcome==="stolen";
     const noGuildParticipants=x?.noGuildParticipants===true||(stolen&&Array.isArray(x.participants)&&x.participants.length===0);
-    const members=Array.isArray(x.participants)&&x.participants.length?x.participants.join(", "):(noGuildParticipants?"우리 길드 참여 없음":"-");
+    const members=Array.isArray(x.participants)&&x.participants.length?x.participants.join(", "):(noGuildParticipants?"길드원 참여 없음":"-");
     const stolenGuild=stolen?String(x?.stolenByGuild??x?.stolenKillerNickname??"").trim():"";
     const memberLine=stolen&&stolenGuild?`<span class="stolen-guild-name">뺏은 길드 : ${escapeHtml(stolenGuild)}</span><span class="stolen-divider">·</span>${escapeHtml(members)}`:escapeHtml(members);
     return `<button type="button" class="log${stolen?" stolen":""}" data-history-id="${id}" aria-label="${bossName} ${stolen?"뺏김":"처치"} 기록 수정">
       <span class="history-boss-icon-wrap">${img?`<img class="history-boss-icon" src="${img}" alt="">`:""}</span>
       <span class="history-copy">
-        <span class="history-top"><span class="history-boss-name">${bossName}</span>${stolen?`<span class="history-result-badge">뺏김</span>`:""}
-        <span class="history-time">${defeatedMs?`처치시간 : ${dateTimeText(defeatedMs)}`:"처치시간 : -"}</span></span>
+        <span class="history-top"><span class="history-boss-name">${bossName}</span>
+        <span class="history-time">${defeatedMs?`처치시간 : ${dateTimeText(defeatedMs)}`:"처치시간 : -"}</span>${stolen?`<span class="history-result-badge">뺏김</span>`:""}</span>
         <span class="history-members">${memberLine}</span>
       </span></button>`;
   });
@@ -990,7 +1074,7 @@ function renderOutcomeChoices(prefix,outcome){
   });
 }
 function syncStolenGuildField(prefix,outcome,value){
-  const field=document.getElementById(prefix+"StolenKillerField"),input=document.getElementById(prefix+"StolenKiller");
+  const field=document.getElementById(prefix+"StolenGuildField"),input=document.getElementById(prefix+"StolenGuild");
   if(!field||!input)return;
   const stolen=outcome==="stolen";
   field.hidden=!stolen;
@@ -1013,7 +1097,7 @@ function renderCompleteParticipants(){
   syncNoParticipantButton("complete",completeOutcome,completeNoParticipants);
   syncStolenGuildField("complete",completeOutcome,completeStolenGuild);
   document.getElementById("completeParticipantInfo").textContent=completeNoParticipants?
-    "우리 길드 참여 없음":(completeParticipants.length?`참여 ${completeParticipants.length}명 · ${completeParticipants.join(", ")}`:"참여 길드원을 선택해주세요.");
+    "길드원 참여 없음":(completeParticipants.length?`참여 ${completeParticipants.length}명 · ${completeParticipants.join(", ")}`:"참여 길드원을 선택해주세요.");
   syncCompleteSave();
 }
 function renderRecordParticipants(){
@@ -1021,7 +1105,7 @@ function renderRecordParticipants(){
   syncNoParticipantButton("record",recordOutcome,recordNoParticipants);
   syncStolenGuildField("record",recordOutcome,recordStolenGuild);
   document.getElementById("recordParticipantInfo").textContent=recordNoParticipants?
-    "우리 길드 참여 없음":(recordParticipants.length?`참여 ${recordParticipants.length}명 · ${recordParticipants.join(", ")}`:"참여 길드원을 선택해주세요.");
+    "길드원 참여 없음":(recordParticipants.length?`참여 ${recordParticipants.length}명 · ${recordParticipants.join(", ")}`:"참여 길드원을 선택해주세요.");
   syncRecordSave();
 }
 function renderRecordBossChoices(){
