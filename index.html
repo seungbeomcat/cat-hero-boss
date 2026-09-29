@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.3.7">
-<!-- internal version: V3.3.7 -->
+<meta name="app-version" content="V3.3.8">
+<!-- internal version: V3.3.8 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -548,6 +548,12 @@ button:disabled{cursor:default;opacity:.45}
 }
 </style>
 
+
+<link rel="preload" as="image" href="assets/louis-v337.png" fetchpriority="high">
+<link rel="preload" as="image" href="assets/looney-v337.png" fetchpriority="high">
+<link rel="preload" as="image" href="assets/luna-v337.png" fetchpriority="high">
+<link rel="preload" as="image" href="assets/bananyang-v337.png" fetchpriority="high">
+
 </head>
 <body>
 <main class="app">
@@ -558,7 +564,122 @@ button:disabled{cursor:default;opacity:.45}
     <div id="now" class="now">현재시간 --:--:--</div>
   </header>
 
-  <section id="bossGrid" class="boss-grid" aria-label="2구역 보스 현황"></section>
+
+  <section id="bossGrid" class="boss-grid" aria-label="2구역 보스 현황">
+    <article class="boss-card" data-static-boss="louis">
+      <img class="boss-art" src="assets/louis-v337.png" alt="루이" loading="eager" decoding="async" fetchpriority="high">
+      <div class="boss-body">
+        <div class="boss-name">루이</div>
+        <div class="popup-label">다음 팝업</div>
+        <div class="popup-time" data-static-popup="louis">미등록</div>
+        <div class="popup-meta" data-static-prev="louis">처치 : —</div>
+        <div class="boss-actions">
+          <button class="complete-btn" type="button" data-complete="louis">처치 등록</button>
+          <button class="popup-edit-btn" type="button" data-popup="louis">팝업시간 수정</button>
+        </div>
+      </div>
+    </article>
+    <article class="boss-card" data-static-boss="looney">
+      <img class="boss-art" src="assets/looney-v337.png" alt="루니" loading="eager" decoding="async" fetchpriority="high">
+      <div class="boss-body">
+        <div class="boss-name">루니</div>
+        <div class="popup-label">다음 팝업</div>
+        <div class="popup-time" data-static-popup="looney">미등록</div>
+        <div class="popup-meta" data-static-prev="looney">처치 : —</div>
+        <div class="boss-actions">
+          <button class="complete-btn" type="button" data-complete="looney">처치 등록</button>
+          <button class="popup-edit-btn" type="button" data-popup="looney">팝업시간 수정</button>
+        </div>
+      </div>
+    </article>
+    <article class="boss-card" data-static-boss="luna">
+      <img class="boss-art" src="assets/luna-v337.png" alt="루나" loading="eager" decoding="async" fetchpriority="high">
+      <div class="boss-body">
+        <div class="boss-name">루나</div>
+        <div class="popup-label">다음 팝업</div>
+        <div class="popup-time" data-static-popup="luna">미등록</div>
+        <div class="popup-meta" data-static-prev="luna">처치 : —</div>
+        <div class="boss-actions">
+          <button class="complete-btn" type="button" data-complete="luna">처치 등록</button>
+          <button class="popup-edit-btn" type="button" data-popup="luna">팝업시간 수정</button>
+        </div>
+      </div>
+    </article>
+    <article class="boss-card" data-static-boss="bananyang">
+      <img class="boss-art" src="assets/bananyang-v337.png" alt="바나냥" loading="eager" decoding="async" fetchpriority="high">
+      <div class="boss-body">
+        <div class="boss-name">바나냥</div>
+        <div class="popup-label">다음 팝업</div>
+        <div class="popup-time" data-static-popup="bananyang">미등록</div>
+        <div class="popup-meta" data-static-prev="bananyang">처치 : —</div>
+        <div class="boss-actions">
+          <button class="complete-btn" type="button" data-complete="bananyang">처치 등록</button>
+          <button class="popup-edit-btn" type="button" data-popup="bananyang">팝업시간 수정</button>
+        </div>
+      </div>
+    </article>
+  </section>
+<script id="instant-first-paint-bootstrap">
+(function(){
+  "use strict";
+  const pad=v=>String(v).padStart(2,"0");
+  const hm=ms=>{const d=new Date(ms);return `${pad(d.getHours())}:${pad(d.getMinutes())}`};
+  const dhm=ms=>{const d=new Date(ms);return `${d.getMonth()+1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}`};
+
+  // Paint current clock immediately; normal app timer takes over later.
+  const nowEl=document.getElementById("now");
+  if(nowEl){
+    const d=new Date();
+    nowEl.textContent=`현재시간 ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  }
+
+  const grid=document.getElementById("bossGrid");
+  if(!grid)return;
+
+  let timers={}, history=[];
+  try{
+    const raw=localStorage.getItem("catHeroBossTimersCacheV1");
+    const parsed=raw?JSON.parse(raw):null;
+    if(parsed&&parsed.state)timers=parsed.state;
+  }catch(e){}
+  try{
+    const raw=localStorage.getItem("catHeroBossHistoryCacheV1");
+    const parsed=raw?JSON.parse(raw):null;
+    if(parsed&&Array.isArray(parsed.items))history=parsed.items;
+  }catch(e){}
+
+  const previousByBoss={};
+  for(const item of history){
+    const id=item&&item.bossId;
+    const ms=Number(item&&item.defeatedMs);
+    if(!id||!Number.isFinite(ms)||ms<=0)continue;
+    if(!previousByBoss[id]||ms>previousByBoss[id])previousByBoss[id]=ms;
+  }
+
+  const cards=[...grid.querySelectorAll("[data-static-boss]")];
+  for(const card of cards){
+    const id=card.dataset.staticBoss;
+    const spawnMs=Number(timers?.[id]?.spawnAtMs);
+    const popup=card.querySelector(`[data-static-popup="${id}"]`);
+    const prev=card.querySelector(`[data-static-prev="${id}"]`);
+    if(popup&&Number.isFinite(spawnMs)&&spawnMs>0)popup.textContent=hm(spawnMs);
+    const prevMs=Number(previousByBoss[id]);
+    if(prev&&Number.isFinite(prevMs)&&prevMs>0)prev.textContent=`처치 : ${dhm(prevMs)}`;
+    card.dataset.instantSpawn=Number.isFinite(spawnMs)&&spawnMs>0?String(spawnMs):"";
+  }
+
+  // Same order rule as the full app: next spawn first, fallback to canonical order.
+  const canonical={louis:0,looney:1,luna:2,bananyang:3};
+  cards.sort((a,b)=>{
+    const am=Number(a.dataset.instantSpawn), bm=Number(b.dataset.instantSpawn);
+    const av=Number.isFinite(am)&&am>0?am:Infinity;
+    const bv=Number.isFinite(bm)&&bm>0?bm:Infinity;
+    return av-bv || canonical[a.dataset.staticBoss]-canonical[b.dataset.staticBoss];
+  });
+  cards.forEach(card=>grid.appendChild(card));
+})();
+</script>
+
 
   <section class="weekly-card" aria-label="이번 주 2구역 참여 현황">
     <div class="weekly-head">
