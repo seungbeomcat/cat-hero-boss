@@ -6,6 +6,8 @@
 <meta name="theme-color" content="#ffffff">
 <title>상층 2구역 종합현황</title>
 <meta name="app-version" content="V3.3.12">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <!-- internal version: V3.3.12 -->
 <style>
 :root{
@@ -17,7 +19,7 @@
 html,body{margin:0;max-width:100%;overflow-x:hidden}
 body{
   background:#000;
-  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Segoe UI",sans-serif;
+  font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
   color:var(--text);
 }
 button,input{font:inherit}
@@ -948,6 +950,14 @@ button:disabled{cursor:default;opacity:.45}
   .weekly-head-main .weekly-outcome-box strong{font-size:10.1px!important;}
 }
 </style>
+
+<style id="cross-platform-font-lock">
+/* Cross-platform text lock: same Pretendard Variable webfont on iOS, Android, Windows and macOS. */
+html,body,button,input,textarea,select,option{
+  font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif!important;
+}
+</style>
+
 </head>
 <body>
 <main class="app">
