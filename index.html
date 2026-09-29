@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.3.9">
-<!-- internal version: V3.3.9 -->
+<meta name="app-version" content="V3.3.10">
+<!-- internal version: V3.3.10 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -549,90 +549,218 @@ button:disabled{cursor:default;opacity:.45}
 </style>
 
 
-<style id="v339-weekly-controls-refined-final">
-/* Weekly controls: left edge aligns with first member cell; right edge aligns with fifth member cell. */
-.weekly-controls-row{
-  width:100%;
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 41%;
-  align-items:center;
-  gap:12px;
-  margin:1px 0 8px;
-}
-.weekly-back{
-  justify-self:start;
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  min-width:0;
-  color:#4b2295;
-  text-decoration:none;
-  font-size:11.5px;
-  line-height:1.1;
-  font-weight:950;
-  white-space:nowrap;
-}
-.weekly-back-icon{
-  width:23px;
-  height:23px;
-  flex:0 0 23px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  border:1.5px solid #bda4e8;
-  border-radius:6px;
-  background:#f7f3ff;
-  color:#4b2295;
-  font-size:15px;
-  line-height:1;
-  font-weight:950;
-}
-.weekly-back:active .weekly-back-icon{background:#eee6fb;}
-.weekly-outcome-summary{
-  width:100%!important;
-  max-width:none!important;
-  margin:0!important;
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  gap:8px!important;
-}
-.weekly-outcome-box{
-  min-height:36px!important;
-  padding:5px 4px!important;
-  gap:4px!important;
-  font-weight:950!important;
-}
-.weekly-outcome-box span{
-  font-size:12.5px!important;
-  font-weight:950!important;
-  letter-spacing:-.2px;
-}
-.weekly-outcome-box strong{
-  font-size:14px!important;
-  font-weight:950!important;
-  letter-spacing:-.15px;
-}
-.weekly-hint{
-  font-size:11.5px!important;
-  line-height:1.25!important;
-  font-weight:950!important;
-  margin-top:6px!important;
-}
-@media(max-width:390px){
-  .weekly-controls-row{grid-template-columns:minmax(0,1fr) 42%;gap:8px;margin-bottom:7px;}
-  .weekly-back{gap:5px;font-size:10.8px;}
-  .weekly-back-icon{width:21px;height:21px;flex-basis:21px;font-size:14px;border-radius:5px;}
-  .weekly-outcome-summary{width:100%!important;gap:6px!important;}
-  .weekly-outcome-box{min-height:34px!important;padding:4px 3px!important;}
-  .weekly-outcome-box span{font-size:11.5px!important;}
-  .weekly-outcome-box strong{font-size:13px!important;}
-  .weekly-hint{font-size:11px!important;}
-}
-</style>
-
 <link rel="preload" as="image" href="assets/louis-v337.png" fetchpriority="high">
 <link rel="preload" as="image" href="assets/looney-v337.png" fetchpriority="high">
 <link rel="preload" as="image" href="assets/luna-v337.png" fetchpriority="high">
 <link rel="preload" as="image" href="assets/bananyang-v337.png" fetchpriority="high">
+
+
+<style id="v339-weekly-control-layout-final">
+.weekly-control-row{
+  width:100%!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:9px!important;
+  margin:0 0 8px!important;
+}
+.weekly-back-link{
+  flex:0 0 auto!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  min-height:36px!important;
+  padding:4px 8px 4px 5px!important;
+  border:1.5px solid #d2c1ee!important;
+  border-radius:10px!important;
+  background:#f7f3ff!important;
+  color:#4b2295!important;
+  text-decoration:none!important;
+  font-size:11.5px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  white-space:nowrap!important;
+}
+.weekly-back-icon{
+  width:24px!important;
+  height:24px!important;
+  flex:0 0 24px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border:1.5px solid #bda6e5!important;
+  border-radius:6px!important;
+  background:#fff!important;
+  color:#4b2295!important;
+  overflow:hidden!important;
+}
+.weekly-back-icon > span{
+  display:block!important;
+  font-size:16px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  transform:scaleX(-1)!important;
+  transform-origin:center!important;
+}
+.weekly-control-row .weekly-outcome-summary{
+  flex:0 0 42%!important;
+  width:42%!important;
+  max-width:none!important;
+  margin:0 0 0 auto!important;
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:9px!important;
+}
+.weekly-control-row .weekly-outcome-box{
+  min-width:0!important;
+  min-height:38px!important;
+  padding:5px 4px!important;
+  gap:4px!important;
+  border-radius:10px!important;
+  font-size:12px!important;
+  line-height:1!important;
+  font-weight:950!important;
+}
+.weekly-control-row .weekly-outcome-box strong{
+  font-size:14px!important;
+  line-height:1!important;
+  font-weight:950!important;
+}
+.weekly-hint{
+  margin-top:6px!important;
+  font-size:11.5px!important;
+  line-height:1.2!important;
+  font-weight:950!important;
+  letter-spacing:-.15px!important;
+}
+@media(max-width:390px){
+  .weekly-control-row{gap:7px!important;margin-bottom:7px!important;}
+  .weekly-back-link{
+    min-height:34px!important;
+    gap:5px!important;
+    padding:4px 6px 4px 4px!important;
+    font-size:10.8px!important;
+  }
+  .weekly-back-icon{width:22px!important;height:22px!important;flex-basis:22px!important;}
+  .weekly-back-icon > span{font-size:15px!important;}
+  .weekly-control-row .weekly-outcome-summary{
+    flex-basis:42%!important;
+    width:42%!important;
+    gap:7px!important;
+  }
+  .weekly-control-row .weekly-outcome-box{
+    min-height:36px!important;
+    font-size:11.2px!important;
+    padding-left:3px!important;
+    padding-right:3px!important;
+  }
+  .weekly-control-row .weekly-outcome-box strong{font-size:13.2px!important;}
+  .weekly-hint{font-size:11px!important;}
+}
+</style>
+
+
+<style id="v3310-weekly-row-refine-final">
+.weekly-card{
+  position:relative!important;
+}
+.weekly-head{
+  position:relative!important;
+  padding-right:0!important;
+  margin-bottom:8px!important;
+}
+
+/* Keep the hint but remove its standalone vertical row. */
+.weekly-hint{
+  position:absolute!important;
+  right:0!important;
+  top:1px!important;
+  margin:0!important;
+  padding:2px 5px!important;
+  border-radius:7px!important;
+  background:#eef6ff!important;
+  color:#176ee8!important;
+  font-size:9.4px!important;
+  line-height:1.15!important;
+  font-weight:950!important;
+  letter-spacing:-.12px!important;
+  white-space:nowrap!important;
+}
+
+/* One row: left return text, right outcome boxes. */
+.weekly-control-row{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:5px!important;
+  width:100%!important;
+  align-items:center!important;
+  margin:0 0 8px!important;
+}
+
+/* Text-only return control with a soft text background, aligned to the first nickname column. */
+.weekly-back-link{
+  grid-column:1 / span 2!important;
+  justify-self:start!important;
+  display:inline-block!important;
+  min-height:0!important;
+  padding:6px 8px!important;
+  border:0!important;
+  border-radius:8px!important;
+  background:#f1eaff!important;
+  color:#4b2295!important;
+  text-decoration:none!important;
+  font-size:11.2px!important;
+  line-height:1.1!important;
+  font-weight:950!important;
+  white-space:nowrap!important;
+  box-shadow:none!important;
+}
+.weekly-back-icon{display:none!important;}
+
+/* Two outcome boxes align exactly with nickname columns 4 and 5. */
+.weekly-control-row .weekly-outcome-summary{
+  grid-column:4 / 6!important;
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:5px!important;
+}
+.weekly-control-row .weekly-outcome-box{
+  width:100%!important;
+  min-width:0!important;
+  min-height:38px!important;
+  padding:5px 3px!important;
+  border-radius:10px!important;
+  font-size:12px!important;
+  line-height:1!important;
+  font-weight:950!important;
+}
+.weekly-control-row .weekly-outcome-box strong{
+  font-size:14px!important;
+  line-height:1!important;
+  font-weight:950!important;
+}
+
+@media(max-width:390px){
+  .weekly-hint{
+    top:0!important;
+    font-size:8.8px!important;
+    padding:2px 4px!important;
+  }
+  .weekly-back-link{
+    font-size:10.5px!important;
+    padding:5px 7px!important;
+  }
+  .weekly-control-row .weekly-outcome-box{
+    min-height:36px!important;
+    font-size:11.2px!important;
+  }
+  .weekly-control-row .weekly-outcome-box strong{
+    font-size:13.2px!important;
+  }
+}
+</style>
 
 </head>
 <body>
@@ -765,11 +893,8 @@ button:disabled{cursor:default;opacity:.45}
       <div id="weeklyPeriod" class="weekly-period">집계기간 계산 중</div>
       <div class="weekly-hint">닉네임 클릭시 현황 확인</div>
     </div>
-    <div class="weekly-controls-row">
-      <a class="weekly-back" href="https://seungbeomcat.github.io/dosalja/" aria-label="계산기로 돌아가기">
-        <span class="weekly-back-icon" aria-hidden="true">↩</span>
-        <span class="weekly-back-text">계산기로 돌아가기</span>
-      </a>
+    <div class="weekly-control-row">
+      <a class="weekly-back-link" href="https://seungbeomcat.github.io/dosalja/" aria-label="계산기로 돌아가기">계산기로 돌아가기</a>
       <div id="weeklyOutcomeSummary" class="weekly-outcome-summary" aria-label="이번 주 보스 획득 결과">
         <div class="weekly-outcome-box won"><span>획득</span><strong id="weeklyWonCount">0회</strong></div>
         <div class="weekly-outcome-box stolen"><span>뺏김</span><strong id="weeklyStolenCount">0회</strong></div>
