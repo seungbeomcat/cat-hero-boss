@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.3.10">
-<!-- internal version: V3.3.10 -->
+<meta name="app-version" content="V3.3.12">
+<!-- internal version: V3.3.12 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -762,12 +762,152 @@ button:disabled{cursor:default;opacity:.45}
 }
 </style>
 
+
+<style id="v3311-weekly-compact-top-final">
+/* Current time + return control share one row. */
+.header-meta-row{
+  width:100%!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  margin-top:5px!important;
+}
+.header-meta-row .now{
+  margin:0!important;
+  text-align:left!important;
+}
+.header-back-link{
+  display:inline-block!important;
+  margin-left:auto!important;
+  padding:5px 8px!important;
+  border:0!important;
+  border-radius:8px!important;
+  background:#f1eaff!important;
+  color:#4b2295!important;
+  text-decoration:none!important;
+  font-size:11.2px!important;
+  line-height:1.1!important;
+  font-weight:950!important;
+  white-space:nowrap!important;
+  box-shadow:none!important;
+}
+
+/* Weekly card: title + compact outcome chips on one top line. */
+.weekly-head{
+  margin-bottom:8px!important;
+}
+.weekly-head-main{
+  width:100%!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:8px!important;
+}
+.weekly-title{
+  min-width:0!important;
+  text-align:left!important;
+}
+.weekly-period{
+  margin-top:4px!important;
+  text-align:center!important;
+}
+
+/* No extra hint row. Nickname click functionality remains unchanged. */
+.weekly-hint,
+.weekly-control-row,
+.weekly-back-link{
+  display:none!important;
+}
+
+/* Compact summary chips anchored to the weekly header top-right. */
+.weekly-head-main .weekly-outcome-summary{
+  flex:0 0 auto!important;
+  width:auto!important;
+  max-width:none!important;
+  margin:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:5px!important;
+}
+.weekly-head-main .weekly-outcome-box{
+  width:auto!important;
+  min-width:58px!important;
+  min-height:29px!important;
+  height:29px!important;
+  padding:3px 7px!important;
+  border-radius:9px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:4px!important;
+  font-size:10.8px!important;
+  line-height:1!important;
+  font-weight:950!important;
+}
+.weekly-head-main .weekly-outcome-box strong{
+  font-size:12.2px!important;
+  line-height:1!important;
+  font-weight:950!important;
+}
+
+@media(max-width:390px){
+  .header-back-link{
+    padding:5px 7px!important;
+    font-size:10.5px!important;
+  }
+  .weekly-head-main{
+    gap:6px!important;
+  }
+  .weekly-title{
+    font-size:15px!important;
+  }
+  .weekly-head-main .weekly-outcome-box{
+    min-width:54px!important;
+    height:27px!important;
+    min-height:27px!important;
+    padding:3px 6px!important;
+    font-size:10px!important;
+  }
+  .weekly-head-main .weekly-outcome-box strong{
+    font-size:11.4px!important;
+  }
+}
+</style>
+
+
+<style id="v3312-spacing-align-fix-final">
+.header{position:relative!important;}
+.header-meta-row{position:relative!important;width:100%!important;display:block!important;margin-top:4px!important;min-height:28px!important;}
+.header-meta-row .now{margin:0!important;width:100%!important;text-align:center!important;font-size:12.5px!important;line-height:1.2!important;font-weight:850!important;}
+.header-back-link{position:absolute!important;right:0!important;top:50%!important;transform:translateY(-50%)!important;margin:0!important;}
+.weekly-head{margin-bottom:5px!important;}
+.weekly-head-main{align-items:center!important;gap:8px!important;}
+.weekly-title{text-align:left!important;margin:0!important;line-height:1.08!important;}
+.weekly-period{margin-top:3px!important;text-align:left!important;padding-left:0!important;line-height:1.12!important;}
+.weekly-card{padding-top:8px!important;padding-bottom:8px!important;}
+.rank-grid{margin-top:5px!important;}
+.weekly-head-main .weekly-outcome-box{min-height:27px!important;height:27px!important;padding-top:2px!important;padding-bottom:2px!important;}
+@media(max-width:390px){
+.header-meta-row{min-height:26px!important;margin-top:3px!important;}
+.header-meta-row .now{font-size:11.8px!important;}
+.weekly-card{padding-top:7px!important;padding-bottom:7px!important;}
+.weekly-head{margin-bottom:4px!important;}
+.weekly-period{margin-top:2px!important;}
+.rank-grid{margin-top:4px!important;}
+}
+</style>
+
 </head>
 <body>
 <main class="app">
   <header class="header">
     <h1 class="title">상층 2구역 종합현황</h1>
-    <div id="now" class="now">현재시간 --:--:--</div>
+    <div class="header-meta-row">
+      <div id="now" class="now">--:--:--</div>
+      <a class="header-back-link" href="https://seungbeomcat.github.io/dosalja/" aria-label="계산기로 돌아가기">계산기로 돌아가기</a>
+    </div>
   </header>
 
 
@@ -836,7 +976,7 @@ button:disabled{cursor:default;opacity:.45}
   const nowEl=document.getElementById("now");
   if(nowEl){
     const d=new Date();
-    nowEl.textContent=`현재시간 ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    nowEl.textContent=`${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
   }
 
   const grid=document.getElementById("bossGrid");
@@ -887,18 +1027,16 @@ button:disabled{cursor:default;opacity:.45}
 </script>
 
 
-  <section class="weekly-card" aria-label="이번 주 2구역 참여 현황">
+  <section class="weekly-card" aria-label="길드원 2구역 참여 현황">
     <div class="weekly-head">
-      <div class="weekly-title">이번 주 2구역 참여 현황</div>
-      <div id="weeklyPeriod" class="weekly-period">집계기간 계산 중</div>
-      <div class="weekly-hint">닉네임 클릭시 현황 확인</div>
-    </div>
-    <div class="weekly-control-row">
-      <a class="weekly-back-link" href="https://seungbeomcat.github.io/dosalja/" aria-label="계산기로 돌아가기">계산기로 돌아가기</a>
-      <div id="weeklyOutcomeSummary" class="weekly-outcome-summary" aria-label="이번 주 보스 획득 결과">
-        <div class="weekly-outcome-box won"><span>획득</span><strong id="weeklyWonCount">0회</strong></div>
-        <div class="weekly-outcome-box stolen"><span>뺏김</span><strong id="weeklyStolenCount">0회</strong></div>
+      <div class="weekly-head-main">
+        <div class="weekly-title">길드원 2구역 참여 현황</div>
+        <div id="weeklyOutcomeSummary" class="weekly-outcome-summary" aria-label="이번 주 보스 획득 결과">
+          <div class="weekly-outcome-box won"><span>획득</span><strong id="weeklyWonCount">0회</strong></div>
+          <div class="weekly-outcome-box stolen"><span>뺏김</span><strong id="weeklyStolenCount">0회</strong></div>
+        </div>
       </div>
+      <div id="weeklyPeriod" class="weekly-period">집계기간 계산 중</div>
     </div>
     <div id="rankGrid" class="rank-grid"></div>
   </section>
@@ -1226,7 +1364,7 @@ function applyCachedStateImmediately(){
   renderHistory();
 }
 function updateCurrentClock(){
-  document.getElementById("now").textContent="현재시간 "+new Date().toLocaleTimeString("ko-KR",{hour12:false});
+  document.getElementById("now").textContent=new Date().toLocaleTimeString("ko-KR",{hour12:false});
 }
 
 function pad(v){return String(v).padStart(2,"0")}
