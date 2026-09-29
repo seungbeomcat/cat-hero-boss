@@ -899,14 +899,62 @@ button:disabled{cursor:default;opacity:.45}
 }
 </style>
 
+
+<style id="v3312-handoff-final-design">
+/* Handoff final: compact top control row; large page title intentionally removed from markup. */
+.header{padding:0 0 5px!important;text-align:initial!important;}
+.header-meta-row{
+  position:static!important;width:100%!important;min-height:28px!important;margin:0!important;
+  display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;
+}
+.header-back-link,
+.header-meta-row .now{
+  position:static!important;transform:none!important;margin:0!important;min-height:28px!important;height:28px!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  padding:4px 8px!important;border-radius:9px!important;box-shadow:none!important;white-space:nowrap!important;
+  font-size:11.2px!important;line-height:1!important;font-weight:950!important;
+}
+.header-back-link{
+  flex:0 0 auto!important;background:#f1eaff!important;border:1px solid #d9c8f4!important;color:#4b2295!important;
+}
+.header-meta-row .now{
+  flex:0 0 auto!important;width:auto!important;background:#edf5ff!important;border:1px solid #c7dcf7!important;
+  color:#24558e!important;text-align:center!important;font-variant-numeric:tabular-nums!important;
+}
+.boss-grid{margin-top:0!important;}
+.weekly-card{margin-top:7px!important;padding-top:7px!important;padding-bottom:7px!important;}
+.weekly-head{margin-bottom:3px!important;}
+.weekly-head-main{align-items:center!important;gap:7px!important;}
+.weekly-title{margin:0!important;text-align:left!important;line-height:1.06!important;}
+.weekly-period{margin-top:2px!important;padding-left:0!important;text-align:left!important;line-height:1.08!important;}
+.rank-grid{margin-top:3px!important;}
+.weekly-head-main .weekly-outcome-summary{gap:4px!important;}
+.weekly-head-main .weekly-outcome-box{
+  width:clamp(64px,17vw,96px)!important;min-width:0!important;min-height:24px!important;height:24px!important;
+  padding:2px 5px!important;border-radius:8px!important;gap:3px!important;font-size:9.8px!important;line-height:1!important;
+}
+.weekly-head-main .weekly-outcome-box strong{font-size:10.8px!important;line-height:1!important;}
+@media(max-width:390px){
+  .header{padding-bottom:4px!important;}
+  .header-meta-row{min-height:27px!important;gap:6px!important;}
+  .header-back-link,.header-meta-row .now{min-height:27px!important;height:27px!important;padding:4px 7px!important;font-size:10.3px!important;}
+  .weekly-card{margin-top:6px!important;padding-top:6px!important;padding-bottom:6px!important;}
+  .weekly-head{margin-bottom:2px!important;}
+  .weekly-head-main{gap:5px!important;}
+  .weekly-title{font-size:14.6px!important;}
+  .weekly-period{margin-top:1px!important;}
+  .rank-grid{margin-top:3px!important;}
+  .weekly-head-main .weekly-outcome-box{width:clamp(60px,17vw,68px)!important;height:23px!important;min-height:23px!important;padding:2px 4px!important;font-size:9.2px!important;}
+  .weekly-head-main .weekly-outcome-box strong{font-size:10.1px!important;}
+}
+</style>
 </head>
 <body>
 <main class="app">
   <header class="header">
-    <h1 class="title">상층 2구역 종합현황</h1>
     <div class="header-meta-row">
-      <div id="now" class="now">--:--:--</div>
       <a class="header-back-link" href="https://seungbeomcat.github.io/dosalja/" aria-label="계산기로 돌아가기">계산기로 돌아가기</a>
+      <div id="now" class="now">현재시각 --월 --일 --:--:--</div>
     </div>
   </header>
 
@@ -976,7 +1024,7 @@ button:disabled{cursor:default;opacity:.45}
   const nowEl=document.getElementById("now");
   if(nowEl){
     const d=new Date();
-    nowEl.textContent=`${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    nowEl.textContent=`현재시각 ${d.getMonth()+1}월 ${d.getDate()}일 ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
   }
 
   const grid=document.getElementById("bossGrid");
@@ -1364,7 +1412,8 @@ function applyCachedStateImmediately(){
   renderHistory();
 }
 function updateCurrentClock(){
-  document.getElementById("now").textContent=new Date().toLocaleTimeString("ko-KR",{hour12:false});
+  const d=new Date();
+  document.getElementById("now").textContent=`현재시각 ${d.getMonth()+1}월 ${d.getDate()}일 ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
 
 function pad(v){return String(v).padStart(2,"0")}
@@ -1470,7 +1519,7 @@ function currentWeekWindow(nowMs=Date.now()){
 }
 function periodText(startMs,endMs){
   const s=new Date(startMs),e=new Date(endMs-60000);
-  return `${s.getFullYear()}.${pad(s.getMonth()+1)}.${pad(s.getDate())} 09:00 ~ ${e.getFullYear()}.${pad(e.getMonth()+1)}.${pad(e.getDate())} 08:59`;
+  return `${pad(s.getMonth()+1)}.${pad(s.getDate())} 09:00 ~ ${pad(e.getMonth()+1)}.${pad(e.getDate())} 08:59`;
 }
 function weeklyMemberStats(name){
   const {startMs,endMs}=currentWeekWindow();
