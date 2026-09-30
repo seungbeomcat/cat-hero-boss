@@ -958,6 +958,88 @@ html,body,button,input,textarea,select,option{font-family:"Pretendard Variable",
 .app{width:min(100%,375px)!important;max-width:375px!important;margin-left:auto!important;margin-right:auto!important;}
 .weekly-head-main .weekly-outcome-box{width:63.75px!important;}
 </style>
+
+<style id="v3312-weekly-header-restore-final">
+/* Restore the approved weekly header: title + (주간) + period at left, outcome chips centered vertically at right. */
+.weekly-head{margin-bottom:3px!important;}
+.weekly-head-main{
+  width:100%!important;
+  min-height:43px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:6px!important;
+}
+.weekly-heading-block{
+  flex:1 1 auto!important;
+  min-width:0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+}
+.weekly-title{
+  margin:0!important;
+  text-align:left!important;
+  color:#351570!important;
+  font-size:15px!important;
+  line-height:1.08!important;
+  font-weight:950!important;
+  letter-spacing:-.35px!important;
+  white-space:nowrap!important;
+}
+.weekly-title-suffix{
+  display:inline-block!important;
+  margin-left:2px!important;
+  color:#7f6ca5!important;
+  font-size:12px!important;
+  line-height:1!important;
+  font-weight:850!important;
+  letter-spacing:-.15px!important;
+  vertical-align:1px!important;
+}
+.weekly-period{
+  margin:3px 0 0!important;
+  padding:0!important;
+  text-align:left!important;
+  font-size:12px!important;
+  line-height:1.08!important;
+  font-weight:850!important;
+  white-space:nowrap!important;
+}
+.weekly-head-main .weekly-outcome-summary{
+  align-self:center!important;
+  flex:0 0 auto!important;
+  width:auto!important;
+  max-width:none!important;
+  margin:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:4px!important;
+}
+.weekly-head-main .weekly-outcome-box{
+  width:63.75px!important;
+  min-width:63.75px!important;
+  min-height:25px!important;
+  height:25px!important;
+  padding:2px 5px!important;
+  border-radius:8px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:3px!important;
+  font-size:9.9px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  box-sizing:border-box!important;
+}
+.weekly-head-main .weekly-outcome-box strong{
+  font-size:10.9px!important;
+  line-height:1!important;
+}
+.rank-grid{margin-top:3px!important;}
+</style>
+
 </head>
 <body>
 <main class="app">
@@ -1085,16 +1167,18 @@ html,body,button,input,textarea,select,option{font-family:"Pretendard Variable",
 </script>
 
 
-  <section class="weekly-card" aria-label="길드원 2구역 참여 현황">
+  <section class="weekly-card" aria-label="길드원 2구역 참여 현황 (주간)">
     <div class="weekly-head">
       <div class="weekly-head-main">
-        <div class="weekly-title">길드원 2구역 참여 현황</div>
+        <div class="weekly-heading-block">
+          <div class="weekly-title">길드원 2구역 참여 현황 <span class="weekly-title-suffix">(주간)</span></div>
+          <div id="weeklyPeriod" class="weekly-period">집계기간 계산 중</div>
+        </div>
         <div id="weeklyOutcomeSummary" class="weekly-outcome-summary" aria-label="이번 주 보스 획득 결과">
           <div class="weekly-outcome-box won"><span>획득</span><strong id="weeklyWonCount">0회</strong></div>
           <div class="weekly-outcome-box stolen"><span>뺏김</span><strong id="weeklyStolenCount">0회</strong></div>
         </div>
       </div>
-      <div id="weeklyPeriod" class="weekly-period">집계기간 계산 중</div>
     </div>
     <div id="rankGrid" class="rank-grid"></div>
   </section>
