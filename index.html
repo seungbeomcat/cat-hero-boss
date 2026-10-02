@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.4.2">
+<meta name="app-version" content="V3.4.4">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<!-- internal version: V3.4.2 -->
+<!-- internal version: V3.4.4 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -553,16 +553,39 @@ button:disabled{cursor:default;opacity:.45}
 
 
 <style id="v340-monthly-participation-final">
-/* Monthly participation feature — keeps the existing weekly view untouched. */
-.monthly-entry{
-  margin-top:8px;border:2px solid var(--line);border-radius:16px;background:#fff;
-  min-height:70px;padding:9px 10px;display:grid;grid-template-columns:48px minmax(0,1fr) auto;
-  align-items:center;gap:10px;cursor:pointer;box-shadow:0 3px 10px rgba(67,32,126,.06);
+/* Monthly/previous-week participation detail panels. */
+/* Participation summary cards — fixed typography across platforms. */
+.participation-entry-row{
+  margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:8px;
+}
+.participation-entry{
+  min-width:0;min-height:70px;border:2px solid var(--line);border-radius:16px;background:#fff;
+  padding:9px 12px;display:grid;grid-template-columns:minmax(0,1fr) 22px;align-items:center;gap:7px;
+  cursor:pointer;box-shadow:0 3px 10px rgba(67,32,126,.06);
   transition:border-color .14s ease,box-shadow .14s ease,transform .14s ease;
 }
-.monthly-entry:active{transform:scale(.995)}
-.monthly-entry:focus-visible{outline:3px solid rgba(112,64,220,.22);outline-offset:2px}
-.monthly-entry:hover{border-color:#a98be2;box-shadow:0 5px 14px rgba(67,32,126,.10)}
+.participation-entry:active{transform:scale(.995)}
+.participation-entry:focus-visible{outline:3px solid rgba(112,64,220,.22);outline-offset:2px}
+.participation-entry:hover{border-color:#a98be2;box-shadow:0 5px 14px rgba(67,32,126,.10)}
+.participation-entry-title{
+  min-width:0;color:#351570;font-size:15px;line-height:1.08;font-weight:950;letter-spacing:-.2px;
+  text-align:left;white-space:nowrap;
+}
+/* V3.4.4 — match Dosalja Dark Teal feature-card styling. */
+.participation-entry{
+  border:3px solid #D9A928!important;
+  background:#2E5D66!important;
+  box-shadow:0 4px 12px rgba(0,0,0,.14)!important;
+}
+.participation-entry:hover{
+  border-color:#D9A928!important;
+  background:#2E5D66!important;
+  box-shadow:0 5px 14px rgba(0,0,0,.17)!important;
+}
+.participation-entry:focus-visible{outline:3px solid rgba(217,169,40,.28)!important;outline-offset:2px!important}
+.participation-entry-title{color:#fff!important;}
+.participation-entry-chevron{font-size:22px;line-height:1;color:#E7BF54!important;font-weight:950;text-align:right}
+
 .monthly-calendar-mark{
   width:44px;height:44px;border:2px solid #6f42d7;border-radius:11px;background:#f5f0ff;
   position:relative;display:grid;grid-template-columns:repeat(3,5px);grid-auto-rows:5px;
@@ -574,12 +597,6 @@ button:disabled{cursor:default;opacity:.45}
 }
 .monthly-calendar-mark span{width:5px;height:5px;border-radius:2px;background:#b69be7}
 .monthly-calendar-mark span:nth-child(5){background:#6f42d7}
-.monthly-entry-copy{min-width:0;display:block}
-.monthly-entry-title,.monthly-entry-period{display:block}
-.monthly-entry-title{color:#351570;font-size:15px;line-height:1.08;font-weight:950;letter-spacing:-.2px}
-.monthly-entry-period{margin-top:4px;color:#234f8f;font-size:10.5px;line-height:1.1;font-weight:900;font-variant-numeric:tabular-nums}
-.monthly-entry-cta{display:flex;align-items:center;gap:5px;color:#6b4aa7;font-size:9.7px;font-weight:900;white-space:nowrap;text-align:right}
-.monthly-entry-chevron{font-size:20px;line-height:1;color:#7040dc;font-weight:900}
 
 .monthly-modal{
   position:fixed;inset:0;z-index:1100;display:none;align-items:center;justify-content:center;
@@ -638,21 +655,32 @@ button:disabled{cursor:default;opacity:.45}
 .monthly-record-together strong{color:#4b2295;font-weight:950}
 .monthly-record-empty{padding:20px 8px;text-align:center;color:#8b8097;font-size:11px;font-weight:850}
 
+
+.lastweek-contribution{
+  margin-top:8px;border:2.5px solid #7b48d8;border-radius:12px;
+  background:linear-gradient(180deg,#fbf8ff 0%,#f0e8ff 100%);
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.82),0 3px 9px rgba(91,52,150,.08);
+  padding:11px 8px;text-align:center;
+}
+.lastweek-contribution-ratio{
+  color:#351570;font-size:22px;line-height:1;font-weight:950;letter-spacing:-.5px;
+  font-variant-numeric:tabular-nums;
+}
+.lastweek-contribution-rate{
+  margin-top:7px;color:#7040dc;font-size:14px;line-height:1.05;font-weight:950;
+  font-variant-numeric:tabular-nums;
+}
+.lastweek-panel-title{font-size:16px!important}
+
 @media (max-width:430px){
-  .monthly-entry{grid-template-columns:44px minmax(0,1fr) auto;gap:8px;padding-left:8px;padding-right:8px}
-  .monthly-calendar-mark{width:40px;height:40px}
-  .monthly-entry-title{font-size:14px}
-  .monthly-entry-cta{font-size:8.9px}
+  .participation-entry-row{gap:6px}
+  .participation-entry{min-height:66px;padding-left:9px;padding-right:9px;grid-template-columns:minmax(0,1fr) 20px;gap:5px}
   .monthly-panel{width:96vw;height:min(75vh,590px);padding:9px}
   .monthly-layout{grid-template-columns:36% minmax(0,1fr);gap:6px}
   .monthly-member{min-height:45px}
-  .monthly-member-count{font-size:12.5px}
-  .monthly-member-name{font-size:11.5px}
   .monthly-detail-pane{padding:6px}
   .monthly-boss-row{grid-template-columns:32px minmax(0,1fr) auto;min-height:44px;padding-left:5px;padding-right:5px}
   .monthly-boss-img{width:32px;height:32px}
-  .monthly-boss-name{font-size:11.7px}
-  .monthly-boss-count{font-size:13px}
 }
 </style>
 
@@ -1185,9 +1213,9 @@ html,body,button,input,textarea,select,option{font-family:"Pretendard Variable",
 .monthly-placeholder-alert{color:#c63c4d!important;font-weight:950!important;}
 @media (max-width:430px){
   .header-meta-row{height:40px!important;min-height:40px!important;border-radius:11px!important;}
-  .header-back-link{padding:0 9px!important;font-size:10.6px!important;}
-  .header-back-link::before{font-size:19px!important;}
-  .header-meta-row .now{padding:0 9px!important;font-size:10.8px!important;}
+  .header-back-link{padding:0 9px!important;}
+  
+  .header-meta-row .now{padding:0 9px!important;}
 }
 </style>
 
@@ -1336,15 +1364,15 @@ html,body,button,input,textarea,select,option{font-family:"Pretendard Variable",
 
   <div id="memberDetailPopover" class="member-detail-popover" aria-hidden="true"></div>
 
-  <section id="monthlyEntry" class="monthly-entry" role="button" tabindex="0" aria-label="월간 참여현황 상세보기">
-    <span class="monthly-calendar-mark" aria-hidden="true">
-      <span></span><span></span><span></span><span></span><span></span><span></span>
-    </span>
-    <span class="monthly-entry-copy">
-      <span class="monthly-entry-title">월간 참여현황</span>
-      <span id="monthlyEntryPeriod" class="monthly-entry-period">집계기간 계산 중</span>
-    </span>
-    <span class="monthly-entry-cta">길드원별 상세보기 <span class="monthly-entry-chevron">›</span></span>
+  <section class="participation-entry-row" aria-label="참여결과 조회">
+    <button id="lastWeekEntry" class="participation-entry" type="button" aria-label="지난주 참여결과 보기">
+      <span class="participation-entry-title">지난주 참여결과</span>
+      <span class="participation-entry-chevron" aria-hidden="true">›</span>
+    </button>
+    <button id="monthlyEntry" class="participation-entry" type="button" aria-label="월간 참여현황 보기">
+      <span class="participation-entry-title">월간 참여현황</span>
+      <span class="participation-entry-chevron" aria-hidden="true">›</span>
+    </button>
   </section>
 
   <section class="history" aria-label="보스 처치 기록">
@@ -1357,6 +1385,26 @@ html,body,button,input,textarea,select,option{font-family:"Pretendard Variable",
     </div>
   </section>
 </main>
+
+<div id="lastWeekModal" class="monthly-modal" aria-hidden="true">
+  <div class="monthly-panel" role="dialog" aria-modal="true" aria-labelledby="lastWeekTitle">
+    <div class="monthly-panel-head">
+      <div class="monthly-panel-head-main">
+        <div>
+          <div id="lastWeekTitle" class="monthly-panel-title lastweek-panel-title">지난주 길드원 참여결과 및 기여도</div>
+          <div id="lastWeekPanelPeriod" class="monthly-panel-period"></div>
+        </div>
+      </div>
+      <button id="closeLastWeekModal" class="monthly-close" type="button" aria-label="지난주 참여결과 닫기">×</button>
+    </div>
+    <div class="monthly-layout">
+      <div class="monthly-members-pane">
+        <div id="lastWeekMemberList" class="monthly-members-list"></div>
+      </div>
+      <div id="lastWeekDetailPane" class="monthly-detail-pane"></div>
+    </div>
+  </div>
+</div>
 
 <div id="monthlyModal" class="monthly-modal" aria-hidden="true">
   <div class="monthly-panel" role="dialog" aria-modal="true" aria-labelledby="monthlyTitle">
@@ -1565,7 +1613,7 @@ function requireWritePin(){
 
 const MEMBERS={
   "돗돔":{base:191.6},"매콤갈비":{base:142.5},"사마엘":{base:129.5},"혀녕":{base:93.8},
-  "데이다라":{base:93},"XIGN":{base:84},"뱅수띠":{base:64},"승부왕":{base:60.2},
+  "데이다라":{base:93},"XIGN":{base:87},"뱅수띠":{base:64},"승부왕":{base:60.8},
   "토시살":{base:60},"진니":{base:57.5},"페르시안":{base:57},"하니엘":{base:45},
   "벨제붑":{base:38},"바포메트":{base:35.5},"옥돔":{base:34.5}
 };
@@ -1586,6 +1634,7 @@ let recordBoss=null,recordParticipants=[],recordOutcome="won",recordNoParticipan
 let popupBoss=null,popupMode="remaining";
 let selectedWeeklyMember=null;
 let selectedMonthlyMember=null,selectedMonthlyBoss=null;
+let selectedLastWeekMember=null,selectedLastWeekBoss=null;
 
 const bossGrid=document.getElementById("bossGrid");
 const rankGrid=document.getElementById("rankGrid");
@@ -1597,8 +1646,12 @@ const historyList=document.getElementById("historyList");
 const completeModal=document.getElementById("completeModal");
 const recordModal=document.getElementById("recordModal");
 const popupModal=document.getElementById("popupModal");
+const lastWeekEntry=document.getElementById("lastWeekEntry");
+const lastWeekModal=document.getElementById("lastWeekModal");
+const lastWeekPanelPeriod=document.getElementById("lastWeekPanelPeriod");
+const lastWeekMemberList=document.getElementById("lastWeekMemberList");
+const lastWeekDetailPane=document.getElementById("lastWeekDetailPane");
 const monthlyEntry=document.getElementById("monthlyEntry");
-const monthlyEntryPeriod=document.getElementById("monthlyEntryPeriod");
 const monthlyModal=document.getElementById("monthlyModal");
 const monthlyPanelPeriod=document.getElementById("monthlyPanelPeriod");
 const monthlyMemberList=document.getElementById("monthlyMemberList");
@@ -1815,9 +1868,7 @@ function currentMonthWindow(nowMs=Date.now()){
 }
 function renderMonthlyEntryPeriod(){
   const {startMs,endMs}=currentMonthWindow();
-  const txt=periodText(startMs,endMs);
-  if(monthlyEntryPeriod)monthlyEntryPeriod.textContent=txt;
-  if(monthlyPanelPeriod)monthlyPanelPeriod.textContent=txt;
+  if(monthlyPanelPeriod)monthlyPanelPeriod.textContent=periodText(startMs,endMs);
 }
 function monthlyMemberStats(name){
   const {startMs,endMs}=currentMonthWindow();
@@ -1899,6 +1950,96 @@ function openMonthlyModal(){
 function closeMonthlyModal(){
   monthlyModal.classList.remove("show");monthlyModal.setAttribute("aria-hidden","true");document.body.style.overflow="";
   selectedMonthlyMember=null;selectedMonthlyBoss=null;
+}
+
+function previousWeekWindow(nowMs=Date.now()){
+  const current=currentWeekWindow(nowMs);
+  const currentStart=new Date(current.startMs);
+  const start=new Date(currentStart.getFullYear(),currentStart.getMonth(),currentStart.getDate()-7,9,0,0,0);
+  return {startMs:start.getTime(),endMs:current.startMs};
+}
+function lastWeekMemberStats(name){
+  const {startMs,endMs}=previousWeekWindow();
+  const byBoss={louis:0,looney:0,luna:0,bananyang:0};
+  historyItems.forEach(({x,defeatedMs})=>{
+    if(!(defeatedMs>=startMs&&defeatedMs<endMs))return;
+    const ps=Array.isArray(x.participants)?x.participants:[];
+    if(!ps.includes(name))return;
+    if(Object.prototype.hasOwnProperty.call(byBoss,x.bossId))byBoss[x.bossId]+=1;
+  });
+  const total=Object.values(byBoss).reduce((a,b)=>a+b,0);
+  return {total,byBoss};
+}
+function lastWeekGuildTotal(){
+  return Object.keys(MEMBERS).reduce((sum,name)=>sum+lastWeekMemberStats(name).total,0);
+}
+function lastWeekRanking(){
+  return Object.keys(MEMBERS).map(name=>({name,...lastWeekMemberStats(name),base:MEMBERS[name]?.base??Infinity}))
+    .sort((a,b)=>b.total-a.total||a.base-b.base||a.name.localeCompare(b.name,"ko-KR"));
+}
+function lastWeekRecordsFor(name,bossId){
+  const {startMs,endMs}=previousWeekWindow();
+  return historyItems.filter(({x,defeatedMs})=>{
+    if(!(defeatedMs>=startMs&&defeatedMs<endMs))return false;
+    if(x?.bossId!==bossId)return false;
+    const ps=Array.isArray(x.participants)?x.participants:[];
+    return ps.includes(name);
+  }).sort((a,b)=>b.defeatedMs-a.defeatedMs);
+}
+function lastWeekPlaceholderHtml(){
+  return `<div class="monthly-placeholder">
+    <div class="monthly-placeholder-icon">?</div>
+    <div class="monthly-placeholder-title">길드원을 선택하세요</div>
+    <div class="monthly-placeholder-copy">
+      <span>길드원을 선택하면</span>
+      <span>지난주 참여결과와 기여율을 확인할 수 있습니다</span>
+      <span class="monthly-placeholder-alert">(보스 클릭시 세부처치내역)</span>
+    </div>
+  </div>`;
+}
+function renderLastWeekMembers(){
+  const rows=lastWeekRanking();
+  lastWeekMemberList.innerHTML=rows.map(x=>`<button type="button" class="monthly-member${selectedLastWeekMember===x.name?" selected":""}" data-lastweek-member="${escapeHtml(x.name)}" aria-label="${escapeHtml(x.name)} 지난주 참여결과 상세">
+    <span class="monthly-member-count">${x.total}회</span><span class="monthly-member-name">${escapeHtml(x.name)}</span>
+  </button>`).join("");
+}
+function renderLastWeekDetail(){
+  if(!selectedLastWeekMember){lastWeekDetailPane.innerHTML=lastWeekPlaceholderHtml();return}
+  const stats=lastWeekMemberStats(selectedLastWeekMember);
+  const guildTotal=lastWeekGuildTotal();
+  const contribution=guildTotal>0?(stats.total/guildTotal*100):0;
+  const bossOrder=["louis","looney","luna","bananyang"];
+  let html=`<div class="monthly-detail-title">${escapeHtml(selectedLastWeekMember)} · 지난주 참여 상세</div>
+    <div class="monthly-boss-list">${bossOrder.map(id=>`<button type="button" class="monthly-boss-row${selectedLastWeekBoss===id?" selected":""}" data-lastweek-boss="${id}">
+      <img class="monthly-boss-img" src="${BOSSES[id].img}" alt=""><span class="monthly-boss-name">${BOSSES[id].name}</span><span class="monthly-boss-count">${stats.byBoss[id]}회</span>
+    </button>`).join("")}</div>
+    <div class="lastweek-contribution" aria-label="지난주 기여도">
+      <div class="lastweek-contribution-ratio">${stats.total} / ${guildTotal}</div>
+      <div class="lastweek-contribution-rate">기여율 ${contribution.toFixed(2)}%</div>
+    </div>`;
+  if(selectedLastWeekBoss){
+    const records=lastWeekRecordsFor(selectedLastWeekMember,selectedLastWeekBoss);
+    html+=`<div class="monthly-records"><div class="monthly-records-head"><div class="monthly-records-title">${BOSSES[selectedLastWeekBoss].name} 참여기록</div><div class="monthly-records-count">총 ${records.length}회</div></div>
+      ${records.length?records.map(item=>monthlyRecordHtml(item,selectedLastWeekMember)).join(""):`<div class="monthly-record-empty">해당 보스 참여기록이 없습니다.</div>`}</div>`;
+  }
+  lastWeekDetailPane.innerHTML=html;
+}
+function refreshLastWeekIfOpen(){
+  const {startMs,endMs}=previousWeekWindow();
+  if(lastWeekPanelPeriod)lastWeekPanelPeriod.textContent=periodText(startMs,endMs);
+  if(!lastWeekModal.classList.contains("show"))return;
+  renderLastWeekMembers();renderLastWeekDetail();
+}
+function openLastWeekModal(){
+  selectedLastWeekMember=null;selectedLastWeekBoss=null;
+  const {startMs,endMs}=previousWeekWindow();
+  lastWeekPanelPeriod.textContent=periodText(startMs,endMs);
+  renderLastWeekMembers();renderLastWeekDetail();
+  lastWeekModal.classList.add("show");lastWeekModal.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
+}
+function closeLastWeekModal(){
+  lastWeekModal.classList.remove("show");lastWeekModal.setAttribute("aria-hidden","true");document.body.style.overflow="";
+  selectedLastWeekMember=null;selectedLastWeekBoss=null;
 }
 
 function weeklyMemberStats(name){
@@ -2152,8 +2293,20 @@ function openPopupModal(bossId){
   setPopupMode("remaining");refreshPopupPreview();openModal(popupModal);
 }
 
+lastWeekEntry.addEventListener("click",openLastWeekModal);
+document.getElementById("closeLastWeekModal").addEventListener("click",closeLastWeekModal);
+lastWeekModal.addEventListener("click",e=>{if(e.target===lastWeekModal)closeLastWeekModal()});
+lastWeekMemberList.addEventListener("click",e=>{
+  const btn=e.target.closest("[data-lastweek-member]");if(!btn)return;
+  selectedLastWeekMember=btn.dataset.lastweekMember;selectedLastWeekBoss=null;
+  renderLastWeekMembers();renderLastWeekDetail();
+});
+lastWeekDetailPane.addEventListener("click",e=>{
+  const btn=e.target.closest("[data-lastweek-boss]");if(!btn)return;
+  selectedLastWeekBoss=btn.dataset.lastweekBoss;renderLastWeekDetail();
+});
+
 monthlyEntry.addEventListener("click",openMonthlyModal);
-monthlyEntry.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openMonthlyModal()}});
 document.getElementById("closeMonthlyModal").addEventListener("click",closeMonthlyModal);
 monthlyModal.addEventListener("click",e=>{if(e.target===monthlyModal)closeMonthlyModal()});
 monthlyMemberList.addEventListener("click",e=>{
@@ -2377,7 +2530,7 @@ async function connectLiveData(){
         historyItems.push({id:d.id,x,defeatedMs:Number.isFinite(defeatedMs)?defeatedMs:0});
       });
       historyItems.sort((a,b)=>b.defeatedMs-a.defeatedMs);
-      renderBosses();renderWeeklyRanking();refreshMonthlyIfOpen();renderHistory();
+      renderBosses();renderWeeklyRanking();refreshMonthlyIfOpen();refreshLastWeekIfOpen();renderHistory();
       saveHistoryCache(historyItems);
     },e=>{
       console.error("[bossHistory] snapshot error",e);
@@ -2403,6 +2556,7 @@ setInterval(()=>{
   if(popupModal.classList.contains("show")&&popupMode==="remaining")refreshPopupPreview();
   renderWeeklyRanking();
   renderMonthlyEntryPeriod();
+  if(lastWeekModal.classList.contains("show"))refreshLastWeekIfOpen();
 },1000);
 connectLiveData();
 </script>
