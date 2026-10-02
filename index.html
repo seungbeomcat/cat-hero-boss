@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.4.4">
+<meta name="app-version" content="V3.4.5">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<!-- internal version: V3.4.4 -->
+<!-- internal version: V3.4.5 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -560,7 +560,7 @@ button:disabled{cursor:default;opacity:.45}
 }
 .participation-entry{
   min-width:0;min-height:70px;border:2px solid var(--line);border-radius:16px;background:#fff;
-  padding:9px 12px;display:grid;grid-template-columns:minmax(0,1fr) 22px;align-items:center;gap:7px;
+  padding:9px 12px;display:grid;grid-template-columns:22px minmax(0,1fr) 22px;align-items:center;gap:7px;
   cursor:pointer;box-shadow:0 3px 10px rgba(67,32,126,.06);
   transition:border-color .14s ease,box-shadow .14s ease,transform .14s ease;
 }
@@ -569,7 +569,7 @@ button:disabled{cursor:default;opacity:.45}
 .participation-entry:hover{border-color:#a98be2;box-shadow:0 5px 14px rgba(67,32,126,.10)}
 .participation-entry-title{
   min-width:0;color:#351570;font-size:15px;line-height:1.08;font-weight:950;letter-spacing:-.2px;
-  text-align:left;white-space:nowrap;
+  text-align:center;white-space:nowrap;grid-column:2;
 }
 /* V3.4.4 — match Dosalja Dark Teal feature-card styling. */
 .participation-entry{
@@ -584,7 +584,7 @@ button:disabled{cursor:default;opacity:.45}
 }
 .participation-entry:focus-visible{outline:3px solid rgba(217,169,40,.28)!important;outline-offset:2px!important}
 .participation-entry-title{color:#fff!important;}
-.participation-entry-chevron{font-size:22px;line-height:1;color:#E7BF54!important;font-weight:950;text-align:right}
+.participation-entry-chevron{grid-column:3;font-size:22px;line-height:1;color:#E7BF54!important;font-weight:950;text-align:right}
 
 .monthly-calendar-mark{
   width:44px;height:44px;border:2px solid #6f42d7;border-radius:11px;background:#f5f0ff;
@@ -657,24 +657,27 @@ button:disabled{cursor:default;opacity:.45}
 
 
 .lastweek-contribution{
-  margin-top:8px;border:2.5px solid #7b48d8;border-radius:12px;
-  background:linear-gradient(180deg,#fbf8ff 0%,#f0e8ff 100%);
-  box-shadow:inset 0 0 0 2px rgba(255,255,255,.82),0 3px 9px rgba(91,52,150,.08);
-  padding:11px 8px;text-align:center;
-}
-.lastweek-contribution-ratio{
-  color:#351570;font-size:22px;line-height:1;font-weight:950;letter-spacing:-.5px;
-  font-variant-numeric:tabular-nums;
+  margin:0 0 7px;border:2.5px solid #1f5d99;border-radius:12px;
+  background:linear-gradient(180deg,#f8fbff 0%,#edf5ff 100%);
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.86),0 3px 9px rgba(31,93,153,.10);
+  padding:9px 8px 8px;text-align:center;
 }
 .lastweek-contribution-rate{
-  margin-top:7px;color:#7040dc;font-size:14px;line-height:1.05;font-weight:950;
-  font-variant-numeric:tabular-nums;
+  color:#174f8d;font-size:19px;line-height:1.05;font-weight:950;letter-spacing:-.35px;
+  font-variant-numeric:tabular-nums;text-align:center;
 }
+.lastweek-participation-box{
+  margin-top:8px;min-height:38px;border:1.8px solid #9ebfe0;border-radius:9px;background:#fff;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 11px;
+  color:#285685;font-variant-numeric:tabular-nums;
+}
+.lastweek-participation-label{font-size:12.5px;line-height:1;font-weight:900;text-align:left;}
+.lastweek-participation-value{font-size:16px;line-height:1;font-weight:950;text-align:right;white-space:nowrap;color:#174f8d;}
 .lastweek-panel-title{font-size:16px!important}
 
 @media (max-width:430px){
   .participation-entry-row{gap:6px}
-  .participation-entry{min-height:66px;padding-left:9px;padding-right:9px;grid-template-columns:minmax(0,1fr) 20px;gap:5px}
+  .participation-entry{min-height:66px;padding-left:9px;padding-right:9px;grid-template-columns:20px minmax(0,1fr) 20px;gap:5px}
   .monthly-panel{width:96vw;height:min(75vh,590px);padding:9px}
   .monthly-layout{grid-template-columns:36% minmax(0,1fr);gap:6px}
   .monthly-member{min-height:45px}
@@ -1926,8 +1929,7 @@ function renderMonthlyDetail(){
   if(!selectedMonthlyMember){monthlyDetailPane.innerHTML=monthlyPlaceholderHtml();return}
   const stats=monthlyMemberStats(selectedMonthlyMember);
   const bossOrder=["louis","looney","luna","bananyang"];
-  let html=`<div class="monthly-detail-title">${escapeHtml(selectedMonthlyMember)} · 월간 참여 상세</div>
-    <div class="monthly-boss-list">${bossOrder.map(id=>`<button type="button" class="monthly-boss-row${selectedMonthlyBoss===id?" selected":""}" data-monthly-boss="${id}">
+  let html=`<div class="monthly-boss-list">${bossOrder.map(id=>`<button type="button" class="monthly-boss-row${selectedMonthlyBoss===id?" selected":""}" data-monthly-boss="${id}">
       <img class="monthly-boss-img" src="${BOSSES[id].img}" alt=""><span class="monthly-boss-name">${BOSSES[id].name}</span><span class="monthly-boss-count">${stats.byBoss[id]}회</span>
     </button>`).join("")}</div>`;
   if(selectedMonthlyBoss){
@@ -2009,14 +2011,13 @@ function renderLastWeekDetail(){
   const guildTotal=lastWeekGuildTotal();
   const contribution=guildTotal>0?(stats.total/guildTotal*100):0;
   const bossOrder=["louis","looney","luna","bananyang"];
-  let html=`<div class="monthly-detail-title">${escapeHtml(selectedLastWeekMember)} · 지난주 참여 상세</div>
+  let html=`<div class="lastweek-contribution" aria-label="지난주 기여도">
+      <div class="lastweek-contribution-rate">기여율 ${contribution.toFixed(2)}%</div>
+      <div class="lastweek-participation-box"><span class="lastweek-participation-label">참여횟수</span><strong class="lastweek-participation-value">${stats.total} / ${guildTotal}</strong></div>
+    </div>
     <div class="monthly-boss-list">${bossOrder.map(id=>`<button type="button" class="monthly-boss-row${selectedLastWeekBoss===id?" selected":""}" data-lastweek-boss="${id}">
       <img class="monthly-boss-img" src="${BOSSES[id].img}" alt=""><span class="monthly-boss-name">${BOSSES[id].name}</span><span class="monthly-boss-count">${stats.byBoss[id]}회</span>
-    </button>`).join("")}</div>
-    <div class="lastweek-contribution" aria-label="지난주 기여도">
-      <div class="lastweek-contribution-ratio">${stats.total} / ${guildTotal}</div>
-      <div class="lastweek-contribution-rate">기여율 ${contribution.toFixed(2)}%</div>
-    </div>`;
+    </button>`).join("")}</div>`;
   if(selectedLastWeekBoss){
     const records=lastWeekRecordsFor(selectedLastWeekMember,selectedLastWeekBoss);
     html+=`<div class="monthly-records"><div class="monthly-records-head"><div class="monthly-records-title">${BOSSES[selectedLastWeekBoss].name} 참여기록</div><div class="monthly-records-count">총 ${records.length}회</div></div>
