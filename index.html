@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.4.6">
+<meta name="app-version" content="V3.4.7">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<!-- internal version: V3.4.6 -->
+<!-- internal version: V3.4.7 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -559,8 +559,8 @@ button:disabled{cursor:default;opacity:.45}
   margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:8px;
 }
 .participation-entry{
-  min-width:0;min-height:70px;border:2px solid var(--line);border-radius:16px;background:#fff;
-  padding:9px 12px;display:grid;grid-template-columns:22px minmax(0,1fr) 22px;align-items:center;gap:7px;
+  min-width:0;min-height:54px;border:2px solid var(--line);border-radius:16px;background:#fff;
+  padding:5px 12px;display:grid;grid-template-columns:22px minmax(0,1fr) 22px;align-items:center;gap:7px;
   cursor:pointer;box-shadow:0 3px 10px rgba(67,32,126,.06);
   transition:border-color .14s ease,box-shadow .14s ease,transform .14s ease;
 }
@@ -611,8 +611,11 @@ button:disabled{cursor:default;opacity:.45}
 .monthly-panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:1px 1px 8px;border-bottom:1px solid #eee6fa}
 .monthly-panel-head-main{display:flex;align-items:center;gap:9px;min-width:0}
 .monthly-panel-head .monthly-calendar-mark{width:38px;height:38px;flex:0 0 38px;border-radius:10px;transform:scale(.92)}
-.monthly-panel-title{color:#351570;font-size:18px;line-height:1.05;font-weight:950}
-.monthly-panel-period{margin-top:3px;color:#234f8f;font-size:10.5px;font-weight:900;font-variant-numeric:tabular-nums;white-space:nowrap}
+.monthly-panel-title{color:#351570;font-size:15px;line-height:1.08;font-weight:900;letter-spacing:-.12px}
+.monthly-panel-period{
+  margin-top:5px;color:#234f8f;font-size:12.5px;line-height:1.15;font-weight:900;
+  font-variant-numeric:tabular-nums;white-space:nowrap;letter-spacing:-.08px;
+}
 .monthly-close{width:34px;height:34px;flex:0 0 34px;border:1px solid #d6c7ee;border-radius:10px;background:#faf8ff;color:#4b2295;font-size:22px;line-height:1;font-weight:850;padding:0}
 .monthly-layout{min-height:0;flex:1;display:grid;grid-template-columns:35% minmax(0,1fr);gap:8px;padding-top:8px}
 .monthly-members-pane,.monthly-detail-pane{min-height:0;border:1px solid #e1d5f3;border-radius:12px;background:#fbfaff;overflow:hidden}
@@ -677,11 +680,11 @@ button:disabled{cursor:default;opacity:.45}
 .lastweek-participation-stat + .lastweek-participation-stat{border-left:1px solid #d5e2ef;}
 .lastweek-participation-label{font-size:10.8px;line-height:1;font-weight:850;text-align:center;color:#3b5f83;white-space:nowrap;}
 .lastweek-participation-value{font-size:15.2px;line-height:1;font-weight:900;text-align:center;white-space:nowrap;color:#174f8d;}
-.lastweek-panel-title{font-size:16px!important}
+.lastweek-panel-title{font-size:15px!important;font-weight:900!important}
 
 @media (max-width:430px){
   .participation-entry-row{gap:6px}
-  .participation-entry{min-height:66px;padding-left:9px;padding-right:9px;grid-template-columns:20px minmax(0,1fr) 20px;gap:5px}
+  .participation-entry{min-height:54px;padding:5px 9px;grid-template-columns:20px minmax(0,1fr) 20px;gap:5px}
   .monthly-panel{width:96vw;height:min(75vh,590px);padding:9px}
   .monthly-layout{grid-template-columns:36% minmax(0,1fr);gap:6px}
   .monthly-member{min-height:45px}
@@ -1226,6 +1229,51 @@ html,body,button,input,textarea,select,option{font-family:"Pretendard Variable",
 }
 </style>
 
+
+<style id="v347-participation-and-modal-header-final">
+.participation-entry{
+  min-height:54px!important;
+  padding-top:5px!important;
+  padding-bottom:5px!important;
+}
+.monthly-panel-head{
+  align-items:center!important;
+  padding-top:2px!important;
+  padding-bottom:8px!important;
+}
+.monthly-panel-head-main{
+  align-items:center!important;
+  gap:9px!important;
+}
+.monthly-panel-head-main > div{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.monthly-panel-title,
+.lastweek-panel-title{
+  font-size:15px!important;
+  line-height:1.08!important;
+  font-weight:900!important;
+}
+.monthly-panel-period{
+  margin-top:5px!important;
+  color:#234f8f!important;
+  font-size:12.5px!important;
+  line-height:1.15!important;
+  font-weight:900!important;
+  white-space:nowrap!important;
+}
+@media (max-width:430px){
+  .participation-entry{
+    min-height:54px!important;
+    padding-top:5px!important;
+    padding-bottom:5px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <main class="app">
@@ -1397,6 +1445,7 @@ html,body,button,input,textarea,select,option{font-family:"Pretendard Variable",
   <div class="monthly-panel" role="dialog" aria-modal="true" aria-labelledby="lastWeekTitle">
     <div class="monthly-panel-head">
       <div class="monthly-panel-head-main">
+        <span class="monthly-calendar-mark" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></span>
         <div>
           <div id="lastWeekTitle" class="monthly-panel-title lastweek-panel-title">지난주 길드원 참여결과 및 기여도</div>
           <div id="lastWeekPanelPeriod" class="monthly-panel-period"></div>
@@ -1875,7 +1924,7 @@ function currentMonthWindow(nowMs=Date.now()){
 }
 function renderMonthlyEntryPeriod(){
   const {startMs,endMs}=currentMonthWindow();
-  if(monthlyPanelPeriod)monthlyPanelPeriod.textContent=periodText(startMs,endMs);
+  if(monthlyPanelPeriod)monthlyPanelPeriod.textContent=`기간 : ${periodText(startMs,endMs)}`;
 }
 function monthlyMemberStats(name){
   const {startMs,endMs}=currentMonthWindow();
@@ -2034,14 +2083,14 @@ function renderLastWeekDetail(){
 }
 function refreshLastWeekIfOpen(){
   const {startMs,endMs}=previousWeekWindow();
-  if(lastWeekPanelPeriod)lastWeekPanelPeriod.textContent=periodText(startMs,endMs);
+  if(lastWeekPanelPeriod)lastWeekPanelPeriod.textContent=`기간 : ${periodText(startMs,endMs)}`;
   if(!lastWeekModal.classList.contains("show"))return;
   renderLastWeekMembers();renderLastWeekDetail();
 }
 function openLastWeekModal(){
   selectedLastWeekMember=null;selectedLastWeekBoss=null;
   const {startMs,endMs}=previousWeekWindow();
-  lastWeekPanelPeriod.textContent=periodText(startMs,endMs);
+  lastWeekPanelPeriod.textContent=`기간 : ${periodText(startMs,endMs)}`;
   renderLastWeekMembers();renderLastWeekDetail();
   lastWeekModal.classList.add("show");lastWeekModal.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
 }
