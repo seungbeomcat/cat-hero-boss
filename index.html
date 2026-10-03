@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.4.7">
+<meta name="app-version" content="V3.4.8">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<!-- internal version: V3.4.7 -->
+<!-- internal version: V3.4.8 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -127,6 +127,14 @@ button:disabled{cursor:default;opacity:.45}
   padding:4px 3px 5px;color:#3b2861;font-size:10px;font-weight:950;
 }
 .member-detail-total strong{color:#4b2295;font-size:12px}
+.member-detail-guild-total,
+.member-detail-contribution{
+  display:flex;align-items:center;justify-content:space-between;
+  margin:0 2px;padding:5px 3px;border-top:1px solid #eee6fa;
+  color:#3b2861;font-size:10px;font-weight:950;
+}
+.member-detail-guild-total strong{color:#4b2295;font-size:11.5px}
+.member-detail-contribution strong{color:#176ee8;font-size:11.5px}
 .member-detail-row{
   display:grid;grid-template-columns:25px minmax(0,1fr) 28px;gap:5px;align-items:center;
   min-height:31px;padding:3px 2px;border-top:1px solid #f0e9f8;
@@ -2113,15 +2121,22 @@ function weeklyMemberStats(name){
   const total=Object.values(byBoss).reduce((a,b)=>a+b,0);
   return {total,byBoss,stolenParticipations};
 }
+function weeklyGuildParticipationTotal(){
+  return Object.keys(MEMBERS).reduce((sum,memberName)=>sum+weeklyMemberStats(memberName).total,0);
+}
 function memberDetailHtml(name){
   const stats=weeklyMemberStats(name);
+  const guildTotal=weeklyGuildParticipationTotal();
+  const contribution=guildTotal>0?(stats.total/guildTotal*100):0;
   const order=["bananyang","luna","looney","louis"];
   return `
     <div class="member-detail-head">
       <div class="member-detail-title">${name} 참여 상세</div>
       <button class="member-detail-close" type="button" aria-label="세부 현황 닫기">×</button>
     </div>
-    <div class="member-detail-total"><span>총 참여횟수</span><strong>${stats.total}회</strong></div>
+    <div class="member-detail-total"><span>개인 참여횟수</span><strong>${stats.total}회</strong></div>
+    <div class="member-detail-guild-total"><span>길드원 총 참여</span><strong>${guildTotal}회</strong></div>
+    <div class="member-detail-contribution"><span>기여율</span><strong>${contribution.toFixed(2)}%</strong></div>
     <div class="member-detail-stolen"><span>뺏긴 전투 참여</span><strong>${stats.stolenParticipations}회</strong></div>
     ${order.map(id=>`
       <div class="member-detail-row">
