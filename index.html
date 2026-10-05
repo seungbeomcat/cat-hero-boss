@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.4.12">
+<meta name="app-version" content="V3.4.14">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<!-- internal version: V3.4.12 -->
+<!-- internal version: V3.4.14 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -1284,7 +1284,7 @@ html,body,button,input,textarea,select,option{font-family:"Pretendard Variable",
 
 
 <style id="v3410-weekly-16member-4x4-final">
-/* V3.4.12 — 16-member weekly status: 4 x 4, one line per card.
+/* V3.4.14 — 16-member weekly status: 4 x 4, one line per card.
    Count stays left, nickname stays right. Existing fixed-px typography is preserved. */
 .rank-grid{
   grid-template-columns:repeat(4,minmax(0,1fr))!important;
@@ -1349,7 +1349,7 @@ html,body,button,input,textarea,select,option{font-family:"Pretendard Variable",
 
 
 <style id="v3411-weekly-count-alignment-fix">
-/* V3.4.12 — weekly 4x4 alignment fix.
+/* V3.4.14 — weekly 4x4 alignment fix.
    Count position is identical in every card; only 아메리칸컬 nickname is compacted. */
 
 .rank-cell{
@@ -1409,6 +1409,85 @@ html,body,button,input,textarea,select,option{font-family:"Pretendard Variable",
 }
 </style>
 
+<style id="v3414-cross-device-responsive-final">
+/* V3.4.14 — fixed readable typography, fluid width, no whole-page shrinking. */
+html,body{width:100%!important;min-width:0!important;max-width:none!important;overflow-x:clip!important;-webkit-text-size-adjust:100%!important;text-size-adjust:100%!important;}
+.app{width:min(100%,560px)!important;max-width:560px!important;min-width:0!important;padding:14px clamp(9px,2.8vw,14px) 30px!important;}
+.app>*{min-width:0!important;max-width:100%!important;}
+.header-meta-row{min-height:43px!important;}
+.header-back-link{font-size:12.5px!important;min-height:41px!important;}
+.header-meta-row .now{font-size:12.5px!important;min-height:41px!important;}
+
+/* Four boss cards stay 4 x 1, but text and controls remain physically readable. */
+.boss-grid{gap:6px!important;margin-top:4px!important;}
+.boss-card{border-radius:15px!important;}
+.boss-body{padding:6px 4px 6px!important;}
+.boss-name{font-size:16px!important;}
+.popup-label{font-size:10px!important;margin-top:5px!important;}
+.popup-time{font-size:20px!important;margin-top:3px!important;}
+.popup-meta{font-size:9.5px!important;line-height:1.2!important;min-height:12px!important;}
+.boss-actions{gap:5px!important;margin-top:4px!important;}
+.boss-actions button{min-height:33px!important;font-size:10.5px!important;padding:5px 2px!important;}
+
+/* Weekly participation. */
+.weekly-card{margin-top:11px!important;padding:11px 10px!important;}
+.weekly-head-main{min-height:48px!important;}
+.weekly-title{font-size:17px!important;}
+.weekly-title-suffix{font-size:12.5px!important;}
+.weekly-period{font-size:12.5px!important;}
+.weekly-head-main .weekly-outcome-box{min-height:29px!important;height:29px!important;font-size:10.5px!important;}
+.weekly-head-main .weekly-outcome-box strong{font-size:11.5px!important;}
+.rank-grid{gap:6px!important;margin-top:5px!important;}
+.rank-cell{min-height:42px!important;padding:7px 6px!important;grid-template-columns:28px minmax(0,1fr)!important;}
+.rank-count{width:28px!important;min-width:28px!important;max-width:28px!important;font-size:11.5px!important;}
+.rank-name{font-size:12.5px!important;}
+.rank-cell.long-name .rank-name{font-size:11.2px!important;letter-spacing:-.62px!important;}
+.weekly-hint{font-size:10.5px!important;line-height:1.3!important;}
+
+/* History and participation navigation. */
+.history-title{font-size:17px!important;}
+.history-boss-name{font-size:13px!important;}
+.history-time{font-size:11.5px!important;}
+.history-members{font-size:10.8px!important;line-height:1.35!important;}
+.participation-entry-row{gap:9px!important;margin-top:10px!important;}
+.participation-entry{min-height:62px!important;padding:7px 11px!important;}
+.participation-entry-title{font-size:16px!important;}
+.participation-entry-chevron{font-size:24px!important;}
+
+/* Last-week/monthly panels and records. */
+.monthly-panel{width:min(96vw,540px)!important;}
+.monthly-panel-title,.lastweek-panel-title{font-size:16px!important;}
+.monthly-panel-period{font-size:13px!important;}
+.monthly-member-count{font-size:13.5px!important;}
+.monthly-member-name{font-size:12.5px!important;}
+.monthly-detail-title{font-size:15px!important;}
+.monthly-boss-name{font-size:13px!important;}
+.monthly-boss-count{font-size:14.5px!important;}
+.monthly-records-title{font-size:13.5px!important;}
+.monthly-record-time{font-size:11.5px!important;}
+.monthly-result{font-size:10px!important;}
+.monthly-record-together{font-size:10.8px!important;}
+.lastweek-participation-label{font-size:11.2px!important;}
+.lastweek-participation-value{font-size:16px!important;}
+
+/* Popovers and modals. */
+.member-detail-popover{width:136px!important;}
+.member-detail-title{font-size:12px!important;}
+.member-detail-boss-name,.member-detail-boss-value{font-size:11.5px!important;}
+.modal,.panel{max-width:calc(100vw - 16px)!important;}
+
+@media (min-width:431px){
+  .boss-grid{gap:8px!important;}
+  .rank-grid{gap:7px!important;}
+}
+@media (max-width:390px){
+  .app{padding-left:8px!important;padding-right:8px!important;}
+  .boss-grid{gap:4px!important;}
+  .rank-grid{gap:4px!important;}
+  .rank-cell{padding-left:5px!important;padding-right:5px!important;}
+  .participation-entry{padding-left:8px!important;padding-right:8px!important;}
+}
+</style>
 </head>
 <body>
 <main class="app">
@@ -1806,7 +1885,7 @@ const MEMBERS={
   "돗돔":{base:194.3},"매콤갈비":{base:159.5},"사마엘":{base:129.5},"혀녕":{base:93.8},
   "데이다라":{base:93},"XIGN":{base:87},"진니":{base:69.2},"아메리칸컬":{base:68.6},
   "뱅수띠":{base:64},"승부왕":{base:60.8},"토시살":{base:57},"페르시안":{base:57},
-  "하니엘":{base:45},"벨제붑":{base:38},"바포메트":{base:35.5},"옥돔":{base:34.5}
+  "하니엘":{base:45},"벨제붑":{base:42},"바포메트":{base:35.5},"옥돔":{base:34.5}
 };
 const MEMBER_ORDER=Object.entries(MEMBERS).sort((a,b)=>b[1].base-a[1].base).map(([n])=>n);
 
