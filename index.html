@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.4.21">
+<meta name="app-version" content="V3.4.22">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<!-- internal version: V3.4.21 -->
+<!-- internal version: V3.4.22 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -1723,6 +1723,53 @@ button,input,select,textarea{font:inherit;}
 }
 </style>
 
+
+<style id="v3422-boss-card-structure-final">
+/* V3.4.22 — top boss cards contain only:
+   boss image → boss name → popup time → 처치 등록 → 시간 수정. */
+.boss-body{
+  padding-top:7px!important;
+  padding-right:4px!important;
+  padding-bottom:6px!important;
+  padding-left:4px!important;
+}
+.boss-name{
+  margin:0!important;
+}
+.popup-time{
+  margin-top:6px!important;
+  margin-bottom:8px!important;
+}
+.boss-actions{
+  gap:5px!important;
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
+.boss-actions button{
+  min-height:28px!important;
+  padding-top:4px!important;
+  padding-bottom:4px!important;
+}
+
+/* Legacy selectors are hidden defensively, but no such nodes are rendered in the top cards. */
+.boss-card .popup-label,
+.boss-card .popup-meta,
+.boss-card [data-static-prev]{
+  display:none!important;
+}
+
+@media (max-width:390px){
+  .boss-body{
+    padding-top:6px!important;
+    padding-bottom:5px!important;
+  }
+  .popup-time{
+    margin-top:5px!important;
+    margin-bottom:7px!important;
+  }
+}
+</style>
+
 </head>
 <body>
 <main class="app">
@@ -1739,9 +1786,7 @@ button,input,select,textarea{font:inherit;}
       <img class="boss-art" src="assets/louis-v337.png" alt="루이" loading="eager" decoding="async" fetchpriority="high">
       <div class="boss-body">
         <div class="boss-name">루이</div>
-        <div class="popup-label">다음 팝업</div>
         <div class="popup-time" data-static-popup="louis">미등록</div>
-        <div class="popup-meta" data-static-prev="louis">처치 : —</div>
         <div class="boss-actions">
           <button class="complete-btn" type="button" data-complete="louis">처치 등록</button>
           <button class="popup-edit-btn" type="button" data-popup="louis">시간 수정</button>
@@ -1752,9 +1797,7 @@ button,input,select,textarea{font:inherit;}
       <img class="boss-art" src="assets/looney-v337.png" alt="루니" loading="eager" decoding="async" fetchpriority="high">
       <div class="boss-body">
         <div class="boss-name">루니</div>
-        <div class="popup-label">다음 팝업</div>
         <div class="popup-time" data-static-popup="looney">미등록</div>
-        <div class="popup-meta" data-static-prev="looney">처치 : —</div>
         <div class="boss-actions">
           <button class="complete-btn" type="button" data-complete="looney">처치 등록</button>
           <button class="popup-edit-btn" type="button" data-popup="looney">시간 수정</button>
@@ -1765,9 +1808,7 @@ button,input,select,textarea{font:inherit;}
       <img class="boss-art" src="assets/luna-v337.png" alt="루나" loading="eager" decoding="async" fetchpriority="high">
       <div class="boss-body">
         <div class="boss-name">루나</div>
-        <div class="popup-label">다음 팝업</div>
         <div class="popup-time" data-static-popup="luna">미등록</div>
-        <div class="popup-meta" data-static-prev="luna">처치 : —</div>
         <div class="boss-actions">
           <button class="complete-btn" type="button" data-complete="luna">처치 등록</button>
           <button class="popup-edit-btn" type="button" data-popup="luna">시간 수정</button>
@@ -1778,9 +1819,7 @@ button,input,select,textarea{font:inherit;}
       <img class="boss-art" src="assets/bananyang-v337.png" alt="바나냥" loading="eager" decoding="async" fetchpriority="high">
       <div class="boss-body">
         <div class="boss-name">바나냥</div>
-        <div class="popup-label">다음 팝업</div>
         <div class="popup-time" data-static-popup="bananyang">미등록</div>
-        <div class="popup-meta" data-static-prev="bananyang">처치 : —</div>
         <div class="boss-actions">
           <button class="complete-btn" type="button" data-complete="bananyang">처치 등록</button>
           <button class="popup-edit-btn" type="button" data-popup="bananyang">시간 수정</button>
@@ -1793,7 +1832,6 @@ button,input,select,textarea{font:inherit;}
   "use strict";
   const pad=v=>String(v).padStart(2,"0");
   const hm=ms=>{const d=new Date(ms);return `${pad(d.getHours())}:${pad(d.getMinutes())}`};
-  const dhm=ms=>{const d=new Date(ms);return `${d.getMonth()+1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}`};
 
   // Paint current clock immediately; normal app timer takes over later.
   const nowEl=document.getElementById("now");
@@ -1804,36 +1842,19 @@ button,input,select,textarea{font:inherit;}
 
   const grid=document.getElementById("bossGrid");
   if(!grid)return;
-
-  let timers={}, history=[];
+  let timers={};
   try{
     const raw=localStorage.getItem("catHeroBossTimersCacheV1");
     const parsed=raw?JSON.parse(raw):null;
     if(parsed&&parsed.state)timers=parsed.state;
   }catch(e){}
-  try{
-    const raw=localStorage.getItem("catHeroBossHistoryCacheV1");
-    const parsed=raw?JSON.parse(raw):null;
-    if(parsed&&Array.isArray(parsed.items))history=parsed.items;
-  }catch(e){}
-
-  const previousByBoss={};
-  for(const item of history){
-    const id=item&&item.bossId;
-    const ms=Number(item&&item.defeatedMs);
-    if(!id||!Number.isFinite(ms)||ms<=0)continue;
-    if(!previousByBoss[id]||ms>previousByBoss[id])previousByBoss[id]=ms;
-  }
 
   const cards=[...grid.querySelectorAll("[data-static-boss]")];
   for(const card of cards){
     const id=card.dataset.staticBoss;
     const spawnMs=Number(timers?.[id]?.spawnAtMs);
     const popup=card.querySelector(`[data-static-popup="${id}"]`);
-    const prev=card.querySelector(`[data-static-prev="${id}"]`);
     if(popup&&Number.isFinite(spawnMs)&&spawnMs>0)popup.textContent=hm(spawnMs);
-    const prevMs=Number(previousByBoss[id]);
-    if(prev&&Number.isFinite(prevMs)&&prevMs>0)prev.textContent=`처치 : ${dhm(prevMs)}`;
     card.dataset.instantSpawn=Number.isFinite(spawnMs)&&spawnMs>0?String(spawnMs):"";
   }
 
@@ -2331,8 +2352,7 @@ function confirmSameBossInterval(bossId,defeatedMs,excludeId=null){
 function renderBosses(){
   const cards=Object.entries(BOSSES).map(([id,b])=>{
     const x=bossState[id]||{},ms=x.spawnAt?.toMillis?.();
-    const prevDefeatMs=latestDefeatMsForBoss(id);
-    return {id,...b,ms:Number.isFinite(ms)?ms:null,prevDefeatMs:Number.isFinite(prevDefeatMs)?prevDefeatMs:null};
+    return {id,...b,ms:Number.isFinite(ms)?ms:null};
   });
   cards.sort((a,b)=>(a.ms??Infinity)-(b.ms??Infinity)||a.order-b.order);
   bossGrid.innerHTML=cards.map(x=>`
@@ -2340,9 +2360,7 @@ function renderBosses(){
       <img class="boss-art" src="${x.img}" alt="${x.name}">
       <div class="boss-body">
         <div class="boss-name">${x.name}</div>
-        <div class="popup-label">다음 팝업</div>
         <div class="popup-time">${x.ms!==null?hmText(x.ms):"미등록"}</div>
-        <div class="popup-meta">처치 : ${x.prevDefeatMs!==null?dateHmText(x.prevDefeatMs):"—"}</div>
         <div class="boss-actions">
           <button class="complete-btn" type="button" data-complete="${x.id}">처치 등록</button>
           <button class="popup-edit-btn" type="button" data-popup="${x.id}">시간 수정</button>
