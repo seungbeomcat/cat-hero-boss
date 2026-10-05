@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.4.16">
+<meta name="app-version" content="V3.4.17">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<!-- internal version: V3.4.16 -->
+<!-- internal version: V3.4.17 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -1284,7 +1284,7 @@ html,body,button,input,textarea,select,option{font-family:"Pretendard Variable",
 
 
 <style id="v3410-weekly-16member-4x4-final">
-/* V3.4.16 — 16-member weekly status: 4 x 4, one line per card.
+/* V3.4.17 — 16-member weekly status: 4 x 4, one line per card.
    Count stays left, nickname stays right. Existing fixed-px typography is preserved. */
 .rank-grid{
   grid-template-columns:repeat(4,minmax(0,1fr))!important;
@@ -1349,7 +1349,7 @@ html,body,button,input,textarea,select,option{font-family:"Pretendard Variable",
 
 
 <style id="v3411-weekly-count-alignment-fix">
-/* V3.4.16 — weekly 4x4 alignment fix.
+/* V3.4.17 — weekly 4x4 alignment fix.
    Count position is identical in every card; only 아메리칸컬 nickname is compacted. */
 
 .rank-cell{
@@ -1410,7 +1410,7 @@ html,body,button,input,textarea,select,option{font-family:"Pretendard Variable",
 </style>
 
 <style id="v3414-cross-device-responsive-final">
-/* V3.4.16 — fixed readable typography, fluid width, no whole-page shrinking. */
+/* V3.4.17 — fixed readable typography, fluid width, no whole-page shrinking. */
 html,body{width:100%!important;min-width:0!important;max-width:none!important;overflow-x:clip!important;-webkit-text-size-adjust:100%!important;text-size-adjust:100%!important;}
 .app{width:min(100%,560px)!important;max-width:560px!important;min-width:0!important;padding:14px clamp(9px,2.8vw,14px) 30px!important;}
 .app>*{min-width:0!important;max-width:100%!important;}
@@ -1490,7 +1490,7 @@ html,body{width:100%!important;min-width:0!important;max-width:none!important;ov
 </style>
 
 <style id="v3415-platform-hardening-final">
-/* V3.4.16 — final cross-platform hardening. */
+/* V3.4.17 — final cross-platform hardening. */
 html{-webkit-text-size-adjust:100%!important;text-size-adjust:100%!important;}
 body{width:100%!important;min-width:0!important;margin:0!important;overflow-x:clip!important;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
 .app{width:100%!important;max-width:560px!important;min-width:0!important;margin-inline:auto!important;transform:none!important;zoom:1!important;}
@@ -1498,6 +1498,19 @@ body{width:100%!important;min-width:0!important;margin:0!important;overflow-x:cl
 button,input,select,textarea{font:inherit;}
 @media (max-width:390px){.app{padding-left:9px!important;padding-right:9px!important;}}
 @media (min-width:391px) and (max-width:560px){.app{padding-left:12px!important;padding-right:12px!important;}}
+</style>
+
+
+<style id="v3417-slim-navigation-cards-final">
+/* V3.4.17 — same common navigation-card height as calculator/OPS. */
+.participation-entry{
+  height:58px!important;
+  min-height:58px!important;
+  max-height:58px!important;
+  padding-top:4px!important;
+  padding-bottom:4px!important;
+}
+.participation-entry-row{gap:9px!important;}
 </style>
 
 </head>
