@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.4.19">
+<meta name="app-version" content="V3.4.20">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<!-- internal version: V3.4.19 -->
+<!-- internal version: V3.4.20 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -1284,7 +1284,7 @@ html,body,button,input,textarea,select,option{font-family:"Pretendard Variable",
 
 
 <style id="v3410-weekly-16member-4x4-final">
-/* V3.4.19 — 16-member weekly status: 4 x 4, one line per card.
+/* V3.4.20 — 16-member weekly status: 4 x 4, one line per card.
    Count stays left, nickname stays right. Existing fixed-px typography is preserved. */
 .rank-grid{
   grid-template-columns:repeat(4,minmax(0,1fr))!important;
@@ -1349,7 +1349,7 @@ html,body,button,input,textarea,select,option{font-family:"Pretendard Variable",
 
 
 <style id="v3411-weekly-count-alignment-fix">
-/* V3.4.19 — weekly 4x4 alignment fix.
+/* V3.4.20 — weekly 4x4 alignment fix.
    Count position is identical in every card; only 아메리칸컬 nickname is compacted. */
 
 .rank-cell{
@@ -1410,7 +1410,7 @@ html,body,button,input,textarea,select,option{font-family:"Pretendard Variable",
 </style>
 
 <style id="v3414-cross-device-responsive-final">
-/* V3.4.19 — fixed readable typography, fluid width, no whole-page shrinking. */
+/* V3.4.20 — fixed readable typography, fluid width, no whole-page shrinking. */
 html,body{width:100%!important;min-width:0!important;max-width:none!important;overflow-x:clip!important;-webkit-text-size-adjust:100%!important;text-size-adjust:100%!important;}
 .app{width:min(100%,560px)!important;max-width:560px!important;min-width:0!important;padding:14px clamp(9px,2.8vw,14px) 30px!important;}
 .app>*{min-width:0!important;max-width:100%!important;}
@@ -1490,7 +1490,7 @@ html,body{width:100%!important;min-width:0!important;max-width:none!important;ov
 </style>
 
 <style id="v3415-platform-hardening-final">
-/* V3.4.19 — final cross-platform hardening. */
+/* V3.4.20 — final cross-platform hardening. */
 html{-webkit-text-size-adjust:100%!important;text-size-adjust:100%!important;}
 body{width:100%!important;min-width:0!important;margin:0!important;overflow-x:clip!important;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
 .app{width:100%!important;max-width:560px!important;min-width:0!important;margin-inline:auto!important;transform:none!important;zoom:1!important;}
@@ -1502,7 +1502,7 @@ button,input,select,textarea{font:inherit;}
 
 
 <style id="v3417-slim-navigation-cards-final">
-/* V3.4.19 — same common navigation-card height as calculator/OPS. */
+/* V3.4.20 — same common navigation-card height as calculator/OPS. */
 .participation-entry{
   height:58px!important;
   min-height:58px!important;
@@ -1515,7 +1515,7 @@ button,input,select,textarea{font:inherit;}
 
 
 <style id="v3418-boss-card-alignment-gap-final">
-/* V3.4.19 — keep all 4 boss cards vertically identical across devices. */
+/* V3.4.20 — keep all 4 boss cards vertically identical across devices. */
 .boss-card .killed-at,
 .boss-card .kill-time,
 .boss-card .last-kill,
@@ -1587,7 +1587,7 @@ button,input,select,textarea{font:inherit;}
 
 
 <style id="v3419-internal-deadspace-trim-final">
-/* V3.4.19 — trim INTERNAL dead space only. Keep font/button sizes unchanged. */
+/* V3.4.20 — trim INTERNAL dead space only. Keep font/button sizes unchanged. */
 
 /* Boss cards: remove the empty strip under the bottom '팝업시간 수정' button. */
 .boss-body{
@@ -1637,6 +1637,26 @@ button,input,select,textarea{font:inherit;}
 }
 </style>
 
+
+<style id="v3420-simple-boss-card-final">
+/* V3.4.20 — boss card structure: name → time → two buttons only. */
+.boss-body{
+  padding-top:7px!important;
+  padding-right:4px!important;
+  padding-bottom:2px!important;
+  padding-left:4px!important;
+}
+.boss-name{margin:0!important;}
+.popup-time{margin-top:5px!important;margin-bottom:6px!important;}
+.boss-actions{margin-top:0!important;margin-bottom:0!important;gap:4px!important;}
+.boss-actions .complete-btn,.boss-actions .popup-edit-btn{margin-top:0!important;margin-bottom:0!important;}
+.popup-label,.popup-meta,[data-static-prev]{display:none!important;}
+@media (max-width:390px){
+  .boss-body{padding-top:6px!important;padding-bottom:1px!important;}
+  .popup-time{margin-top:4px!important;margin-bottom:5px!important;}
+}
+</style>
+
 </head>
 <body>
 <main class="app">
@@ -1653,9 +1673,7 @@ button,input,select,textarea{font:inherit;}
       <img class="boss-art" src="assets/louis-v337.png" alt="루이" loading="eager" decoding="async" fetchpriority="high">
       <div class="boss-body">
         <div class="boss-name">루이</div>
-        <div class="popup-label">다음 팝업</div>
         <div class="popup-time" data-static-popup="louis">미등록</div>
-        <div class="popup-meta" data-static-prev="louis">처치 : —</div>
         <div class="boss-actions">
           <button class="complete-btn" type="button" data-complete="louis">처치 등록</button>
           <button class="popup-edit-btn" type="button" data-popup="louis">팝업시간 수정</button>
@@ -1666,9 +1684,7 @@ button,input,select,textarea{font:inherit;}
       <img class="boss-art" src="assets/looney-v337.png" alt="루니" loading="eager" decoding="async" fetchpriority="high">
       <div class="boss-body">
         <div class="boss-name">루니</div>
-        <div class="popup-label">다음 팝업</div>
         <div class="popup-time" data-static-popup="looney">미등록</div>
-        <div class="popup-meta" data-static-prev="looney">처치 : —</div>
         <div class="boss-actions">
           <button class="complete-btn" type="button" data-complete="looney">처치 등록</button>
           <button class="popup-edit-btn" type="button" data-popup="looney">팝업시간 수정</button>
@@ -1679,9 +1695,7 @@ button,input,select,textarea{font:inherit;}
       <img class="boss-art" src="assets/luna-v337.png" alt="루나" loading="eager" decoding="async" fetchpriority="high">
       <div class="boss-body">
         <div class="boss-name">루나</div>
-        <div class="popup-label">다음 팝업</div>
         <div class="popup-time" data-static-popup="luna">미등록</div>
-        <div class="popup-meta" data-static-prev="luna">처치 : —</div>
         <div class="boss-actions">
           <button class="complete-btn" type="button" data-complete="luna">처치 등록</button>
           <button class="popup-edit-btn" type="button" data-popup="luna">팝업시간 수정</button>
@@ -1692,9 +1706,7 @@ button,input,select,textarea{font:inherit;}
       <img class="boss-art" src="assets/bananyang-v337.png" alt="바나냥" loading="eager" decoding="async" fetchpriority="high">
       <div class="boss-body">
         <div class="boss-name">바나냥</div>
-        <div class="popup-label">다음 팝업</div>
         <div class="popup-time" data-static-popup="bananyang">미등록</div>
-        <div class="popup-meta" data-static-prev="bananyang">처치 : —</div>
         <div class="boss-actions">
           <button class="complete-btn" type="button" data-complete="bananyang">처치 등록</button>
           <button class="popup-edit-btn" type="button" data-popup="bananyang">팝업시간 수정</button>
@@ -1707,7 +1719,6 @@ button,input,select,textarea{font:inherit;}
   "use strict";
   const pad=v=>String(v).padStart(2,"0");
   const hm=ms=>{const d=new Date(ms);return `${pad(d.getHours())}:${pad(d.getMinutes())}`};
-  const dhm=ms=>{const d=new Date(ms);return `${d.getMonth()+1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}`};
 
   // Paint current clock immediately; normal app timer takes over later.
   const nowEl=document.getElementById("now");
@@ -1718,36 +1729,19 @@ button,input,select,textarea{font:inherit;}
 
   const grid=document.getElementById("bossGrid");
   if(!grid)return;
-
-  let timers={}, history=[];
+  let timers={};
   try{
     const raw=localStorage.getItem("catHeroBossTimersCacheV1");
     const parsed=raw?JSON.parse(raw):null;
     if(parsed&&parsed.state)timers=parsed.state;
   }catch(e){}
-  try{
-    const raw=localStorage.getItem("catHeroBossHistoryCacheV1");
-    const parsed=raw?JSON.parse(raw):null;
-    if(parsed&&Array.isArray(parsed.items))history=parsed.items;
-  }catch(e){}
-
-  const previousByBoss={};
-  for(const item of history){
-    const id=item&&item.bossId;
-    const ms=Number(item&&item.defeatedMs);
-    if(!id||!Number.isFinite(ms)||ms<=0)continue;
-    if(!previousByBoss[id]||ms>previousByBoss[id])previousByBoss[id]=ms;
-  }
 
   const cards=[...grid.querySelectorAll("[data-static-boss]")];
   for(const card of cards){
     const id=card.dataset.staticBoss;
     const spawnMs=Number(timers?.[id]?.spawnAtMs);
     const popup=card.querySelector(`[data-static-popup="${id}"]`);
-    const prev=card.querySelector(`[data-static-prev="${id}"]`);
     if(popup&&Number.isFinite(spawnMs)&&spawnMs>0)popup.textContent=hm(spawnMs);
-    const prevMs=Number(previousByBoss[id]);
-    if(prev&&Number.isFinite(prevMs)&&prevMs>0)prev.textContent=`처치 : ${dhm(prevMs)}`;
     card.dataset.instantSpawn=Number.isFinite(spawnMs)&&spawnMs>0?String(spawnMs):"";
   }
 
@@ -2254,9 +2248,7 @@ function renderBosses(){
       <img class="boss-art" src="${x.img}" alt="${x.name}">
       <div class="boss-body">
         <div class="boss-name">${x.name}</div>
-        <div class="popup-label">다음 팝업</div>
         <div class="popup-time">${x.ms!==null?hmText(x.ms):"미등록"}</div>
-        <div class="popup-meta">처치 : ${x.prevDefeatMs!==null?dateHmText(x.prevDefeatMs):"—"}</div>
         <div class="boss-actions">
           <button class="complete-btn" type="button" data-complete="${x.id}">처치 등록</button>
           <button class="popup-edit-btn" type="button" data-popup="${x.id}">팝업시간 수정</button>
