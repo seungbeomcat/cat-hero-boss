@@ -1777,7 +1777,7 @@ button,input,select,textarea{font:inherit;}
 <style id="v3426-black-zero-footer-sync-final">html,body{background:#000!important}.app{background:transparent!important}.rank-cell.zero-participation{background:#f7f5fa!important;border-color:#e6dfec!important}.rank-cell.zero-participation .rank-count,.rank-cell.zero-participation .rank-name{color:#a19aaa!important}.header-meta-row .now::after{content:attr(data-sync-label);display:inline-flex;align-items:center;justify-content:center;margin-left:5px;min-height:16px;padding:2px 5px;border-radius:999px;background:#f2ecfb;color:#684a98;font-size:8.5px;line-height:1;font-weight:950;vertical-align:1px}.boss-footer-credits{padding:14px 0 4px;text-align:center;color:#d7c8ed;font-size:11px;line-height:1.35;font-weight:900}.boss-footer-credits::after{content:"";display:block;width:118px;height:2px;margin:4px auto 5px;border-radius:99px;background:linear-gradient(90deg,transparent,#7f42df,transparent)}.boss-footer-date{color:#c1b4d5;font-weight:800;font-variant-numeric:tabular-nums}@media(max-width:390px){.header-meta-row .now::after{font-size:8px;margin-left:3px;padding-left:4px;padding-right:4px}}</style>
 
 <style id="v3427-royal-violet-outline-consistency-final">
-/* V3.4.29 — shared DOSALJA/OPS visual language: strong Royal Violet outer frames only. */
+/* V3.4.28 — shared DOSALJA/OPS visual language: strong Royal Violet outer frames only. */
 .header-meta-row,
 .weekly-card,
 .history{
@@ -1798,14 +1798,71 @@ button,input,select,textarea{font:inherit;}
   box-sizing:border-box!important;
 }
 </style>
-
-<style id="v3429-remove-time-edit-final">
-/* V3.4.29 — top boss cards: remove the 시간 수정 box entirely.
-   Keep the existing boss image/name/time and 처치 등록 design unchanged. */
-.boss-actions{grid-template-columns:1fr!important;gap:0!important;margin-top:0!important;margin-bottom:0!important;}
-.boss-actions .complete-btn{width:100%!important;}
-.boss-body{padding-bottom:6px!important;}
-@media (max-width:390px){.boss-body{padding-bottom:5px!important;}}
+<style id="v3429-boss-gear-popup-final">
+/* V3.4.29 — popup time editing moves from the second bottom button to a small gear button
+   on the top-right corner of each boss image area. Existing popup edit logic is preserved. */
+.boss-art-wrap{
+  position:relative!important;
+  display:block!important;
+}
+.boss-art{
+  display:block!important;
+}
+.popup-gear-btn{
+  position:absolute!important;
+  top:7px!important;
+  right:7px!important;
+  width:24px!important;
+  height:24px!important;
+  min-width:24px!important;
+  min-height:24px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:0!important;
+  border:1.5px solid rgba(255,255,255,.95)!important;
+  border-radius:999px!important;
+  background:rgba(71,33,136,.92)!important;
+  color:#fff!important;
+  font-size:14px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  box-shadow:0 2px 6px rgba(21,8,44,.22)!important;
+  z-index:2!important;
+}
+.popup-gear-btn:hover{
+  background:#5a2eb3!important;
+}
+.popup-gear-btn:active{
+  transform:scale(.97)!important;
+}
+.popup-gear-btn:focus-visible{
+  outline:2px solid rgba(255,255,255,.92)!important;
+  outline-offset:1px!important;
+}
+.boss-actions{
+  grid-template-columns:1fr!important;
+}
+.boss-actions .popup-edit-btn{
+  display:none!important;
+}
+.boss-body{
+  padding-bottom:6px!important;
+}
+.popup-time{
+  margin-bottom:8px!important;
+}
+@media (max-width:390px){
+  .popup-gear-btn{
+    top:6px!important;
+    right:6px!important;
+    width:22px!important;
+    height:22px!important;
+    min-width:22px!important;
+    min-height:22px!important;
+    font-size:13px!important;
+  }
+}
 </style>
 </head>
 <body>
@@ -1820,7 +1877,10 @@ button,input,select,textarea{font:inherit;}
 
   <section id="bossGrid" class="boss-grid" aria-label="2구역 보스 현황">
     <article class="boss-card" data-static-boss="louis">
-      <img class="boss-art" src="assets/louis-v337-display.webp" alt="루이" loading="eager" decoding="async" fetchpriority="high">
+      <div class="boss-art-wrap">
+        <img class="boss-art" src="assets/louis-v337-display.webp" alt="루이" loading="eager" decoding="async" fetchpriority="high">
+        <button class="popup-edit-btn popup-gear-btn" type="button" data-popup="louis" aria-label="루이 팝업시간 수정" title="팝업시간 수정">⚙</button>
+      </div>
       <div class="boss-body">
         <div class="boss-name">루이</div>
         <div class="popup-time" data-static-popup="louis">미등록</div>
@@ -1830,7 +1890,10 @@ button,input,select,textarea{font:inherit;}
       </div>
     </article>
     <article class="boss-card" data-static-boss="looney">
-      <img class="boss-art" src="assets/looney-v337-display.webp" alt="루니" loading="eager" decoding="async" fetchpriority="high">
+      <div class="boss-art-wrap">
+        <img class="boss-art" src="assets/looney-v337-display.webp" alt="루니" loading="eager" decoding="async" fetchpriority="high">
+        <button class="popup-edit-btn popup-gear-btn" type="button" data-popup="looney" aria-label="루니 팝업시간 수정" title="팝업시간 수정">⚙</button>
+      </div>
       <div class="boss-body">
         <div class="boss-name">루니</div>
         <div class="popup-time" data-static-popup="looney">미등록</div>
@@ -1840,7 +1903,10 @@ button,input,select,textarea{font:inherit;}
       </div>
     </article>
     <article class="boss-card" data-static-boss="luna">
-      <img class="boss-art" src="assets/luna-v337-display.webp" alt="루나" loading="eager" decoding="async" fetchpriority="high">
+      <div class="boss-art-wrap">
+        <img class="boss-art" src="assets/luna-v337-display.webp" alt="루나" loading="eager" decoding="async" fetchpriority="high">
+        <button class="popup-edit-btn popup-gear-btn" type="button" data-popup="luna" aria-label="루나 팝업시간 수정" title="팝업시간 수정">⚙</button>
+      </div>
       <div class="boss-body">
         <div class="boss-name">루나</div>
         <div class="popup-time" data-static-popup="luna">미등록</div>
@@ -1850,7 +1916,10 @@ button,input,select,textarea{font:inherit;}
       </div>
     </article>
     <article class="boss-card" data-static-boss="bananyang">
-      <img class="boss-art" src="assets/bananyang-v337-display.webp" alt="바나냥" loading="eager" decoding="async" fetchpriority="high">
+      <div class="boss-art-wrap">
+        <img class="boss-art" src="assets/bananyang-v337-display.webp" alt="바나냥" loading="eager" decoding="async" fetchpriority="high">
+        <button class="popup-edit-btn popup-gear-btn" type="button" data-popup="bananyang" aria-label="바나냥 팝업시간 수정" title="팝업시간 수정">⚙</button>
+      </div>
       <div class="boss-body">
         <div class="boss-name">바나냥</div>
         <div class="popup-time" data-static-popup="bananyang">미등록</div>
@@ -2409,7 +2478,10 @@ function renderBosses(){
   cards.sort((a,b)=>(a.ms??Infinity)-(b.ms??Infinity)||a.order-b.order);
   bossGrid.innerHTML=cards.map(x=>`
     <article class="boss-card">
-      <img class="boss-art" src="${x.img}" alt="${x.name}">
+      <div class="boss-art-wrap">
+        <img class="boss-art" src="${x.img}" alt="${x.name}">
+        <button class="popup-edit-btn popup-gear-btn" type="button" data-popup="${x.id}" aria-label="${x.name} 팝업시간 수정" title="팝업시간 수정">⚙</button>
+      </div>
       <div class="boss-body">
         <div class="boss-name">${x.name}</div>
         <div class="popup-time">${x.ms!==null?hmText(x.ms):"미등록"}</div>
