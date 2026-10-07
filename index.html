@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#000000">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.4.25">
+<meta name="app-version" content="V3.4.26">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<!-- internal version: V3.4.25 -->
+<!-- internal version: V3.4.26 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -1774,13 +1774,14 @@ button,input,select,textarea{font:inherit;}
 <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://identitytoolkit.googleapis.com" crossorigin>
+<style id="v3426-black-zero-footer-sync-final">html,body{background:#000!important}.app{background:transparent!important}.rank-cell.zero-participation{background:#f7f5fa!important;border-color:#e6dfec!important}.rank-cell.zero-participation .rank-count,.rank-cell.zero-participation .rank-name{color:#a19aaa!important}.header-meta-row .now::after{content:attr(data-sync-label);display:inline-flex;align-items:center;justify-content:center;margin-left:5px;min-height:16px;padding:2px 5px;border-radius:999px;background:#f2ecfb;color:#684a98;font-size:8.5px;line-height:1;font-weight:950;vertical-align:1px}.boss-footer-credits{padding:14px 0 4px;text-align:center;color:#d7c8ed;font-size:11px;line-height:1.35;font-weight:900}.boss-footer-credits::after{content:"";display:block;width:118px;height:2px;margin:4px auto 5px;border-radius:99px;background:linear-gradient(90deg,transparent,#7f42df,transparent)}.boss-footer-date{color:#c1b4d5;font-weight:800;font-variant-numeric:tabular-nums}@media(max-width:390px){.header-meta-row .now::after{font-size:8px;margin-left:3px;padding-left:4px;padding-right:4px}}</style>
 </head>
 <body>
 <main class="app">
   <header class="header">
     <div class="header-meta-row">
       <a class="header-back-link" href="https://seungbeomcat.github.io/dosalja/" aria-label="계산기로 돌아가기">계산기로 돌아가기</a>
-      <div id="now" class="now">현재시각 --월 --일 --:--:--</div>
+      <div id="now" class="now" data-sync-label="연결">현재시각 --월 --일 --:--:--</div>
     </div>
   </header>
 
@@ -1913,6 +1914,7 @@ button,input,select,textarea{font:inherit;}
       <div id="historyList" class="history-empty">기록을 불러오는 중입니다.</div>
     </div>
   </section>
+  <footer class="boss-footer-credits" aria-label="페이지 제작 정보"><div>Created by 돗돔 · V3.4.26</div><div class="boss-footer-date">2026.10.07</div></footer>
 </main>
 
 <div id="lastWeekModal" class="monthly-modal" aria-hidden="true">
@@ -2114,7 +2116,7 @@ button,input,select,textarea{font:inherit;}
   let items=[];try{const raw=localStorage.getItem("catHeroBossHistoryCacheV1"),p=raw?JSON.parse(raw):null;if(p&&Array.isArray(p.items))items=p.items;}catch(e){}
   const counts=Object.fromEntries(Object.keys(members).map(n=>[n,0]));let won=0,stolen=0;for(const it of items){const ms=Number(it.defeatedMs)||0;if(ms<start.getTime()||ms>=end.getTime())continue;if(it.outcome==="stolen")stolen++;else won++;for(const n of Array.isArray(it.participants)?it.participants:[])if(n in counts)counts[n]++;}
   const w=document.getElementById("weeklyWonCount"),s=document.getElementById("weeklyStolenCount");if(w)w.textContent=`${won}회`;if(s)s.textContent=`${stolen}회`;
-  const grid=document.getElementById("rankGrid");if(grid){const ranked=Object.entries(counts).map(([name,count])=>({name,count,base:members[name]})).sort((a,b)=>b.count-a.count||a.base-b.base||a.name.localeCompare(b.name,"ko-KR")).slice(0,16);grid.innerHTML=ranked.map(x=>`<div class="rank-cell${x.name.length>=5?" long-name":""}" data-member="${x.name}" role="button" tabindex="0" aria-label="${x.name} 주간 참여 세부 현황"><div class="rank-count">${x.count}회</div><div class="rank-name">${x.name}</div></div>`).join("");}
+  const grid=document.getElementById("rankGrid");if(grid){const ranked=Object.entries(counts).map(([name,count])=>({name,count,base:members[name]})).sort((a,b)=>b.count-a.count||a.base-b.base||a.name.localeCompare(b.name,"ko-KR")).slice(0,16);grid.innerHTML=ranked.map(x=>`<div class="rank-cell${x.count===0?" zero-participation":""}${x.name.length>=5?" long-name":""}" data-member="${x.name}" role="button" tabindex="0" aria-label="${x.name} 주간 참여 세부 현황"><div class="rank-count">${x.count}회</div><div class="rank-name">${x.name}</div></div>`).join("");}
   const list=document.getElementById("historyList");if(list&&items.length){const rows=[...items].sort((a,b)=>(Number(b.defeatedMs)||0)-(Number(a.defeatedMs)||0)).slice(0,40).map(it=>{const m=boss[it.bossId]||{name:it.bossName||it.bossId||"-",img:""},st=it.outcome==="stolen",ps=Array.isArray(it.participants)&&it.participants.length?it.participants.join(", "):(it.noGuildParticipants===true?"길드원 참여 없음":"-"),g=st?String(it.stolenByGuild||"").trim():"",dt=new Date(Number(it.defeatedMs)||0),tm=it.defeatedMs?`${dt.getMonth()+1}/${dt.getDate()} ${pad(dt.getHours())}:${pad(dt.getMinutes())}:${pad(dt.getSeconds())}`:"-",memberLine=st&&g?`<span class="stolen-guild-name">뺏은 길드 : ${esc(g)}</span><span class="stolen-divider">·</span>${esc(ps)}`:esc(ps);return `<button type="button" class="log${st?" stolen":""}" data-history-id="${esc(it.id)}"><span class="history-boss-icon-wrap">${m.img?`<img class="history-boss-icon" src="${m.img}" alt="" loading="lazy" decoding="async">`:""}</span><span class="history-copy"><span class="history-top"><span class="history-boss-name">${esc(it.bossName||m.name)}</span><span class="history-time">처치시간 : ${tm}</span>${st?`<span class="history-result-badge">뺏김</span>`:""}</span><span class="history-members">${memberLine}</span></span></button>`;});list.className="";list.innerHTML=rows.join("");}
 })();
 </script>
@@ -2291,6 +2293,7 @@ function applyCachedStateImmediately(){
     historyItems=cachedHistory.sort((a,b)=>b.defeatedMs-a.defeatedMs);
     historyState=new Map(historyItems.map(item=>[item.id,item.x]));
   }
+  if(cachedTimers||cachedHistory?.length) document.getElementById("now").dataset.syncLabel="저장";
   renderBosses();
   renderWeeklyRanking();
   renderMonthlyEntryPeriod();
@@ -2692,7 +2695,7 @@ function renderWeeklyRanking(){
     .sort((a,b)=>b.count-a.count||a.base-b.base||a.name.localeCompare(b.name,"ko-KR"))
     .slice(0,16);
   rankGrid.innerHTML=ranked.map(x=>`
-    <div class="rank-cell${x.name.length>=5?" long-name":""}${selectedWeeklyMember===x.name?" selected":""}" data-member="${x.name}" role="button" tabindex="0" aria-label="${x.name} 주간 참여 세부 현황">
+    <div class="rank-cell${x.count===0?" zero-participation":""}${x.name.length>=5?" long-name":""}${selectedWeeklyMember===x.name?" selected":""}" data-member="${x.name}" role="button" tabindex="0" aria-label="${x.name} 주간 참여 세부 현황">
       <div class="rank-count">${x.count}회</div>
       <div class="rank-name">${x.name}</div>
     </div>`).join("");
@@ -3071,7 +3074,8 @@ async function connectLiveData(){
       snap.forEach(d=>bossState[d.id]=d.data());
       renderBosses();
       saveTimersCache(bossState);
-    },e=>console.error("[bossTimers] snapshot error",e));
+      document.getElementById("now").dataset.syncLabel="실시간";
+    },e=>{console.error("[bossTimers] snapshot error",e);document.getElementById("now").dataset.syncLabel="지연";});
 
     onSnapshot(collection(db,"bossHistory"),snap=>{
       historyState=new Map();historyItems=[];
@@ -3084,15 +3088,16 @@ async function connectLiveData(){
       historyItems.sort((a,b)=>b.defeatedMs-a.defeatedMs);
       renderBosses();renderWeeklyRanking();refreshMonthlyIfOpen();refreshLastWeekIfOpen();renderHistory();
       saveHistoryCache(historyItems);
+      document.getElementById("now").dataset.syncLabel="실시간";
     },e=>{
-      console.error("[bossHistory] snapshot error",e);
+      console.error("[bossHistory] snapshot error",e);document.getElementById("now").dataset.syncLabel="지연";
       if(!historyItems.length){
         historyList.className="history-empty";
         historyList.textContent="처치 기록을 불러오지 못했습니다.";
       }
     });
   }catch(e){
-    console.error("[live data] connection failed",e);
+    console.error("[live data] connection failed",e);document.getElementById("now").dataset.syncLabel="지연";
   }
 }
 
