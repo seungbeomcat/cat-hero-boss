@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.4.31">
+<meta name="app-version" content="V3.4.32">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<!-- internal version: V3.4.31 -->
+<!-- internal version: V3.4.32 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -1799,7 +1799,7 @@ button,input,select,textarea{font:inherit;}
 }
 </style>
 <style id="v3430-boss-gear-position-opacity-final">
-/* V3.4.31 — move the gear closer to the extreme top-right corner and make it more translucent,
+/* V3.4.32 — move the gear closer to the extreme top-right corner and make it more translucent,
    so it covers less of the boss image while preserving the existing popup edit behavior. */
 .boss-art-wrap{
   position:relative!important;
@@ -1869,7 +1869,7 @@ button,input,select,textarea{font:inherit;}
 </style>
 
 <style id="v3431-control-height-unify-final">
-/* V3.4.31 — align the three requested navigation/control boxes to the DOSALJA 41px control height. */
+/* V3.4.32 — align the three requested navigation/control boxes to the DOSALJA 41px control height. */
 :root{--v3431-shared-control-height:41px;}
 .header-meta-row{
   height:var(--v3431-shared-control-height)!important;
@@ -1909,6 +1909,62 @@ button,input,select,textarea{font:inherit;}
   }
 }
 </style>
+
+<style id="v3432-weekly-reward-box-final">
+.weekly-reward-wrap{
+  margin-top:8px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:stretch;
+  border:2px solid #2f78dd;border-radius:14px;background:#fff;padding:7px 8px;
+  box-shadow:0 2px 8px rgba(47,101,184,.08);
+}
+.weekly-reward-items{
+  min-width:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;align-items:center;
+}
+.weekly-reward-chip{
+  min-width:0;display:flex;align-items:center;justify-content:center;gap:5px;
+  min-height:42px;border:1.5px solid #cfe0ff;border-radius:11px;background:#f8fbff;
+  padding:4px 5px;color:#2f65b8;font-weight:950;
+}
+.weekly-reward-icon{width:24px;height:24px;flex:0 0 24px;display:block;object-fit:cover;border-radius:7px;border:1.5px solid #91b8f4;background:#fff;}
+.weekly-reward-count{font-size:12.5px;line-height:1;font-weight:950;white-space:nowrap;font-variant-numeric:tabular-nums;color:#2f65b8;}
+.weekly-reward-side{display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:3px;min-width:46px;}
+.weekly-reward-edit{
+  width:33px;height:33px;border:2px solid #2f78dd;border-radius:10px;background:#fff;color:#2f65b8;
+  font-size:17px;line-height:1;font-weight:900;padding:0;display:flex;align-items:center;justify-content:center;
+}
+.weekly-reward-updated{
+  max-width:78px;color:#7292c8;font-size:8.5px;line-height:1.2;font-weight:900;text-align:right;
+  font-variant-numeric:tabular-nums;word-break:break-word;
+}
+.weekly-reward-sheet .sheet-title{font-size:18px;}
+.weekly-reward-editor-grid{display:grid;grid-template-columns:1fr;gap:8px;margin-top:6px;}
+.weekly-reward-editor-row{display:grid;grid-template-columns:36px minmax(0,1fr) 108px;gap:8px;align-items:center;padding:7px 8px;border:1.5px solid #d8c8ee;border-radius:12px;background:#fbfaff;}
+.weekly-reward-editor-icon{width:36px;height:36px;display:block;object-fit:cover;border-radius:10px;border:2px solid #7a55d8;background:#fff;}
+.weekly-reward-editor-label{min-width:0;color:#41256f;font-size:12px;font-weight:900;line-height:1.2;}
+.weekly-reward-editor-input{width:100%;min-height:38px;border:2px solid #2f78dd;border-radius:10px;padding:0 10px;text-align:right;color:#2f65b8;background:#fff;font-size:16px;font-weight:950;font-variant-numeric:tabular-nums;}
+.weekly-reward-editor-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px;}
+.weekly-reward-save{min-width:90px;min-height:40px;border:0;border-radius:11px;background:linear-gradient(180deg,#8156e9,#6133c7);color:#fff;font-size:14px;font-weight:950;padding:0 14px;}
+.member-detail-popover{width:156px!important;}
+.member-detail-reward-list{margin-top:2px;border-top:1px solid #eee6fa;padding-top:4px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;}
+.member-detail-reward-chip{min-width:0;display:flex;align-items:center;justify-content:space-between;gap:4px;padding:3px 4px;border:1px solid #e4d9f5;border-radius:9px;background:#faf8ff;}
+.member-detail-reward-icon{width:20px;height:20px;flex:0 0 20px;display:block;object-fit:cover;border-radius:6px;border:1.5px solid #90b5f0;background:#fff;}
+.member-detail-reward-value{min-width:0;color:#2f65b8;font-size:10px;font-weight:950;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.member-detail-stolen{display:flex;align-items:center;justify-content:space-between;margin:0;padding:5px 3px;border-top:1px solid #eee6fa;color:#3b2861;font-size:10px;font-weight:950;}
+.member-detail-stolen strong{color:#c74444;font-size:11.5px;}
+@media (max-width:420px){
+  .weekly-reward-wrap{padding:6px 7px;gap:6px;}
+  .weekly-reward-items{gap:5px;}
+  .weekly-reward-chip{min-height:40px;padding:4px 4px;gap:4px;}
+  .weekly-reward-icon{width:22px;height:22px;flex-basis:22px;}
+  .weekly-reward-count{font-size:11.5px;}
+  .weekly-reward-side{min-width:42px;}
+  .weekly-reward-updated{max-width:70px;font-size:8px;}
+  .weekly-reward-editor-row{grid-template-columns:34px minmax(0,1fr) 96px;gap:7px;padding:6px 7px;}
+  .weekly-reward-editor-icon{width:34px;height:34px;}
+  .weekly-reward-editor-label{font-size:11.2px;}
+  .weekly-reward-editor-input{min-height:36px;font-size:15px;padding:0 9px;}
+}
+</style>
+
 </head>
 <body>
 <main class="app">
@@ -2032,6 +2088,13 @@ button,input,select,textarea{font:inherit;}
       </div>
     </div>
     <div id="rankGrid" class="rank-grid"></div>
+    <div id="weeklyRewardWrap" class="weekly-reward-wrap" aria-label="주간 수집보상">
+      <div id="weeklyRewardItems" class="weekly-reward-items"></div>
+      <div class="weekly-reward-side">
+        <button id="weeklyRewardEditBtn" class="weekly-reward-edit" type="button" aria-label="주간 수집보상 수량 입력">✎</button>
+        <div id="weeklyRewardUpdatedAt" class="weekly-reward-updated">-</div>
+      </div>
+    </div>
   </section>
 
   <div id="memberDetailPopover" class="member-detail-popover" aria-hidden="true"></div>
@@ -2056,7 +2119,7 @@ button,input,select,textarea{font:inherit;}
       <div id="historyList" class="history-empty">기록을 불러오는 중입니다.</div>
     </div>
   </section>
-  <footer class="boss-footer-credits" aria-label="페이지 제작 정보"><div>Created by 돗돔 · V3.4.31</div><div class="boss-footer-date">2026.10.08</div></footer>
+  <footer class="boss-footer-credits" aria-label="페이지 제작 정보"><div>Created by 돗돔 · V3.4.32</div><div class="boss-footer-date">2026.10.08</div></footer>
 </main>
 
 <div id="lastWeekModal" class="monthly-modal" aria-hidden="true">
@@ -2097,6 +2160,41 @@ button,input,select,textarea{font:inherit;}
         <div id="monthlyMemberList" class="monthly-members-list"></div>
       </div>
       <div id="monthlyDetailPane" class="monthly-detail-pane"></div>
+    </div>
+  </div>
+</div>
+
+
+<div id="weeklyRewardModal" class="modal" aria-hidden="true">
+  <div class="sheet weekly-reward-sheet" role="dialog" aria-modal="true" aria-labelledby="weeklyRewardModalTitle">
+    <div class="sheet-head">
+      <div id="weeklyRewardModalTitle" class="sheet-title">주간 수집보상 입력</div>
+      <button id="closeWeeklyRewardModal" class="close" type="button" aria-label="주간 수집보상 입력 닫기">×</button>
+    </div>
+    <div class="weekly-reward-editor-grid">
+      <label class="weekly-reward-editor-row">
+        <img class="weekly-reward-editor-icon" src="assets/reward-rune-ticket.webp" alt="">
+        <span class="weekly-reward-editor-label">룬 소환서</span>
+        <input id="rewardInputRuneSummon" class="weekly-reward-editor-input" type="number" min="0" step="1" inputmode="numeric">
+      </label>
+      <label class="weekly-reward-editor-row">
+        <img class="weekly-reward-editor-icon" src="assets/reward-random-special-rune-ticket.webp" alt="">
+        <span class="weekly-reward-editor-label">랜덤 특수룬 소환</span>
+        <input id="rewardInputRandomSpecialRune" class="weekly-reward-editor-input" type="number" min="0" step="1" inputmode="numeric">
+      </label>
+      <label class="weekly-reward-editor-row">
+        <img class="weekly-reward-editor-icon" src="assets/reward-companion-ticket.webp" alt="">
+        <span class="weekly-reward-editor-label">동료 소환서</span>
+        <input id="rewardInputCompanionSummon" class="weekly-reward-editor-input" type="number" min="0" step="1" inputmode="numeric">
+      </label>
+      <label class="weekly-reward-editor-row">
+        <img class="weekly-reward-editor-icon" src="assets/reward-pickup-companion-ticket.webp" alt="">
+        <span class="weekly-reward-editor-label">픽업 동료 소환서</span>
+        <input id="rewardInputPickupCompanion" class="weekly-reward-editor-input" type="number" min="0" step="1" inputmode="numeric">
+      </label>
+    </div>
+    <div class="weekly-reward-editor-actions">
+      <button id="weeklyRewardSaveBtn" class="weekly-reward-save" type="button">저장</button>
     </div>
   </div>
 </div>
@@ -2327,6 +2425,15 @@ let selectedWeeklyMember=null;
 let selectedMonthlyMember=null,selectedMonthlyBoss=null;
 let selectedLastWeekMember=null,selectedLastWeekBoss=null;
 
+const WEEKLY_REWARD_ITEMS=[
+  {key:"runeSummon",label:"룬 소환서",img:"assets/reward-rune-ticket.webp"},
+  {key:"randomSpecialRune",label:"랜덤 특수룬 소환",img:"assets/reward-random-special-rune-ticket.webp"},
+  {key:"companionSummon",label:"동료 소환서",img:"assets/reward-companion-ticket.webp"},
+  {key:"pickupCompanion",label:"픽업 동료 소환서",img:"assets/reward-pickup-companion-ticket.webp"}
+];
+const WEEKLY_REWARD_DOC_PATH=["bossPageConfig","weeklyRewardTotals"];
+let weeklyRewardState={runeSummon:0,randomSpecialRune:0,companionSummon:0,pickupCompanion:0,updatedAtMs:0};
+
 const bossGrid=document.getElementById("bossGrid");
 const rankGrid=document.getElementById("rankGrid");
 const weeklyPeriod=document.getElementById("weeklyPeriod");
@@ -2347,9 +2454,20 @@ const monthlyModal=document.getElementById("monthlyModal");
 const monthlyPanelPeriod=document.getElementById("monthlyPanelPeriod");
 const monthlyMemberList=document.getElementById("monthlyMemberList");
 const monthlyDetailPane=document.getElementById("monthlyDetailPane");
+const weeklyRewardItemsEl=document.getElementById("weeklyRewardItems");
+const weeklyRewardUpdatedAt=document.getElementById("weeklyRewardUpdatedAt");
+const weeklyRewardEditBtn=document.getElementById("weeklyRewardEditBtn");
+const weeklyRewardModal=document.getElementById("weeklyRewardModal");
+const closeWeeklyRewardModalBtn=document.getElementById("closeWeeklyRewardModal");
+const weeklyRewardSaveBtn=document.getElementById("weeklyRewardSaveBtn");
+const rewardInputRuneSummon=document.getElementById("rewardInputRuneSummon");
+const rewardInputRandomSpecialRune=document.getElementById("rewardInputRandomSpecialRune");
+const rewardInputCompanionSummon=document.getElementById("rewardInputCompanionSummon");
+const rewardInputPickupCompanion=document.getElementById("rewardInputPickupCompanion");
 
 const BOSS_TIMERS_CACHE_KEY="catHeroBossTimersCacheV1";
 const BOSS_HISTORY_CACHE_KEY="catHeroBossHistoryCacheV1";
+const BOSS_WEEKLY_REWARDS_CACHE_KEY="catHeroBossWeeklyRewardsCacheV1";
 function cacheTs(ms){
   return Number.isFinite(ms)?{toMillis:()=>ms}:null;
 }
@@ -2425,6 +2543,33 @@ function saveHistoryCache(items){
     localStorage.setItem(BOSS_HISTORY_CACHE_KEY,JSON.stringify({savedAt:Date.now(),items:plain}));
   }catch(e){console.warn("[cache] history save failed",e)}
 }
+
+function loadWeeklyRewardsCache(){
+  try{
+    const raw=localStorage.getItem(BOSS_WEEKLY_REWARDS_CACHE_KEY);
+    if(!raw)return null;
+    const parsed=JSON.parse(raw);
+    if(!parsed||typeof parsed!=="object")return null;
+    return {
+      runeSummon:Math.max(0,Math.floor(Number(parsed.runeSummon)||0)),
+      randomSpecialRune:Math.max(0,Math.floor(Number(parsed.randomSpecialRune)||0)),
+      companionSummon:Math.max(0,Math.floor(Number(parsed.companionSummon)||0)),
+      pickupCompanion:Math.max(0,Math.floor(Number(parsed.pickupCompanion)||0)),
+      updatedAtMs:Number(parsed.updatedAtMs)||0
+    };
+  }catch(e){console.warn("[cache] weekly rewards read failed",e);return null}
+}
+function saveWeeklyRewardsCache(state){
+  try{
+    localStorage.setItem(BOSS_WEEKLY_REWARDS_CACHE_KEY,JSON.stringify({
+      runeSummon:Math.max(0,Math.floor(Number(state?.runeSummon)||0)),
+      randomSpecialRune:Math.max(0,Math.floor(Number(state?.randomSpecialRune)||0)),
+      companionSummon:Math.max(0,Math.floor(Number(state?.companionSummon)||0)),
+      pickupCompanion:Math.max(0,Math.floor(Number(state?.pickupCompanion)||0)),
+      updatedAtMs:Number(state?.updatedAtMs)||0
+    }));
+  }catch(e){console.warn("[cache] weekly rewards save failed",e)}
+}
 function applyCachedStateImmediately(){
   const cachedTimers=loadTimersCache();
   if(cachedTimers){
@@ -2435,9 +2580,12 @@ function applyCachedStateImmediately(){
     historyItems=cachedHistory.sort((a,b)=>b.defeatedMs-a.defeatedMs);
     historyState=new Map(historyItems.map(item=>[item.id,item.x]));
   }
-  if(cachedTimers||cachedHistory?.length) document.getElementById("now").dataset.syncLabel="저장";
+  const cachedWeeklyRewards=loadWeeklyRewardsCache();
+  if(cachedWeeklyRewards) weeklyRewardState=cachedWeeklyRewards;
+  if(cachedTimers||cachedHistory?.length||cachedWeeklyRewards) document.getElementById("now").dataset.syncLabel="저장";
   renderBosses();
   renderWeeklyRanking();
+  renderWeeklyRewardBox();
   renderMonthlyEntryPeriod();
   renderHistory();
 }
@@ -2734,6 +2882,61 @@ function closeLastWeekModal(){
   selectedLastWeekMember=null;selectedLastWeekBoss=null;
 }
 
+function formatFullDateTime(ms){
+  if(!Number.isFinite(ms)||ms<=0)return "-";
+  const d=new Date(ms);
+  return `${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())}. ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+function normalizeRewardState(data){
+  const updatedAtMs=Number(data?.updatedAtMs)||Number(data?.updatedAt?.toMillis?.())||0;
+  return {
+    runeSummon:Math.max(0,Math.floor(Number(data?.runeSummon)||0)),
+    randomSpecialRune:Math.max(0,Math.floor(Number(data?.randomSpecialRune)||0)),
+    companionSummon:Math.max(0,Math.floor(Number(data?.companionSummon)||0)),
+    pickupCompanion:Math.max(0,Math.floor(Number(data?.pickupCompanion)||0)),
+    updatedAtMs
+  };
+}
+function renderWeeklyRewardBox(){
+  if(!weeklyRewardItemsEl)return;
+  weeklyRewardItemsEl.innerHTML=WEEKLY_REWARD_ITEMS.map(item=>`<div class="weekly-reward-chip" aria-label="${item.label} ${Math.max(0,Math.floor(Number(weeklyRewardState[item.key])||0))}개"><img class="weekly-reward-icon" src="${item.img}" alt=""><span class="weekly-reward-count">${Math.max(0,Math.floor(Number(weeklyRewardState[item.key])||0))}</span></div>`).join("");
+  if(weeklyRewardUpdatedAt) weeklyRewardUpdatedAt.textContent=formatFullDateTime(Number(weeklyRewardState.updatedAtMs)||0);
+}
+function openWeeklyRewardModal(){
+  rewardInputRuneSummon.value=String(Math.max(0,Math.floor(Number(weeklyRewardState.runeSummon)||0)));
+  rewardInputRandomSpecialRune.value=String(Math.max(0,Math.floor(Number(weeklyRewardState.randomSpecialRune)||0)));
+  rewardInputCompanionSummon.value=String(Math.max(0,Math.floor(Number(weeklyRewardState.companionSummon)||0)));
+  rewardInputPickupCompanion.value=String(Math.max(0,Math.floor(Number(weeklyRewardState.pickupCompanion)||0)));
+  openModal(weeklyRewardModal);
+}
+function closeWeeklyRewardModal(){closeModal(weeklyRewardModal)}
+function getWeeklyRewardDistributionMap(){
+  const memberStats=Object.keys(MEMBERS).map((name,index)=>{
+    const total=weeklyMemberStats(name).total;
+    return {name,total,index};
+  });
+  const guildTotal=memberStats.reduce((sum,x)=>sum+x.total,0);
+  const map={};
+  memberStats.forEach(x=>{map[x.name]={runeSummon:0,randomSpecialRune:0,companionSummon:0,pickupCompanion:0};});
+  for(const item of WEEKLY_REWARD_ITEMS){
+    const totalReward=Math.max(0,Math.floor(Number(weeklyRewardState[item.key])||0));
+    if(totalReward<=0||guildTotal<=0)continue;
+    const rows=memberStats.map(x=>{
+      const raw=totalReward*(x.total/guildTotal);
+      const base=Math.floor(raw);
+      return {name:x.name,total:x.total,index:x.index,raw,base,frac:raw-base,alloc:base};
+    });
+    let remain=totalReward-rows.reduce((sum,row)=>sum+row.base,0);
+    rows.sort((a,b)=>b.frac-a.frac||b.total-a.total||a.index-b.index||a.name.localeCompare(b.name,'ko-KR'));
+    for(let i=0;i<rows.length&&remain>0;i+=1){rows[i].alloc+=1;remain-=1;}
+    rows.forEach(row=>{map[row.name][item.key]=row.alloc;});
+  }
+  return map;
+}
+function weeklyRewardDistributionForMember(name){
+  return getWeeklyRewardDistributionMap()[name]||{runeSummon:0,randomSpecialRune:0,companionSummon:0,pickupCompanion:0};
+}
+
 function weeklyMemberStats(name){
   const {startMs,endMs}=currentWeekWindow();
   const byBoss={louis:0,looney:0,luna:0,bananyang:0};
@@ -2755,6 +2958,7 @@ function memberDetailHtml(name){
   const stats=weeklyMemberStats(name);
   const guildTotal=weeklyGuildParticipationTotal();
   const contribution=guildTotal>0?(stats.total/guildTotal*100):0;
+  const rewardAlloc=weeklyRewardDistributionForMember(name);
   const order=["bananyang","luna","looney","louis"];
   return `
     <div class="member-detail-head">
@@ -2764,6 +2968,9 @@ function memberDetailHtml(name){
     <div class="member-detail-guild-total"><span>길드원 총 참여</span><strong>${guildTotal}회</strong></div>
     <div class="member-detail-total"><span>개인 참여</span><strong>${stats.total}회</strong></div>
     <div class="member-detail-contribution"><span>기여율</span><strong>${contribution.toFixed(2)}%</strong></div>
+    <div class="member-detail-reward-list">
+      ${WEEKLY_REWARD_ITEMS.map(item=>`<div class="member-detail-reward-chip" aria-label="${item.label} ${rewardAlloc[item.key]||0}개"><img class="member-detail-reward-icon" src="${item.img}" alt=""><span class="member-detail-reward-value">${rewardAlloc[item.key]||0}개</span></div>`).join("")}
+    </div>
     <div class="member-detail-stolen"><span>뺏긴 전투 참여</span><strong>${stats.stolenParticipations}회</strong></div>
     ${order.map(id=>`
       <div class="member-detail-row">
@@ -3059,6 +3266,39 @@ bossGrid.addEventListener("click",e=>{
   const c=e.target.closest("[data-complete]");if(c){if(requireWritePin())openCompleteModal(c.dataset.complete);return}
   const p=e.target.closest("[data-popup]");if(p){if(requireWritePin())openPopupModal(p.dataset.popup)}
 });
+weeklyRewardEditBtn.addEventListener("click",()=>{if(requireWritePin())openWeeklyRewardModal()});
+closeWeeklyRewardModalBtn.addEventListener("click",closeWeeklyRewardModal);
+weeklyRewardModal.addEventListener("click",e=>{if(e.target===weeklyRewardModal)closeWeeklyRewardModal()});
+weeklyRewardSaveBtn.addEventListener("click",async()=>{
+  const payload=normalizeRewardState({
+    runeSummon:rewardInputRuneSummon.value,
+    randomSpecialRune:rewardInputRandomSpecialRune.value,
+    companionSummon:rewardInputCompanionSummon.value,
+    pickupCompanion:rewardInputPickupCompanion.value,
+    updatedAtMs:Date.now()
+  });
+  try{
+    await authReady;
+    const batch=writeBatch(db);
+    batch.set(doc(db,...WEEKLY_REWARD_DOC_PATH),{
+      runeSummon:payload.runeSummon,
+      randomSpecialRune:payload.randomSpecialRune,
+      companionSummon:payload.companionSummon,
+      pickupCompanion:payload.pickupCompanion,
+      updatedAtMs:payload.updatedAtMs,
+      updatedAt:serverTimestamp()
+    },{merge:true});
+    await batch.commit();
+    weeklyRewardState=payload;
+    saveWeeklyRewardsCache(weeklyRewardState);
+    renderWeeklyRewardBox();
+    refreshOpenMemberDetail();
+    closeWeeklyRewardModal();
+  }catch(err){
+    console.error(err);
+    window.alert("주간 수집보상 저장에 실패했습니다.");
+  }
+});
 document.getElementById("historyAddBtn").addEventListener("click",()=>{if(requireWritePin())openRecordModal()});
 historyList.addEventListener("click",e=>{const row=e.target.closest("[data-history-id]");if(row&&requireWritePin())openRecordModal(row.dataset.historyId)});
 
@@ -3221,7 +3461,21 @@ async function connectLiveData(){
       document.getElementById("now").dataset.syncLabel="실시간";
     },e=>{console.error("[bossTimers] snapshot error",e);document.getElementById("now").dataset.syncLabel="지연";});
 
-    onSnapshot(collection(db,"bossHistory"),snap=>{
+    onSnapshot(doc(db,...WEEKLY_REWARD_DOC_PATH),snap=>{
+    if(!snap.exists()) {
+      weeklyRewardState=normalizeRewardState({});
+      saveWeeklyRewardsCache(weeklyRewardState);
+      renderWeeklyRewardBox();
+      refreshOpenMemberDetail();
+      return;
+    }
+    weeklyRewardState=normalizeRewardState(snap.data()||{});
+    saveWeeklyRewardsCache(weeklyRewardState);
+    renderWeeklyRewardBox();
+    refreshOpenMemberDetail();
+  },err=>console.error(err));
+
+  onSnapshot(collection(db,"bossHistory"),snap=>{
       historyState=new Map();historyItems=[];
       snap.forEach(d=>{
         const x=d.data();if(x.type!=="defeated")return;
@@ -3230,7 +3484,7 @@ async function connectLiveData(){
         historyItems.push({id:d.id,x,defeatedMs:Number.isFinite(defeatedMs)?defeatedMs:0});
       });
       historyItems.sort((a,b)=>b.defeatedMs-a.defeatedMs);
-      renderBosses();renderWeeklyRanking();refreshMonthlyIfOpen();refreshLastWeekIfOpen();renderHistory();
+      renderBosses();renderWeeklyRanking();renderWeeklyRewardBox();refreshMonthlyIfOpen();refreshLastWeekIfOpen();renderHistory();
       saveHistoryCache(historyItems);
       document.getElementById("now").dataset.syncLabel="실시간";
     },e=>{
