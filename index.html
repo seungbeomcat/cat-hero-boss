@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.4.26">
+<meta name="app-version" content="V3.4.28">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<!-- internal version: V3.4.26 -->
+<!-- internal version: V3.4.28 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -1775,6 +1775,29 @@ button,input,select,textarea{font:inherit;}
 <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://identitytoolkit.googleapis.com" crossorigin>
 <style id="v3426-black-zero-footer-sync-final">html,body{background:#000!important}.app{background:transparent!important}.rank-cell.zero-participation{background:#f7f5fa!important;border-color:#e6dfec!important}.rank-cell.zero-participation .rank-count,.rank-cell.zero-participation .rank-name{color:#a19aaa!important}.header-meta-row .now::after{content:attr(data-sync-label);display:inline-flex;align-items:center;justify-content:center;margin-left:5px;min-height:16px;padding:2px 5px;border-radius:999px;background:#f2ecfb;color:#684a98;font-size:8.5px;line-height:1;font-weight:950;vertical-align:1px}.boss-footer-credits{padding:14px 0 4px;text-align:center;color:#d7c8ed;font-size:11px;line-height:1.35;font-weight:900}.boss-footer-credits::after{content:"";display:block;width:118px;height:2px;margin:4px auto 5px;border-radius:99px;background:linear-gradient(90deg,transparent,#7f42df,transparent)}.boss-footer-date{color:#c1b4d5;font-weight:800;font-variant-numeric:tabular-nums}@media(max-width:390px){.header-meta-row .now::after{font-size:8px;margin-left:3px;padding-left:4px;padding-right:4px}}</style>
+
+<style id="v3427-royal-violet-outline-consistency-final">
+/* V3.4.28 — shared DOSALJA/OPS visual language: strong Royal Violet outer frames only. */
+.header-meta-row,
+.weekly-card,
+.history{
+  border:3px solid #8b35f2!important;
+}
+.boss-card{
+  border:3px solid #8b35f2!important;
+}
+/* Preserve all existing dimensions/content behavior; border participates in box sizing. */
+.header-meta-row,.weekly-card,.history,.boss-card{box-sizing:border-box!important;}
+</style>
+<style id="v3428-live-badge-green-final">
+/* Live badge only: match the weekly 획득 success palette. Size/typography/layout unchanged. */
+.header-meta-row .now::after{
+  background:rgba(78,179,103,.14)!important;
+  border:1.5px solid rgba(91,174,112,.62)!important;
+  color:#176b3f!important;
+  box-sizing:border-box!important;
+}
+</style>
 </head>
 <body>
 <main class="app">
@@ -1914,7 +1937,7 @@ button,input,select,textarea{font:inherit;}
       <div id="historyList" class="history-empty">기록을 불러오는 중입니다.</div>
     </div>
   </section>
-  <footer class="boss-footer-credits" aria-label="페이지 제작 정보"><div>Created by 돗돔 · V3.4.26</div><div class="boss-footer-date">2026.10.07</div></footer>
+  <footer class="boss-footer-credits" aria-label="페이지 제작 정보"><div>Created by 돗돔 · V3.4.28</div><div class="boss-footer-date">2026.10.07</div></footer>
 </main>
 
 <div id="lastWeekModal" class="monthly-modal" aria-hidden="true">
