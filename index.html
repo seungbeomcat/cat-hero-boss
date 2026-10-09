@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.4.35">
+<meta name="app-version" content="V3.4.36">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<!-- internal version: V3.4.35 -->
+<!-- internal version: V3.4.36 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -1984,7 +1984,8 @@ button,input,select,textarea{font:inherit;}
 
 
 <style id="v3435-weekly-reward-icon-border-final">
-/* V3.4.35 — unify all weekly reward icons with a blue outer frame for stronger visual consistency. */
+/* V3.4.36 — current roster/nickname data update; existing weekly reward icon styling retained.
+   V3.4.35 — unify all weekly reward icons with a blue outer frame for stronger visual consistency. */
 .weekly-reward-icon,
 .weekly-reward-editor-icon,
 .member-detail-reward-icon{
@@ -2155,7 +2156,7 @@ button,input,select,textarea{font:inherit;}
       <div id="historyList" class="history-empty">기록을 불러오는 중입니다.</div>
     </div>
   </section>
-  <footer class="boss-footer-credits" aria-label="페이지 제작 정보"><div>Created by 돗돔 · V3.4.35</div><div class="boss-footer-date">2026.10.08</div></footer>
+  <footer class="boss-footer-credits" aria-label="페이지 제작 정보"><div>Created by 돗돔 · V3.4.36</div><div class="boss-footer-date">2026.10.09</div></footer>
 </main>
 
 <div id="lastWeekModal" class="monthly-modal" aria-hidden="true">
@@ -2386,13 +2387,15 @@ button,input,select,textarea{font:inherit;}
 <script id="v3425-weekly-history-instant-cache">
 (function(){
   "use strict";
-  const members={"돗돔":194.3,"매콤갈비":159.5,"사마엘":129.5,"혀녕":100.5,"데이다라":100,"XIGN":87,"뱅수띠":72,"진니":69.2,"아메리칸컬":68.6,"승부왕":60.8,"토시살":60,"페르시안":57,"하니엘":45,"벨제붑":42,"바포메트":35.5,"옥돔":34.5};
+  const members={"돗돔":194.3,"매콤갈비":165.2,"도살장":138.5,"잎새주":107.9,"차돌":100.5,"애기다라":100,"채끝살":89,"대창":72,"진니":69.2,"아메리칸컬":68.6,"승부왕":60.8,"토시살":60,"페르시안":57,"생갈비":45,"벨제붑":42,"바포메트":35.5};
+  const renamed={"사마엘":"도살장","혀녕":"차돌","XIGN":"채끝살","뱅수띠":"대창","데이다라":"애기다라","하니엘":"생갈비"};
+  const activeName=n=>renamed[n]||n;
   const boss={louis:{name:"루이",img:"assets/louis-v337-display.webp"},looney:{name:"루니",img:"assets/looney-v337-display.webp"},luna:{name:"루나",img:"assets/luna-v337-display.webp"},bananyang:{name:"바나냥",img:"assets/bananyang-v337-display.webp"}};
   const pad=v=>String(v).padStart(2,"0"),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]||c));
   const now=Date.now(),nd=new Date(now),off=(nd.getDay()+6)%7;let start=new Date(nd.getFullYear(),nd.getMonth(),nd.getDate()-off,9,0,0,0);if(now<start.getTime())start=new Date(start.getFullYear(),start.getMonth(),start.getDate()-7,9,0,0,0);const end=new Date(start.getFullYear(),start.getMonth(),start.getDate()+7,9,0,0,0),endLabel=new Date(end.getTime()-60000);
   const period=document.getElementById("weeklyPeriod");if(period)period.textContent=`${pad(start.getMonth()+1)}.${pad(start.getDate())} 09:00 ~ ${pad(endLabel.getMonth()+1)}.${pad(endLabel.getDate())} 08:59`;
   let items=[];try{const raw=localStorage.getItem("catHeroBossHistoryCacheV1"),p=raw?JSON.parse(raw):null;if(p&&Array.isArray(p.items))items=p.items;}catch(e){}
-  const counts=Object.fromEntries(Object.keys(members).map(n=>[n,0]));let won=0,stolen=0;for(const it of items){const ms=Number(it.defeatedMs)||0;if(ms<start.getTime()||ms>=end.getTime())continue;if(it.outcome==="stolen")stolen++;else won++;for(const n of Array.isArray(it.participants)?it.participants:[])if(n in counts)counts[n]++;}
+  const counts=Object.fromEntries(Object.keys(members).map(n=>[n,0]));let won=0,stolen=0;for(const it of items){const ms=Number(it.defeatedMs)||0;if(ms<start.getTime()||ms>=end.getTime())continue;if(it.outcome==="stolen")stolen++;else won++;for(const raw of Array.isArray(it.participants)?it.participants:[]){const n=activeName(raw);if(n in counts)counts[n]++;}}
   const w=document.getElementById("weeklyWonCount"),s=document.getElementById("weeklyStolenCount");if(w)w.textContent=`${won}회`;if(s)s.textContent=`${stolen}회`;
   const grid=document.getElementById("rankGrid");if(grid){const ranked=Object.entries(counts).map(([name,count])=>({name,count,base:members[name]})).sort((a,b)=>b.count-a.count||a.base-b.base||a.name.localeCompare(b.name,"ko-KR")).slice(0,16);grid.innerHTML=ranked.map(x=>`<div class="rank-cell${x.count===0?" zero-participation":""}${x.name.length>=5?" long-name":""}" data-member="${x.name}" role="button" tabindex="0" aria-label="${x.name} 주간 참여 세부 현황"><div class="rank-count">${x.count}회</div><div class="rank-name">${x.name}</div></div>`).join("");}
   const list=document.getElementById("historyList");if(list&&items.length){const rows=[...items].sort((a,b)=>(Number(b.defeatedMs)||0)-(Number(a.defeatedMs)||0)).slice(0,40).map(it=>{const m=boss[it.bossId]||{name:it.bossName||it.bossId||"-",img:""},st=it.outcome==="stolen",ps=Array.isArray(it.participants)&&it.participants.length?it.participants.join(", "):(it.noGuildParticipants===true?"길드원 참여 없음":"-"),g=st?String(it.stolenByGuild||"").trim():"",dt=new Date(Number(it.defeatedMs)||0),tm=it.defeatedMs?`${dt.getMonth()+1}/${dt.getDate()} ${pad(dt.getHours())}:${pad(dt.getMinutes())}:${pad(dt.getSeconds())}`:"-",memberLine=st&&g?`<span class="stolen-guild-name">뺏은 길드 : ${esc(g)}</span><span class="stolen-divider">·</span>${esc(ps)}`:esc(ps);return `<button type="button" class="log${st?" stolen":""}" data-history-id="${esc(it.id)}"><span class="history-boss-icon-wrap">${m.img?`<img class="history-boss-icon" src="${m.img}" alt="" loading="lazy" decoding="async">`:""}</span><span class="history-copy"><span class="history-top"><span class="history-boss-name">${esc(it.bossName||m.name)}</span><span class="history-time">처치시간 : ${tm}</span>${st?`<span class="history-result-badge">뺏김</span>`:""}</span><span class="history-members">${memberLine}</span></span></button>`;});list.className="";list.innerHTML=rows.join("");}
@@ -2439,11 +2442,18 @@ function requireWritePin(){
 }
 
 const MEMBERS={
-  "돗돔":{base:194.3},"매콤갈비":{base:159.5},"사마엘":{base:129.5},"혀녕":{base:100.5},
-  "데이다라":{base:100},"XIGN":{base:87},"진니":{base:69.2},"아메리칸컬":{base:68.6},
-  "뱅수띠":{base:72},"승부왕":{base:60.8},"토시살":{base:60},"페르시안":{base:57},
-  "하니엘":{base:45},"벨제붑":{base:42},"바포메트":{base:35.5},"옥돔":{base:34.5}
+  "돗돔":{base:194.3},"매콤갈비":{base:165.2},"도살장":{base:138.5},"잎새주":{base:107.9},
+  "차돌":{base:100.5},"애기다라":{base:100},"채끝살":{base:89},"대창":{base:72},
+  "진니":{base:69.2},"아메리칸컬":{base:68.6},"승부왕":{base:60.8},"토시살":{base:60},
+  "페르시안":{base:57},"생갈비":{base:45},"벨제붑":{base:42},"바포메트":{base:35.5}
 };
+const MEMBER_NAME_MIGRATIONS=Object.freeze({"사마엘":"도살장","혀녕":"차돌","XIGN":"채끝살","뱅수띠":"대창","데이다라":"애기다라","하니엘":"생갈비"});
+function activeMemberName(name){return MEMBER_NAME_MIGRATIONS[name]||name}
+function participantMatchesActive(list,name){return (Array.isArray(list)?list:[]).some(raw=>activeMemberName(raw)===name)}
+function toggleParticipantByActiveName(list,name){
+  const src=Array.isArray(list)?list:[];
+  return participantMatchesActive(src,name)?src.filter(raw=>activeMemberName(raw)!==name):[...src,name];
+}
 const MEMBER_ORDER=Object.entries(MEMBERS).sort((a,b)=>b[1].base-a[1].base).map(([n])=>n);
 
 const BOSSES={
@@ -2755,7 +2765,7 @@ function monthlyMemberStats(name){
   historyItems.forEach(({x,defeatedMs})=>{
     if(!(defeatedMs>=startMs&&defeatedMs<endMs))return;
     const ps=Array.isArray(x.participants)?x.participants:[];
-    if(!ps.includes(name))return;
+    if(!participantMatchesActive(ps,name))return;
     if(Object.prototype.hasOwnProperty.call(byBoss,x.bossId))byBoss[x.bossId]+=1;
   });
   const total=Object.values(byBoss).reduce((a,b)=>a+b,0);
@@ -2771,7 +2781,7 @@ function monthlyRecordsFor(name,bossId){
     if(!(defeatedMs>=startMs&&defeatedMs<endMs))return false;
     if(x?.bossId!==bossId)return false;
     const ps=Array.isArray(x.participants)?x.participants:[];
-    return ps.includes(name);
+    return participantMatchesActive(ps,name);
   }).sort((a,b)=>b.defeatedMs-a.defeatedMs);
 }
 function monthlyPlaceholderHtml(){
@@ -2794,7 +2804,7 @@ function renderMonthlyMembers(){
 function monthlyRecordHtml(item,name){
   const x=item.x||{};
   const ps=Array.isArray(x.participants)?x.participants:[];
-  const together=ps.filter(n=>n!==name);
+  const together=ps.filter(n=>activeMemberName(n)!==name);
   const names=together.length?together.map(n=>escapeHtml(n)).join(" · "):"단독 참여";
   return `<div class="monthly-record-card">
     <div class="monthly-record-top"><span class="monthly-record-time">${dateTimeText(item.defeatedMs)}</span></div>
@@ -2842,7 +2852,7 @@ function lastWeekMemberStats(name){
   historyItems.forEach(({x,defeatedMs})=>{
     if(!(defeatedMs>=startMs&&defeatedMs<endMs))return;
     const ps=Array.isArray(x.participants)?x.participants:[];
-    if(!ps.includes(name))return;
+    if(!participantMatchesActive(ps,name))return;
     if(Object.prototype.hasOwnProperty.call(byBoss,x.bossId))byBoss[x.bossId]+=1;
   });
   const total=Object.values(byBoss).reduce((a,b)=>a+b,0);
@@ -2861,7 +2871,7 @@ function lastWeekRecordsFor(name,bossId){
     if(!(defeatedMs>=startMs&&defeatedMs<endMs))return false;
     if(x?.bossId!==bossId)return false;
     const ps=Array.isArray(x.participants)?x.participants:[];
-    return ps.includes(name);
+    return participantMatchesActive(ps,name);
   }).sort((a,b)=>b.defeatedMs-a.defeatedMs);
 }
 function lastWeekPlaceholderHtml(){
@@ -2996,7 +3006,7 @@ function weeklyMemberStats(name){
   historyItems.forEach(({x,defeatedMs})=>{
     if(!(defeatedMs>=startMs&&defeatedMs<endMs))return;
     const ps=Array.isArray(x.participants)?x.participants:[];
-    if(!ps.includes(name))return;
+    if(!participantMatchesActive(ps,name))return;
     if(Object.prototype.hasOwnProperty.call(byBoss,x.bossId))byBoss[x.bossId]+=1;
     if(x?.outcome==="stolen")stolenParticipations+=1;
   });
@@ -3139,7 +3149,7 @@ function syncStolenGuildField(prefix,outcome,value){
 }
 
 function participantButtons(host,selected,attr){
-  host.innerHTML=MEMBER_ORDER.map(n=>`<button type="button" class="member-btn${selected.includes(n)?" selected":""}" ${attr}="${n}">${n}</button>`).join("");
+  host.innerHTML=MEMBER_ORDER.map(n=>`<button type="button" class="member-btn${participantMatchesActive(selected,n)?" selected":""}" ${attr}="${n}">${n}</button>`).join("");
 }
 function syncNoParticipantButton(prefix,outcome,noParticipants){
   const btn=document.getElementById(prefix+"NoParticipants");
@@ -3362,12 +3372,12 @@ historyList.addEventListener("click",e=>{const row=e.target.closest("[data-histo
 document.getElementById("completeParticipantGrid").addEventListener("click",e=>{
   const b=e.target.closest("[data-complete-member]");if(!b)return;const n=b.dataset.completeMember;
   completeNoParticipants=false;
-  completeParticipants=completeParticipants.includes(n)?completeParticipants.filter(x=>x!==n):[...completeParticipants,n];renderCompleteParticipants();
+  completeParticipants=toggleParticipantByActiveName(completeParticipants,n);renderCompleteParticipants();
 });
 document.getElementById("recordParticipantGrid").addEventListener("click",e=>{
   const b=e.target.closest("[data-record-member]");if(!b)return;const n=b.dataset.recordMember;
   recordNoParticipants=false;
-  recordParticipants=recordParticipants.includes(n)?recordParticipants.filter(x=>x!==n):[...recordParticipants,n];renderRecordParticipants();
+  recordParticipants=toggleParticipantByActiveName(recordParticipants,n);renderRecordParticipants();
 });
 document.getElementById("completeNoParticipants").addEventListener("click",()=>{
   if(completeOutcome!=="stolen")return;
