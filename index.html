@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.4.36">
+<meta name="app-version" content="V3.4.37">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<!-- internal version: V3.4.36 -->
+<!-- internal version: V3.4.37 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -1984,7 +1984,8 @@ button,input,select,textarea{font:inherit;}
 
 
 <style id="v3435-weekly-reward-icon-border-final">
-/* V3.4.36 — current roster/nickname data update; existing weekly reward icon styling retained.
+/* V3.4.37 — preserve historical participant names while aggregating renamed members into the current weekly roster.
+   V3.4.36 — current roster/nickname data update; existing weekly reward icon styling retained.
    V3.4.35 — unify all weekly reward icons with a blue outer frame for stronger visual consistency. */
 .weekly-reward-icon,
 .weekly-reward-editor-icon,
@@ -2156,7 +2157,7 @@ button,input,select,textarea{font:inherit;}
       <div id="historyList" class="history-empty">기록을 불러오는 중입니다.</div>
     </div>
   </section>
-  <footer class="boss-footer-credits" aria-label="페이지 제작 정보"><div>Created by 돗돔 · V3.4.36</div><div class="boss-footer-date">2026.10.09</div></footer>
+  <footer class="boss-footer-credits" aria-label="페이지 제작 정보"><div>Created by 돗돔 · V3.4.37</div><div class="boss-footer-date">2026.10.09</div></footer>
 </main>
 
 <div id="lastWeekModal" class="monthly-modal" aria-hidden="true">
@@ -2448,7 +2449,7 @@ const MEMBERS={
   "페르시안":{base:57},"생갈비":{base:45},"벨제붑":{base:42},"바포메트":{base:35.5}
 };
 const MEMBER_NAME_MIGRATIONS=Object.freeze({"사마엘":"도살장","혀녕":"차돌","XIGN":"채끝살","뱅수띠":"대창","데이다라":"애기다라","하니엘":"생갈비"});
-function activeMemberName(name){return MEMBER_NAME_MIGRATIONS[name]||name}
+function activeMemberName(name){const raw=String(name??"").trim();return MEMBER_NAME_MIGRATIONS[raw]||raw}
 function participantMatchesActive(list,name){return (Array.isArray(list)?list:[]).some(raw=>activeMemberName(raw)===name)}
 function toggleParticipantByActiveName(list,name){
   const src=Array.isArray(list)?list:[];
@@ -3100,7 +3101,7 @@ function renderWeeklyRanking(){
     if(!(defeatedMs>=startMs&&defeatedMs<endMs))return;
     if(x?.outcome==="stolen")stolenCount+=1;else wonCount+=1;
     const ps=Array.isArray(x.participants)?x.participants:[];
-    ps.forEach(n=>{if(Object.prototype.hasOwnProperty.call(counts,n))counts[n]+=1});
+    ps.forEach(raw=>{const n=activeMemberName(raw);if(Object.prototype.hasOwnProperty.call(counts,n))counts[n]+=1});
   });
   if(weeklyWonCount)weeklyWonCount.textContent=`${wonCount}회`;
   if(weeklyStolenCount)weeklyStolenCount.textContent=`${stolenCount}회`;
