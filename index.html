@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.4.38">
+<meta name="app-version" content="V3.4.39">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<!-- internal version: V3.4.38 -->
+<!-- internal version: V3.4.39 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -1984,8 +1984,8 @@ button,input,select,textarea{font:inherit;}
 
 
 <style id="v3435-weekly-reward-icon-border-final">
-/* V3.4.38 — update current live roster combat values without modifying persisted boss history.
-   V3.4.38 — preserve historical participant names while aggregating renamed members into the current weekly roster.
+/* V3.4.39 — update current live roster combat values without modifying persisted boss history.
+   V3.4.39 — preserve historical participant names while aggregating renamed members into the current weekly roster.
    V3.4.36 — current roster/nickname data update; existing weekly reward icon styling retained.
    V3.4.35 — unify all weekly reward icons with a blue outer frame for stronger visual consistency. */
 .weekly-reward-icon,
@@ -2006,6 +2006,16 @@ button,input,select,textarea{font:inherit;}
 }
 .member-detail-reward-icon{
   border-radius:6px!important;
+}
+</style>
+<style id="v3439-weekly-data-update-stamp">
+/* Keep the same understated supplementary text as DOSALJA; inside weekly card only. */
+.weekly-card > .guild-data-update-stamp{
+  display:block;width:100%;margin:5px 0 0;padding:0 2px;
+  color:#837293;
+  font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  font-size:11.5px;font-weight:650;line-height:1.4;letter-spacing:0;
+  font-variant-numeric:tabular-nums;text-align:center;white-space:nowrap;
 }
 </style>
 </head>
@@ -2117,11 +2127,11 @@ button,input,select,textarea{font:inherit;}
 </script>
 
 
-  <section class="weekly-card" aria-label="길드원 2구역 참여 현황 (주간)">
+  <section class="weekly-card" aria-label="2구역 참여 현황 (주간)">
     <div class="weekly-head">
       <div class="weekly-head-main">
         <div class="weekly-heading-block">
-          <div class="weekly-title">길드원 2구역 참여 현황 <span class="weekly-title-suffix">(주간)</span></div>
+          <div class="weekly-title">2구역 참여 현황 <span class="weekly-title-suffix">(주간)</span></div>
           <div id="weeklyPeriod" class="weekly-period">집계기간 계산 중</div>
         </div>
         <div id="weeklyOutcomeSummary" class="weekly-outcome-summary" aria-label="이번 주 보스 획득 결과">
@@ -2134,6 +2144,7 @@ button,input,select,textarea{font:inherit;}
     <button id="weeklyRewardWrap" class="weekly-reward-wrap" type="button" aria-label="주간 수집보상 보기 및 수정">
       <span id="weeklyRewardItems" class="weekly-reward-items"></span>
     </button>
+    <div id="bossDataUpdateStamp" class="guild-data-update-stamp" aria-label="처치 기록 및 보상 입력 마지막 저장 시각">update : --</div>
   </section>
 
   <div id="memberDetailPopover" class="member-detail-popover" aria-hidden="true"></div>
@@ -2158,7 +2169,7 @@ button,input,select,textarea{font:inherit;}
       <div id="historyList" class="history-empty">기록을 불러오는 중입니다.</div>
     </div>
   </section>
-  <footer class="boss-footer-credits" aria-label="페이지 제작 정보"><div>Created by 돗돔 · V3.4.38</div><div class="boss-footer-date">2026.10.10</div></footer>
+  <footer class="boss-footer-credits" aria-label="페이지 제작 정보"><div>Created by 돗돔 · V3.4.39</div><div class="boss-footer-date">2026.10.10</div></footer>
 </main>
 
 <div id="lastWeekModal" class="monthly-modal" aria-hidden="true">
@@ -2468,6 +2479,46 @@ const BOSSES={
 let bossState={};
 let historyState=new Map();
 let historyItems=[];
+// Latest successful save/delete of bossHistory, and latest saved weekly reward counts.
+let persistedHistoryChangeMs=0;
+let persistedRewardChangeMs=0;
+const bossDataUpdateStamp=document.getElementById("bossDataUpdateStamp");
+const BOSS_DATA_UPDATE_CACHE_KEY="catHeroBossDataUpdatedAtV1";
+function storedTimestampMs(value){
+  const ms=value?.toMillis?.();
+  if(Number.isFinite(ms)&&ms>0)return ms;
+  const n=Number(value);
+  return Number.isFinite(n)&&n>0?n:0;
+}
+function formatKstDataUpdate(ms){
+  if(!ms)return "update : --";
+  const formatter=new Intl.DateTimeFormat("en-GB",{
+    timeZone:"Asia/Seoul",hourCycle:"h23",year:"numeric",month:"2-digit",
+    day:"2-digit",hour:"2-digit",minute:"2-digit"
+  });
+  const x=Object.fromEntries(formatter.formatToParts(new Date(ms)).map(p=>[p.type,p.value]));
+  return `update : ${x.year}.${x.month}.${x.day} ${x.hour}:${x.minute}`;
+}
+function renderBossDataUpdate(){
+  const historyMs=Math.max(persistedHistoryChangeMs,...historyItems.map(({x})=>
+    storedTimestampMs(x.updatedAt)||storedTimestampMs(x.createdAt)
+  ),0);
+  const ms=Math.max(historyMs,persistedRewardChangeMs,storedTimestampMs(weeklyRewardState?.updatedAtMs));
+  if(bossDataUpdateStamp)bossDataUpdateStamp.textContent=formatKstDataUpdate(ms);
+}
+function saveBossDataUpdateCache(){
+  try{localStorage.setItem(BOSS_DATA_UPDATE_CACHE_KEY,JSON.stringify({
+    historyMs:persistedHistoryChangeMs,rewardMs:persistedRewardChangeMs
+  }))}catch(e){}
+}
+function loadBossDataUpdateCache(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(BOSS_DATA_UPDATE_CACHE_KEY)||"null");
+    if(saved){persistedHistoryChangeMs=storedTimestampMs(saved.historyMs);
+      persistedRewardChangeMs=storedTimestampMs(saved.rewardMs)}
+  }catch(e){}
+}
+
 let completeBoss=null,completeParticipants=[],completeOutcome="won",completeNoParticipants=false,completeStolenGuild="";
 let recordBoss=null,recordParticipants=[],recordOutcome="won",recordNoParticipants=false,recordStolenGuild="",editingHistoryId=null;
 let popupBoss=null,popupMode="remaining";
@@ -2623,6 +2674,7 @@ function saveWeeklyRewardsCache(state){
   }catch(e){console.warn("[cache] weekly rewards save failed",e)}
 }
 function applyCachedStateImmediately(){
+  loadBossDataUpdateCache();
   const cachedTimers=loadTimersCache();
   if(cachedTimers){
     bossState=cachedTimers;
@@ -2640,6 +2692,7 @@ function applyCachedStateImmediately(){
   renderWeeklyRewardBox();
   renderMonthlyEntryPeriod();
   renderHistory();
+  renderBossDataUpdate();
 }
 function updateCurrentClock(){
   const d=new Date();
@@ -3359,6 +3412,9 @@ weeklyRewardSaveBtn.addEventListener("click",async()=>{
     },{merge:true});
     await batch.commit();
     weeklyRewardState=payload;
+    persistedRewardChangeMs=Math.max(persistedRewardChangeMs,payload.updatedAtMs);
+    saveBossDataUpdateCache();
+    renderBossDataUpdate();
     saveWeeklyRewardsCache(weeklyRewardState);
     renderWeeklyRewardBox();
     refreshOpenMemberDetail();
@@ -3452,12 +3508,19 @@ document.getElementById("saveComplete").addEventListener("click",async()=>{
       calculatedAtClient:Timestamp.fromMillis(calcBaseMs),recordedByUid:auth.currentUser?.uid||"",
       createdAt:serverTimestamp(),updatedAt:serverTimestamp()
     });
+    // Louis timer and weekly reward metadata share a document: avoid a duplicate batch write.
+    if(completeBoss!=="louis")batch.set(doc(db,...WEEKLY_REWARD_DOC_PATH),{
+      bossHistoryUpdatedAt:serverTimestamp(),bossHistoryUpdatedAtMs:calcBaseMs
+    },{merge:true});
     batch.set(timerRef,{
       bossId:completeBoss,bossName:BOSSES[completeBoss].name,
       spawnAt:Timestamp.fromMillis(spawnMs),remainingMsAtRecord:remain,
       updateSource:"completion",sourceHistoryId:historyRef.id,
       calculatedAtClient:Timestamp.fromMillis(calcBaseMs),
-      updatedAt:serverTimestamp(),updatedByUid:auth.currentUser?.uid||""
+      updatedAt:serverTimestamp(),updatedByUid:auth.currentUser?.uid||"",
+      ...(completeBoss==="louis"?{
+        bossHistoryUpdatedAt:serverTimestamp(),bossHistoryUpdatedAtMs:calcBaseMs
+      }:{})
     },{merge:true});
     await batch.commit();closeModal(completeModal);
   }catch(e){err.textContent="저장 실패: "+(e?.message||e)}
@@ -3484,6 +3547,9 @@ document.getElementById("saveRecord").addEventListener("click",async()=>{
       recordedByUid:auth.currentUser?.uid||"",updatedAt:serverTimestamp()};
     const batch=writeBatch(db);
     if(editingHistoryId)batch.set(ref,payload,{merge:true});else batch.set(ref,{...payload,createdAt:serverTimestamp()});
+    batch.set(doc(db,...WEEKLY_REWARD_DOC_PATH),{
+      bossHistoryUpdatedAt:serverTimestamp(),bossHistoryUpdatedAtMs:Date.now()
+    },{merge:true});
     await batch.commit();editingHistoryId=null;closeModal(recordModal);
   }catch(e){err.textContent="저장 실패: "+(e?.message||e)}
   finally{syncRecordSave()}
@@ -3491,7 +3557,15 @@ document.getElementById("saveRecord").addEventListener("click",async()=>{
 document.getElementById("deleteRecord").addEventListener("click",async()=>{
   if(!editingHistoryId)return;if(!confirm("이 처치 기록을 삭제할까요?"))return;
   const err=document.getElementById("recordError");
-  try{await authReady;await deleteDoc(doc(db,"bossHistory",editingHistoryId));editingHistoryId=null;closeModal(recordModal)}
+  try{
+    await authReady;
+    const batch=writeBatch(db);
+    batch.delete(doc(db,"bossHistory",editingHistoryId));
+    batch.set(doc(db,...WEEKLY_REWARD_DOC_PATH),{
+      bossHistoryUpdatedAt:serverTimestamp(),bossHistoryUpdatedAtMs:Date.now()
+    },{merge:true});
+    await batch.commit();editingHistoryId=null;closeModal(recordModal);
+  }
   catch(e){err.textContent="삭제 실패: "+(e?.message||e)}
 });
 
@@ -3531,17 +3605,31 @@ async function connectLiveData(){
     },e=>{console.error("[bossTimers] snapshot error",e);document.getElementById("now").dataset.syncLabel="지연";});
 
     onSnapshot(doc(db,...WEEKLY_REWARD_DOC_PATH),snap=>{
+    if(snap.exists()){
+      const data=snap.data();
+      persistedHistoryChangeMs=Math.max(
+        persistedHistoryChangeMs,
+        storedTimestampMs(data?.bossHistoryUpdatedAt)||storedTimestampMs(data?.bossHistoryUpdatedAtMs)
+      );
+      persistedRewardChangeMs=Math.max(
+        persistedRewardChangeMs,
+        storedTimestampMs(data?.weeklyRewardsUpdatedAt)||storedTimestampMs(data?.weeklyRewards?.updatedAtMs)
+      );
+      saveBossDataUpdateCache();
+    }
     if(!snap.exists()) {
       weeklyRewardState=normalizeRewardState({});
       saveWeeklyRewardsCache(weeklyRewardState);
       renderWeeklyRewardBox();
       refreshOpenMemberDetail();
+      renderBossDataUpdate();
       return;
     }
     weeklyRewardState=normalizeRewardState(snap.data()?.weeklyRewards||{});
     saveWeeklyRewardsCache(weeklyRewardState);
     renderWeeklyRewardBox();
     refreshOpenMemberDetail();
+    renderBossDataUpdate();
   },err=>console.error(err));
 
   onSnapshot(collection(db,"bossHistory"),snap=>{
@@ -3555,6 +3643,7 @@ async function connectLiveData(){
       historyItems.sort((a,b)=>b.defeatedMs-a.defeatedMs);
       renderBosses();renderWeeklyRanking();renderWeeklyRewardBox();refreshMonthlyIfOpen();refreshLastWeekIfOpen();renderHistory();
       saveHistoryCache(historyItems);
+      renderBossDataUpdate();
       document.getElementById("now").dataset.syncLabel="실시간";
     },e=>{
       console.error("[bossHistory] snapshot error",e);document.getElementById("now").dataset.syncLabel="지연";
