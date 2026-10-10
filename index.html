@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <title>상층 2구역 종합현황</title>
-<meta name="app-version" content="V3.4.39">
+<meta name="app-version" content="V3.5.0">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<!-- internal version: V3.4.39 -->
+<!-- internal version: V3.5.0 -->
 <style>
 :root{
   --bg:#f7f3ff; --card:#fff; --line:#ccb8f1; --deep:#3e187d; --violet:#7040dc;
@@ -1984,8 +1984,8 @@ button,input,select,textarea{font:inherit;}
 
 
 <style id="v3435-weekly-reward-icon-border-final">
-/* V3.4.39 — update current live roster combat values without modifying persisted boss history.
-   V3.4.39 — preserve historical participant names while aggregating renamed members into the current weekly roster.
+/* V3.5.0 — update current live roster combat values without modifying persisted boss history.
+   V3.5.0 — preserve historical participant names while aggregating renamed members into the current weekly roster.
    V3.4.36 — current roster/nickname data update; existing weekly reward icon styling retained.
    V3.4.35 — unify all weekly reward icons with a blue outer frame for stronger visual consistency. */
 .weekly-reward-icon,
@@ -2169,7 +2169,7 @@ button,input,select,textarea{font:inherit;}
       <div id="historyList" class="history-empty">기록을 불러오는 중입니다.</div>
     </div>
   </section>
-  <footer class="boss-footer-credits" aria-label="페이지 제작 정보"><div>Created by 돗돔 · V3.4.39</div><div class="boss-footer-date">2026.10.10</div></footer>
+  <footer class="boss-footer-credits" aria-label="페이지 제작 정보"><div>Created by 돗돔 · V3.5.0</div><div class="boss-footer-date">2026.10.10</div></footer>
 </main>
 
 <div id="lastWeekModal" class="monthly-modal" aria-hidden="true">
@@ -2397,11 +2397,31 @@ button,input,select,textarea{font:inherit;}
 </div>
 
 
+<script id="dosalja-central-loader">
+(function(){
+  "use strict";
+  var source=(location.protocol==="file:" && location.pathname.includes("/dosalja/")) ? "shared/guild-core.js" : "/dosalja/shared/guild-core.js";
+  document.write('<script src="'+source+'?rev='+Date.now()+'"><\/script>');
+})();
+</script>
+<script id="dosalja-central-fallback-warning">
+if(!window.DosaljaShared){
+  console.warn("공통 격추 데이터 연결 실패: 내장 이전 데이터를 임시로 사용합니다.");
+  document.addEventListener("DOMContentLoaded",function(){
+    var el=document.createElement("div");
+    el.textContent="공통 격추정보 연결 실패 · 임시 저장값 사용 중";
+    el.setAttribute("role","status");
+    el.style.cssText="position:relative;z-index:30;max-width:580px;margin:5px auto;padding:5px 8px;border:1px solid #dba1a1;border-radius:7px;text-align:center;font-size:11px;color:#873343;background:#fff0f0;";
+    document.body.insertBefore(el,document.body.firstChild);
+  });
+}
+</script>
+
 <script id="v3425-weekly-history-instant-cache">
 (function(){
   "use strict";
-  const members={"돗돔":180.9,"매콤갈비":165.2,"도살장":138.5,"잎새주":107.9,"차돌":123.8,"애기다라":100,"채끝살":89,"대창":72,"진니":69.2,"아메리칸컬":68.6,"승부왕":62.8,"토시살":81,"페르시안":57,"생갈비":45,"벨제붑":42,"바포메트":35.5};
-  const renamed={"사마엘":"도살장","혀녕":"차돌","XIGN":"채끝살","뱅수띠":"대창","데이다라":"애기다라","하니엘":"생갈비"};
+  const members=(window.DosaljaShared ? Object.fromEntries(Object.entries(window.DosaljaShared.members).map(([name,m])=>[name,m.base])) : {"돗돔":182.9,"매콤갈비":165.2,"도살장":138.5,"잎새주":107.9,"차돌":123.8,"애기다라":100,"채끝살":89,"대창":72,"진니":69.2,"아메리칸컬":68.6,"승부왕":62.8,"토시살":81,"페르시안":57,"생갈비":45,"벨제붑":42,"바포메트":35.5});
+  const renamed=window.DosaljaShared?.formerNames || {"사마엘":"도살장","혀녕":"차돌","XIGN":"채끝살","뱅수띠":"대창","데이다라":"애기다라","하니엘":"생갈비"};
   const activeName=n=>renamed[n]||n;
   const boss={louis:{name:"루이",img:"assets/louis-v337-display.webp"},looney:{name:"루니",img:"assets/looney-v337-display.webp"},luna:{name:"루나",img:"assets/luna-v337-display.webp"},bananyang:{name:"바나냥",img:"assets/bananyang-v337-display.webp"}};
   const pad=v=>String(v).padStart(2,"0"),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]||c));
@@ -2454,13 +2474,13 @@ function requireWritePin(){
   return true;
 }
 
-const MEMBERS={
-  "돗돔":{base:180.9},"매콤갈비":{base:165.2},"도살장":{base:138.5},"잎새주":{base:107.9},
+const MEMBERS=window.DosaljaShared?.members || {
+  "돗돔":{base:182.9},"매콤갈비":{base:165.2},"도살장":{base:138.5},"잎새주":{base:107.9},
   "차돌":{base:123.8},"애기다라":{base:100},"채끝살":{base:89},"대창":{base:72},
   "진니":{base:69.2},"아메리칸컬":{base:68.6},"승부왕":{base:62.8},"토시살":{base:81},
   "페르시안":{base:57},"생갈비":{base:45},"벨제붑":{base:42},"바포메트":{base:35.5}
 };
-const MEMBER_NAME_MIGRATIONS=Object.freeze({"사마엘":"도살장","혀녕":"차돌","XIGN":"채끝살","뱅수띠":"대창","데이다라":"애기다라","하니엘":"생갈비"});
+const MEMBER_NAME_MIGRATIONS=window.DosaljaShared?.formerNames || Object.freeze({"사마엘":"도살장","혀녕":"차돌","XIGN":"채끝살","뱅수띠":"대창","데이다라":"애기다라","하니엘":"생갈비"});
 function activeMemberName(name){const raw=String(name??"").trim();return MEMBER_NAME_MIGRATIONS[raw]||raw}
 function participantMatchesActive(list,name){return (Array.isArray(list)?list:[]).some(raw=>activeMemberName(raw)===name)}
 function toggleParticipantByActiveName(list,name){
